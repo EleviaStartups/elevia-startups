@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valoración de Startups (7 Métodos) — Elevia Startups</title>
+  <meta name="description" content="Calcula la valoración pre-money y post-money de tu startup con 7 metodologías reconocidas: Berkus, Scorecard, VC Method, Múltiplos, DCF, Risk Factor y Comparables." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/startup-valuation.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+  <style>
+    .method-tab-panel { display: none; }
+    .method-tab-panel.active { display: block; }
+    .nav-tabs-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Valoración de startups</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--lavender" aria-hidden="true">💰</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--lavender">Finanzas y valoración</span>
+          <h1 class="tool-header__title">Calculadora de Valoración de Startups</h1>
+          <p class="tool-header__desc">
+            Estima el rango de valoración orientativo de tu compañía utilizando los 7 métodos habituales del ecosistema inversor. Aprende a triangular resultados, fundamentar tus supuestos y defender tu negociación frente a business angels y fondos de Venture Capital.
+          </p>
+        </div>
+      </div>
+
+      <!-- Legal & Technical Disclaimer Callout -->
+      <div class="alert alert-info" style="margin-top: 16px; font-size: 0.85rem;">
+        <strong>Nota importante sobre valoración:</strong> No existe una valoración exacta universal para una startup en fase temprana; el valor real es el precio que un inversor está dispuesto a pagar y tú a aceptar. Esta herramienta produce estimaciones orientativas basadas en metodologías estándar. No constituye una tasación pericial independiente ni asesoramiento financiero, legal o fiscal.
+      </div>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo Pre-seed</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-print">🖨️ Informe PDF</button>
+      </div>
+    </div>
+
+    <!-- Step 1: Stage Selector & Method Recommendations -->
+    <section class="tool-panel" style="margin-bottom: 28px;">
+      <div class="tool-panel__header">
+        <div>
+          <h2 class="tool-panel__title">Fase de desarrollo de tu startup</h2>
+          <div class="tool-panel__subtitle">Te recomendaremos los métodos más adecuados para tu momento</div>
+        </div>
+      </div>
+
+      <div class="stage-selector-grid" id="stage-grid">
+        <div class="stage-card" data-stage="idea">
+          <div class="stage-card__name">Fase Idea</div>
+          <div class="stage-card__rec">Berkus</div>
+        </div>
+        <div class="stage-card is-selected" data-stage="pre-seed">
+          <div class="stage-card__name">Pre-seed</div>
+          <div class="stage-card__rec">Scorecard + Berkus</div>
+        </div>
+        <div class="stage-card" data-stage="seed">
+          <div class="stage-card__name">Seed</div>
+          <div class="stage-card__rec">VC Method + Múltiplos</div>
+        </div>
+        <div class="stage-card" data-stage="growth">
+          <div class="stage-card__name">Growth / Post-seed</div>
+          <div class="stage-card__rec">VC Method + Múltiplos</div>
+        </div>
+        <div class="stage-card" data-stage="series-a">
+          <div class="stage-card__name">Series A</div>
+          <div class="stage-card__rec">Múltiplos + DCF</div>
+        </div>
+        <div class="stage-card" data-stage="consolidated">
+          <div class="stage-card__name">Consolidada</div>
+          <div class="stage-card__rec">DCF + Múltiplos</div>
+        </div>
+      </div>
+
+      <div id="stage-recommendation-box" style="background: var(--color-ivory); padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--color-ink-70);">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Step 2: The 7 Methods Workspace -->
+    <div class="workspace-grid workspace-grid--equal">
+      
+      <!-- Left Column: Method Tabs & Forms -->
+      <section class="tool-panel">
+        <div class="tool-panel__header">
+          <div>
+            <h2 class="tool-panel__title">Configurar Métodos</h2>
+            <div class="tool-panel__subtitle">Selecciona una metodología para ajustar sus parámetros</div>
+          </div>
+        </div>
+
+        <!-- Scrollable Method Navigation Tabs -->
+        <nav class="nav-tabs-scroll" aria-label="Pestañas de metodologías de valoración">
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn is-active" data-method="berkus">1. Berkus</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="scorecard">2. Scorecard</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="vc">3. VC Method</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="multiples">4. Múltiplos</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="dcf">5. DCF</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="risk">6. Risk Factor</button>
+          <button type="button" class="btn btn-ghost btn-sm tab-m-btn" data-method="comparables">7. Comparables</button>
+        </nav>
+
+        <!-- 1. BERKUS -->
+        <div id="m-panel-berkus" class="method-tab-panel active">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Diseñado para fases pre-revenue. Asigna valor monetario a 5 áreas críticas de des-riesgo, hasta un máximo ilustrativo configurable (habitualmente 500.000 € por componente, techo de 2,5 M€).
+          </p>
+          <div id="berkus-inputs-wrap" style="display:flex; flex-direction:column; gap:14px;">
+            <!-- Rendered by JS -->
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <strong>Resultado Berkus:</strong>
+            <span id="berkus-total-display" style="font-size:1.2rem; font-weight:800; color:var(--color-ink);">0 €</span>
+          </div>
+        </div>
+
+        <!-- 2. SCORECARD (PAYNE) -->
+        <div id="m-panel-scorecard" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Compara tu startup con valoraciones medias de rondas similares en tu región y ajusta por fortalezas y debilidades relativas del equipo, mercado y tecnología.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Valoración base de referencia en tu sector / geografía (€)</label>
+            <input type="number" id="sc-ref-val" class="form-input" value="1500000" min="100000" step="50000" />
+            <div class="help-text">Ejemplo de la guía: 1.500.000 € para startups pre-seed de base tecnológica.</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="sc-factors-table">
+              <thead>
+                <tr>
+                  <th>Factor de evaluación</th>
+                  <th style="width:110px;">Ponderación</th>
+                  <th style="width:140px;">Puntuación</th>
+                </tr>
+              </thead>
+              <tbody id="sc-factors-tbody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>Multiplicador: <strong id="sc-mult-display">1.00x</strong> (Suma pesos: <span id="sc-weight-sum">100%</span>)</div>
+            <strong id="sc-total-display" style="font-size:1.2rem; font-weight:800; color:var(--color-ink);">0 €</strong>
+          </div>
+        </div>
+
+        <!-- 3. VC METHOD -->
+        <div id="m-panel-vc" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            El método clásico de fondos VC: parte del valor de venta futuro estimado (Exit) y descuenta hacia atrás según el retorno exigido (Target Return Multiple).
+          </p>
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label class="form-label">Valor de salida (Exit) estimado (€)</label>
+              <input type="number" id="vc-exit" class="form-input" value="10000000" step="500000" />
+              <div class="help-text">Venta proyectada de la compañía en 5-7 años.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Horizonte temporal (años)</label>
+              <input type="number" id="vc-horizon" class="form-input" value="5" min="1" max="10" />
+            </div>
+          </div>
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label class="form-label">Retorno exigido por el fondo (Múltiplo)</label>
+              <input type="number" id="vc-mult" class="form-input" value="10" min="2" max="50" step="0.5" />
+              <div class="help-text">Ejemplo guía: 10x para etapas pre-seed/seed.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Capital a captar en esta ronda (€)</label>
+              <input type="number" id="vc-inv" class="form-input" value="300000" step="50000" />
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span>Post-money orientativa (Exit / Retorno):</span>
+              <strong id="vc-post-display">1.000.000 €</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>Pre-money orientativa (Post - Inversión):</span>
+              <strong id="vc-pre-display" style="font-size:1.15rem; color:var(--color-ink);">700.000 €</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. MÚLTIPLOS DE FACTURACIÓN -->
+        <div id="m-panel-multiples" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Aplica múltiplos de valoración sobre métricas anuales reales (ARR o Facturación). Se utiliza cuando la startup ya factura de forma recurrente.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Facturación anual recurrente (ARR) (€)</label>
+            <input type="number" id="mult-rev" class="form-input" value="150000" step="10000" />
+          </div>
+          <div class="form-row form-row--3">
+            <div class="form-group">
+              <label class="form-label">Múltiplo mínimo</label>
+              <input type="number" id="mult-min" class="form-input" value="4.0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Múltiplo central</label>
+              <input type="number" id="mult-mid" class="form-input" value="6.0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Múltiplo superior</label>
+              <input type="number" id="mult-max" class="form-input" value="8.0" step="0.5" />
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <span>Rango estimado:</span>
+            <strong id="mult-range-display" style="font-size:1.1rem; color:var(--color-ink);">600.000 € – 1.200.000 €</strong>
+          </div>
+        </div>
+
+        <!-- 5. DCF (DESCUENTO DE FLUJOS) -->
+        <div id="m-panel-dcf" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Descuenta a valor presente los flujos de caja libres proyectados. Exige proyecciones razonablemente estables (Series A o empresas con tracción predecible).
+          </p>
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label class="form-label">Tasa de descuento WACC (%)</label>
+              <input type="number" id="dcf-discount" class="form-input" value="25" min="5" max="60" />
+              <div class="help-text">Startups suelen requerir 20%-35% por riesgo.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tasa de crecimiento terminal (%)</label>
+              <input type="number" id="dcf-growth" class="form-input" value="3.0" min="0" max="10" step="0.5" />
+              <div class="help-text">Debe ser inferior a la tasa de descuento.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Flujos de caja proyectados (Años 1 al 5 en €)</label>
+            <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:6px;">
+              <input type="number" class="form-input dcf-cf" value="-40000" placeholder="A1" />
+              <input type="number" class="form-input dcf-cf" value="20000" placeholder="A2" />
+              <input type="number" class="form-input dcf-cf" value="90000" placeholder="A3" />
+              <input type="number" class="form-input dcf-cf" value="180000" placeholder="A4" />
+              <input type="number" class="form-input dcf-cf" value="300000" placeholder="A5" />
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <span>Valor del Equity DCF:</span>
+            <strong id="dcf-val-display" style="font-size:1.15rem; color:var(--color-ink);">0 €</strong>
+          </div>
+        </div>
+
+        <!-- 6. RISK FACTOR SUMMATION -->
+        <div id="m-panel-risk" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Ajusta una valoración base sumando o restando importes fijos (por defecto ±250.000 €) en 12 categorías de riesgo operacional, legal y comercial.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Valoración base de partida (€)</label>
+            <input type="number" id="rf-base" class="form-input" value="1500000" step="50000" />
+          </div>
+          <div id="rf-factors-wrap" style="display:flex; flex-direction:column; gap:8px; max-height:260px; overflow-y:auto; padding-right:6px;">
+            <!-- Rendered by JS -->
+          </div>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>Ajuste acumulado: <strong id="rf-adjust-display">0 €</strong></div>
+            <strong id="rf-val-display" style="font-size:1.15rem; color:var(--color-ink);">0 €</strong>
+          </div>
+        </div>
+
+        <!-- 7. COMPARABLES -->
+        <div id="m-panel-comparables" class="method-tab-panel">
+          <p style="font-size:0.85rem; color:var(--color-ink-70); margin-bottom:16px;">
+            Introduce transacciones públicas u observadas de startups semejantes para calcular la mediana y el rango de mercado observado.
+          </p>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Referencia</th>
+                  <th>Sector</th>
+                  <th style="width:130px;">Valoración (€)</th>
+                  <th style="width:40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="comp-tbody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-add-comp" style="margin-top:8px;">+ Añadir comparable</button>
+          <div style="margin-top:16px; padding:12px; background:var(--color-ivory); border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;">
+            <div>Mediana observada: <strong id="comp-median-display">0 €</strong></div>
+            <span id="comp-count-display" style="font-size:0.85rem; color:var(--color-ink-70);">0 operaciones</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Triangulation & Comparative Summary -->
+      <section class="tool-panel">
+        <div class="tool-panel__header">
+          <div>
+            <h2 class="tool-panel__title">Triangulación de Resultados</h2>
+            <div class="tool-panel__subtitle">Comparación de métodos aplicados</div>
+          </div>
+          <span class="badge badge-sage">Orientativo</span>
+        </div>
+
+        <!-- Triangulation Chart -->
+        <div class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Rango de valoraciones estimadas</h3>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-valuation-summary" width="480" height="240" aria-label="Comparativa de métodos de valoración"></canvas>
+          </div>
+        </div>
+
+        <!-- Methods Summary Table -->
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="data-table" id="summary-methods-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="padding: 8px 10px; font-size: 0.82rem;">Método</th>
+                <th style="padding: 8px 10px; font-size: 0.82rem;">Fase idónea</th>
+                <th style="padding: 8px 10px; font-size: 0.82rem; text-align: right;">Estimación</th>
+              </tr>
+            </thead>
+            <tbody id="summary-methods-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Sensitivity Analysis Box -->
+        <div style="margin-top:20px; padding:16px; background:var(--color-ivory); border-radius:var(--radius-lg); border:1px solid var(--color-border);">
+          <h3 style="font-size:0.95rem; font-weight:700; color:var(--color-ink); margin:0 0 8px;">Análisis de Sensibilidad (±20% en supuestos clave)</h3>
+          <p style="font-size:0.8rem; color:var(--color-ink-70); margin:0 0 12px;">En rondas tempranas, pequeños cambios en el retorno exigido o el ARR mueven drásticamente la valoración final.</p>
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700;">
+            <span style="color:#8C441A;" id="sens-min-display">Mín: 0 €</span>
+            <span style="color:var(--color-ink);" id="sens-mid-display">Central: 0 €</span>
+            <span style="color:#1E663B;" id="sens-max-display">Máx: 0 €</span>
+          </div>
+        </div>
+
+        <!-- Recommendations and limitations -->
+        <div id="valuation-insights" style="display:flex; flex-direction:column; gap:8px; margin-top:20px;"></div>
+
+      </section>
+
+    </div>
+
+    <!-- Storage notice -->
+    <div class="storage-notice" style="margin-top: 40px;">
+      <div class="storage-notice-icon">🔒</div>
+      <div class="storage-notice-text">
+        <strong>Confidencialidad:</strong> Ninguna de las hipótesis financieras, proyecciones ni comparables introducidos se envía a servidores. Todo se procesa exclusivamente en tu navegador.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {calcBerkus,
+      calcScorecard,
+      calcVentureCapital,
+      calcRevenueMultiples,
+      calcDCF,
+      calcRiskFactors,
+      calcComparables,
+      getRecommendedMethods} = __req('valuation.calc');
+    const {saveData, loadData} = __req('storage');
+    const {formatCurrency, formatPercent, downloadFile, triggerPrint} = __req('format');
+    const {renderBarChart} = __req('charts');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_valuation';
+
+    // State
+    let currentStage = 'pre-seed';
+    let berkusComponents = [
+      { name: 'Idea básica y modelo validado', value: 300000, maxValue: 500000 },
+      { name: 'Prototipo funcional / Tecnología', value: 350000, maxValue: 500000 },
+      { name: 'Equipo promotor complementario', value: 400000, maxValue: 500000 },
+      { name: 'Relaciones estratégicas / Partners', value: 150000, maxValue: 500000 },
+      { name: 'Tracción inicial / Lanzamiento', value: 200000, maxValue: 500000 },
+    ];
+
+    let scorecardFactors = [
+      { name: 'Equipo directivo y fundador', weight: 30, score: 1.2 },
+      { name: 'Oportunidad y tamaño de mercado', weight: 25, score: 1.1 },
+      { name: 'Producto / Tecnología / Barreras', weight: 15, score: 1.0 },
+      { name: 'Entorno competitivo', weight: 10, score: 0.9 },
+      { name: 'Marketing y canales comerciales', weight: 10, score: 1.0 },
+      { name: 'Necesidad de inversión adicional', weight: 5, score: 1.0 },
+      { name: 'Otros factores relevantes', weight: 5, score: 1.0 },
+    ];
+
+    let riskFactors = [
+      { name: 'Riesgo de gestión / Equipo', adjustment: 150000 },
+      { name: 'Fase de desarrollo del negocio', adjustment: 0 },
+      { name: 'Riesgo de financiación futura', adjustment: -100000 },
+      { name: 'Riesgo de competencia', adjustment: -50000 },
+      { name: 'Riesgo tecnológico', adjustment: 100000 },
+      { name: 'Riesgo de ventas y marketing', adjustment: 50000 },
+      { name: 'Litigios y regulación', adjustment: 0 },
+      { name: 'Riesgo de reputación', adjustment: 0 },
+      { name: 'Riesgo de internacionalización', adjustment: -50000 },
+      { name: 'Posición competitiva', adjustment: 50000 },
+      { name: 'Riesgo macroeconómico', adjustment: 0 },
+      { name: 'Riesgo de tracción comercial', adjustment: 100000 },
+    ];
+
+    let comparables = [
+      { id: 1, name: 'Startup A (Fintech B2B)', sector: 'Fintech', valuation: 1600000 },
+      { id: 2, name: 'Startup B (SaaS HR)', sector: 'SaaS', valuation: 1400000 },
+      { id: 3, name: 'Startup C (Logística)', sector: 'Logtech', valuation: 1800000 },
+    ];
+
+    const chartCanvas = document.getElementById('chart-valuation-summary');
+
+    // Method tab switcher
+    document.querySelectorAll('.tab-m-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const m = e.currentTarget.dataset.method;
+        document.querySelectorAll('.tab-m-btn').forEach(b => b.classList.remove('is-active'));
+        document.querySelectorAll('.method-tab-panel').forEach(p => p.classList.remove('active'));
+        e.currentTarget.classList.add('is-active');
+        document.getElementById(`m-panel-${m}`)?.classList.add('active');
+      });
+    });
+
+    // Stage Selector handler
+    document.querySelectorAll('.stage-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        currentStage = card.dataset.stage;
+        updateStageRecommendation();
+        recalculateAll();
+      });
+    });
+
+    function updateStageRecommendation() {
+      const rec = getRecommendedMethods(currentStage);
+      const textMap = {
+        'idea': 'Para fase Idea sin producto terminado, Berkus es la metodología reina por sencillez.',
+        'pre-seed': 'Para Pre-seed recomendamos contrastar Scorecard (Payne) y Berkus.',
+        'seed': 'En fase Seed con tracción inicial, el Venture Capital Method y múltiplos orientativos son los más observados por inversores.',
+        'growth': 'En Growth, los inversores institucionales se basan en múltiplos de ingresos recurrentes y el VC Method.',
+        'series-a': 'En Series A con estados financieros fiables, se utilizan múltiplos sectoriales y DCF con descuento prudente.',
+        'consolidated': 'Para empresas consolidadas, el DCF y transacciones comparables son la base técnica principal.'
+      };
+      document.getElementById('stage-recommendation-box').innerHTML = `
+        <strong>Recomendación para ${currentStage.toUpperCase()}:</strong> ${textMap[currentStage] || ''}
+      `;
+    }
+
+    // Render Berkus Inputs
+    function renderBerkus() {
+      const wrap = document.getElementById('berkus-inputs-wrap');
+      wrap.innerHTML = '';
+      berkusComponents.forEach((comp, idx) => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+            <span>${comp.name}</span>
+            <strong id="berkus-comp-val-${idx}">${formatCurrency(comp.value, 'EUR')}</strong>
+          </div>
+          <input type="range" class="form-range berkus-slider" data-idx="${idx}" min="0" max="${comp.maxValue}" step="25000" value="${comp.value}" />
+        `;
+        wrap.appendChild(div);
+      });
+
+      document.querySelectorAll('.berkus-slider').forEach(s => {
+        s.addEventListener('input', e => {
+          const i = parseInt(e.target.dataset.idx, 10);
+          const val = parseFloat(e.target.value) || 0;
+          berkusComponents[i].value = val;
+          const valEl = document.getElementById(`berkus-comp-val-${i}`);
+          if (valEl) valEl.textContent = formatCurrency(val, 'EUR');
+          recalculateAll();
+        });
+      });
+    }
+
+    // Render Scorecard Inputs
+    function renderScorecard() {
+      const tbody = document.getElementById('sc-factors-tbody');
+      tbody.innerHTML = '';
+      scorecardFactors.forEach((f, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${f.name}</td>
+          <td>
+            <div class="input-addon">
+              <input type="number" class="form-input sc-w" value="${f.weight}" data-idx="${idx}" style="padding-right:24px;" />
+              <span class="input-addon__suffix">%</span>
+            </div>
+          </td>
+          <td>
+            <select class="form-select sc-s" data-idx="${idx}">
+              <option value="0.7" ${f.score === 0.7 ? 'selected':''}>Muy inferior (0.7x)</option>
+              <option value="0.9" ${f.score === 0.9 ? 'selected':''}>Inferior (0.9x)</option>
+              <option value="1.0" ${f.score === 1.0 ? 'selected':''}>Promedio (1.0x)</option>
+              <option value="1.1" ${f.score === 1.1 ? 'selected':''}>Superior (1.1x)</option>
+              <option value="1.2" ${f.score === 1.2 ? 'selected':''}>Muy superior (1.2x)</option>
+            </select>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.sc-w').forEach(inp => {
+        inp.addEventListener('input', e => {
+          scorecardFactors[parseInt(e.target.dataset.idx, 10)].weight = parseFloat(e.target.value) || 0;
+          recalculateAll();
+        });
+      });
+      document.querySelectorAll('.sc-s').forEach(sel => {
+        sel.addEventListener('change', e => {
+          scorecardFactors[parseInt(e.target.dataset.idx, 10)].score = parseFloat(e.target.value) || 1.0;
+          recalculateAll();
+        });
+      });
+    }
+
+    // Render Risk Factors
+    function renderRiskFactors() {
+      const wrap = document.getElementById('rf-factors-wrap');
+      wrap.innerHTML = '';
+      riskFactors.forEach((rf, idx) => {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.style.fontSize = '0.85rem';
+        row.innerHTML = `
+          <span style="flex:1;">${rf.name}</span>
+          <select class="form-select rf-sel" data-idx="${idx}" style="width:170px; padding:3px 6px; font-size:0.8rem;">
+            <option value="-250000" ${rf.adjustment === -250000 ? 'selected':''}>Muy negativo (-250k€)</option>
+            <option value="-100000" ${rf.adjustment === -100000 ? 'selected':''}>Negativo (-100k€)</option>
+            <option value="-50000" ${rf.adjustment === -50000 ? 'selected':''}>Bajo (-50k€)</option>
+            <option value="0" ${rf.adjustment === 0 ? 'selected':''}>Neutro (0€)</option>
+            <option value="50000" ${rf.adjustment === 50000 ? 'selected':''}>Favorable (+50k€)</option>
+            <option value="100000" ${rf.adjustment === 100000 ? 'selected':''}>Positivo (+100k€)</option>
+            <option value="150000" ${rf.adjustment === 150000 ? 'selected':''}>Muy positivo (+150k€)</option>
+          </select>
+        `;
+        wrap.appendChild(row);
+      });
+
+      document.querySelectorAll('.rf-sel').forEach(s => {
+        s.addEventListener('change', e => {
+          riskFactors[parseInt(e.target.dataset.idx, 10)].adjustment = parseFloat(e.target.value) || 0;
+          recalculateAll();
+        });
+      });
+    }
+
+    // Render Comparables
+    function renderComparables() {
+      const tbody = document.getElementById('comp-tbody');
+      tbody.innerHTML = '';
+      comparables.forEach((c, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" class="form-input c-name" value="${c.name}" data-idx="${idx}" /></td>
+          <td><input type="text" class="form-input c-sector" value="${c.sector}" data-idx="${idx}" /></td>
+          <td><input type="number" class="form-input c-val" value="${c.valuation}" step="50000" data-idx="${idx}" /></td>
+          <td><button type="button" class="btn btn-ghost btn-sm c-del" data-idx="${idx}" style="color:var(--color-error); padding:2px 6px;">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.c-name').forEach(inp => {
+        inp.addEventListener('input', e => { comparables[parseInt(e.target.dataset.idx, 10)].name = e.target.value; recalculateAll(); });
+      });
+      document.querySelectorAll('.c-sector').forEach(inp => {
+        inp.addEventListener('input', e => { comparables[parseInt(e.target.dataset.idx, 10)].sector = e.target.value; recalculateAll(); });
+      });
+      document.querySelectorAll('.c-val').forEach(inp => {
+        inp.addEventListener('input', e => { comparables[parseInt(e.target.dataset.idx, 10)].valuation = parseFloat(e.target.value) || 0; recalculateAll(); });
+      });
+      document.querySelectorAll('.c-del').forEach(btn => {
+        btn.addEventListener('click', e => {
+          comparables.splice(parseInt(e.currentTarget.dataset.idx, 10), 1);
+          renderComparables();
+          recalculateAll();
+        });
+      });
+    }
+
+    document.getElementById('btn-add-comp').addEventListener('click', () => {
+      comparables.push({ id: Date.now(), name: `Comparable ${comparables.length + 1}`, sector: 'Tech', valuation: 1500000 });
+      renderComparables();
+      recalculateAll();
+    });
+
+    // Inputs listeners for VC, Multiples, DCF
+    ['sc-ref-val', 'vc-exit', 'vc-horizon', 'vc-mult', 'vc-inv', 'mult-rev', 'mult-min', 'mult-mid', 'mult-max', 'dcf-discount', 'dcf-growth', 'rf-base'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', recalculateAll);
+    });
+    document.querySelectorAll('.dcf-cf').forEach(inp => inp.addEventListener('input', recalculateAll));
+
+    // Master Recalculation
+    function recalculateAll() {
+      // 1. Berkus
+      const resB = calcBerkus(berkusComponents);
+      document.getElementById('berkus-total-display').textContent = formatCurrency(resB.total, 'EUR');
+
+      // 2. Scorecard
+      const refVal = parseFloat(document.getElementById('sc-ref-val').value) || 0;
+      const resSC = calcScorecard(refVal, scorecardFactors);
+      document.getElementById('sc-mult-display').textContent = `${(resSC.multiplier || 1).toFixed(2)}x`;
+      document.getElementById('sc-weight-sum').textContent = `${(resSC.weightSum || 0).toFixed(0)}%`;
+      document.getElementById('sc-total-display').textContent = formatCurrency(resSC.valuation || 0, 'EUR');
+
+      // 3. VC Method
+      const vcExit = parseFloat(document.getElementById('vc-exit').value) || 0;
+      const vcMult = parseFloat(document.getElementById('vc-mult').value) || 10;
+      const vcInv = parseFloat(document.getElementById('vc-inv').value) || 0;
+      const resVC = calcVentureCapital({
+        exitValue: vcExit,
+        horizon: parseFloat(document.getElementById('vc-horizon').value) || 5,
+        requiredMultiple: vcMult,
+        investment: vcInv
+      });
+      document.getElementById('vc-post-display').textContent = formatCurrency(resVC.postMoney || 0, 'EUR');
+      document.getElementById('vc-pre-display').textContent = formatCurrency(resVC.preMoney || 0, 'EUR');
+
+      // 4. Multiples
+      const multRev = parseFloat(document.getElementById('mult-rev').value) || 0;
+      const resMult = calcRevenueMultiples({
+        revenue: multRev,
+        multipleMin: parseFloat(document.getElementById('mult-min').value) || 4,
+        multipleMid: parseFloat(document.getElementById('mult-mid').value) || 6,
+        multipleMax: parseFloat(document.getElementById('mult-max').value) || 8,
+      });
+      document.getElementById('mult-range-display').textContent = `${formatCurrency(resMult.valuationMin || 0, 'EUR')} – ${formatCurrency(resMult.valuationMax || 0, 'EUR')}`;
+
+      // 5. DCF
+      const cfs = Array.from(document.querySelectorAll('.dcf-cf')).map(inp => parseFloat(inp.value) || 0);
+      const resDCF = calcDCF({
+        cashFlows: cfs,
+        discountRate: parseFloat(document.getElementById('dcf-discount').value) || 25,
+        terminalGrowthRate: parseFloat(document.getElementById('dcf-growth').value) || 3,
+        cash: 0,
+        debt: 0
+      });
+      document.getElementById('dcf-val-display').textContent = formatCurrency(resDCF.equityValue || 0, 'EUR');
+
+      // 6. Risk Factors
+      const rfBase = parseFloat(document.getElementById('rf-base').value) || 0;
+      const resRF = calcRiskFactors({ baseValuation: rfBase, factors: riskFactors });
+      document.getElementById('rf-adjust-display').textContent = formatCurrency(resRF.totalAdjustment || 0, 'EUR');
+      document.getElementById('rf-val-display').textContent = formatCurrency(resRF.finalValuation || 0, 'EUR');
+
+      // 7. Comparables
+      const resComp = calcComparables(comparables);
+      document.getElementById('comp-median-display').textContent = formatCurrency(resComp.median || 0, 'EUR');
+      document.getElementById('comp-count-display').textContent = `${resComp.count} operaciones`;
+
+      // Summary Table & Chart Triangulation
+      const summaryList = [
+        { name: 'Berkus', val: resB.total || 0, stage: 'Idea / Pre-seed' },
+        { name: 'Scorecard (Payne)', val: resSC.valuation || 0, stage: 'Pre-seed' },
+        { name: 'Venture Capital', val: resVC.preMoney || 0, stage: 'Seed / Growth' },
+        { name: 'Múltiplos (Central)', val: resMult.valuationMid || 0, stage: 'Seed+ con ARR' },
+        { name: 'DCF (Flujos Descontados)', val: resDCF.equityValue || 0, stage: 'Series A / Crecimiento' },
+        { name: 'Risk Factor Summation', val: resRF.finalValuation || 0, stage: 'Pre-seed / Seed' },
+        { name: 'Comparables (Mediana)', val: resComp.median || 0, stage: 'Todas' },
+      ];
+
+      // Update Summary Table
+      const tbody = document.getElementById('summary-methods-tbody');
+      tbody.innerHTML = '';
+      const validVals = [];
+
+      summaryList.forEach(m => {
+        if (m.val > 0) validVals.push(m.val);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="padding: 8px 10px; font-size: 0.82rem;"><strong>${m.name}</strong></td>
+          <td style="padding: 8px 10px; font-size: 0.78rem; color:var(--color-ink-70);">${m.stage}</td>
+          <td style="padding: 8px 10px; font-family:var(--font-mono); font-size:0.85rem; font-weight:700; text-align: right; white-space: nowrap;">${formatCurrency(m.val, 'EUR')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Sensitivity Analysis
+      if (validVals.length > 0) {
+        const minVal = Math.min(...validVals);
+        const maxVal = Math.max(...validVals);
+        const avgVal = validVals.reduce((a, b) => a + b, 0) / validVals.length;
+
+        document.getElementById('sens-min-display').textContent = `Mín: ${formatCurrency(minVal * 0.8, 'EUR')}`;
+        document.getElementById('sens-mid-display').textContent = `Rango medio: ${formatCurrency(avgVal, 'EUR')}`;
+        document.getElementById('sens-max-display').textContent = `Máx: ${formatCurrency(maxVal * 1.2, 'EUR')}`;
+      }
+
+      // Update Bar Chart
+      const chartData = summaryList.map(m => ({
+        label: m.name,
+        value: m.val,
+        max: Math.max(...validVals, 1000000),
+        color: '#D8C9F0'
+      }));
+      renderBarChart(chartCanvas, chartData, {
+        format: v => formatCurrency(v, 'EUR')
+      });
+
+      // Insights
+      const insightsWrap = document.getElementById('valuation-insights');
+      insightsWrap.innerHTML = `
+        <div class="alert alert-info">
+          💡 <strong>Estrategia de negociación:</strong> Ningún inversor compra un cálculo aislado. Presenta un <em>rango</em> razonable fundamentado en la media de los 2 o 3 métodos más sólidos para tu fase (${currentStage.toUpperCase()}) y explica qué hitos te permitirán alcanzar el extremo superior.
+        </div>
+      `;
+    }
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      currentStage = 'pre-seed';
+      updateStageRecommendation();
+      document.querySelector('[data-stage="pre-seed"]')?.click();
+      recalculateAll();
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      recalculateAll();
+    });
+
+    // Print Report
+    document.getElementById('btn-print').addEventListener('click', () => {
+      triggerPrint();
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        currentStage,
+        berkus: berkusComponents,
+        scorecard: scorecardFactors,
+        riskFactors,
+        comparables,
+        scRef: document.getElementById('sc-ref-val').value,
+        vcExit: document.getElementById('vc-exit').value,
+        vcMult: document.getElementById('vc-mult').value,
+        vcInv: document.getElementById('vc-inv').value,
+        multRev: document.getElementById('mult-rev').value
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Valoración guardada localmente en tu navegador.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const saved = loadData(STORAGE_KEY, null);
+      if (!saved) {
+        alert('No se encontraron valoraciones previas guardadas.');
+        return;
+      }
+      if (saved.berkus) berkusComponents = saved.berkus;
+      if (saved.scorecard) scorecardFactors = saved.scorecard;
+      if (saved.riskFactors) riskFactors = saved.riskFactors;
+      if (saved.comparables) comparables = saved.comparables;
+      if (saved.currentStage) {
+        currentStage = saved.currentStage;
+        document.querySelector(`[data-stage="${currentStage}"]`)?.click();
+      }
+      renderBerkus();
+      renderScorecard();
+      renderRiskFactors();
+      renderComparables();
+      recalculateAll();
+      alert('✓ Valoración recuperada con éxito.');
+    });
+
+    // Init
+    updateStageRecommendation();
+    renderBerkus();
+    renderScorecard();
+    renderRiskFactors();
+    renderComparables();
+    recalculateAll();
+  
+})();
+</script>
+
+</body>
+</html>

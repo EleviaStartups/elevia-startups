@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creador de ICP (Perfil de Cliente Ideal) — Elevia Startups</title>
+  <meta name="description" content="Diseña tu perfil de cliente ideal (ICP) para B2C, B2B o B2B2C. Clasifica tus supuestos en hipótesis, validados o pendientes, y genera un dossier listo para imprimir." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/icp-creator.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+  <style>
+    .hypo-selector {
+      display: inline-flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .hypo-pill {
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border);
+      background: white;
+      cursor: pointer;
+      color: var(--color-ink-70);
+      user-select: none;
+    }
+    .hypo-pill.active-hypo { background: #FEF3C7; color: #92400E; border-color: #F59E0B; font-weight: 700; }
+    .hypo-pill.active-val  { background: #D1FAE5; color: #065F46; border-color: #10B981; font-weight: 700; }
+    .hypo-pill.active-pend { background: #E0E7FF; color: #3730A3; border-color: #6366F1; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Creador de ICP</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header" style="padding: 16px 20px; margin-bottom: 16px;">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--peach" aria-hidden="true" style="width: 44px; height: 44px; font-size: 1.4rem;">🧑‍💼</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--peach" style="font-size: 0.72rem; padding: 2px 8px;">Mercado y estrategia</span>
+          <h1 class="tool-header__title" style="font-size: 1.4rem; margin: 0 0 4px;">Creador de ICP (Perfil de Cliente Ideal)</h1>
+          <p class="tool-header__desc" style="font-size: 0.85rem; line-height: 1.45; margin: 0;">
+            Define con máxima concreción a quién le resuelves un problema urgente en B2C, B2B y B2B2C, etiquetando hipótesis vs hechos validados.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout" style="margin-top: 10px;">
+        <summary style="font-size: 0.85rem;">Privacidad y gestión de hipótesis</summary>
+        <div class="edu-callout__content" style="font-size: 0.82rem;">
+          <p><strong>Privacidad por diseño:</strong> Los perfiles deben ser arquetipos ficticios representativos. Las imágenes se procesan de forma 100% local en tu navegador.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Wizard Steps Indicator -->
+    <nav class="wizard-steps" style="margin-bottom: 16px;" aria-label="Pasos del creador de ICP">
+      <div class="wizard-step is-active" id="w-step-1" data-step="1">
+        <span class="wizard-step__num">1</span>
+        <span>Modelo</span>
+      </div>
+      <div class="wizard-step" id="w-step-2" data-step="2">
+        <span class="wizard-step__num">2</span>
+        <span>Perfil y Dolores</span>
+      </div>
+      <div class="wizard-step" id="w-step-3" data-step="3">
+        <span class="wizard-step__num">3</span>
+        <span>Validación</span>
+      </div>
+      <div class="wizard-step" id="w-step-4" data-step="4">
+        <span class="wizard-step__num">4</span>
+        <span>Ficha y Resumen</span>
+      </div>
+    </nav>
+
+    <!-- Wizard Step 1: Business Model -->
+    <div id="step-panel-1" class="tool-panel" style="padding: 18px 22px;">
+      <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--color-ink); margin-bottom: 6px;">Paso 1: ¿Qué tipo de relación comercial tiene tu startup?</h2>
+      <p style="color: var(--color-ink-70); margin-bottom: 16px; font-size: 0.88rem;">Selecciona la estructura de clientes que mejor describe cómo monetizas.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 20px;">
+        <!-- Card B2C -->
+        <div class="card model-card is-selected" id="card-b2c" style="cursor: pointer; border: 2px solid var(--color-ink); padding: 16px 18px; text-align: left;">
+          <div style="font-size: 1.6rem; margin-bottom: 6px;">👤</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--color-ink); margin: 0 0 4px;">B2C (Business to Consumer)</h3>
+          <p style="font-size: 0.82rem; color: var(--color-ink-70); margin: 0;">Vendes directamente a personas o familias que usan y pagan el producto para beneficio personal.</p>
+        </div>
+        <!-- Card B2B -->
+        <div class="card model-card" id="card-b2b" style="cursor: pointer; border: 1px solid var(--color-border); padding: 16px 18px; text-align: left;">
+          <div style="font-size: 1.6rem; margin-bottom: 6px;">🏢</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--color-ink); margin: 0 0 4px;">B2B (Business to Business)</h3>
+          <p style="font-size: 0.82rem; color: var(--color-ink-70); margin: 0;">Vendes a empresas. Hay procesos de compra formales, decisores, presupuesto y ROI.</p>
+        </div>
+        <!-- Card B2B2C -->
+        <div class="card model-card" id="card-b2b2c" style="cursor: pointer; border: 1px solid var(--color-border); padding: 16px 18px; text-align: left;">
+          <div style="font-size: 1.6rem; margin-bottom: 6px;">🤝</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--color-ink); margin: 0 0 4px;">B2B2C (Intermediación)</h3>
+          <p style="font-size: 0.82rem; color: var(--color-ink-70); margin: 0;">Tu cliente directo es una empresa, pero el valor final depende de que sus usuarios o empleados lo adopten.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-primary" id="btn-next-1">Continuar al perfil →</button>
+      </div>
+    </div>
+
+    <!-- Wizard Step 2: Form according to selection -->
+    <div id="step-panel-2" class="tool-panel" style="display: none; padding: 18px 22px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+        <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--color-ink); margin: 0;">Paso 2: Datos del Perfil Arquetipo</h2>
+        <span class="badge badge-peach" id="active-model-badge">B2C</span>
+      </div>
+
+      <!-- Avatar Picker -->
+      <div style="display:flex; align-items:center; gap: 16px; margin-bottom: 18px; padding: 12px 16px; background: var(--color-ivory); border-radius: var(--radius-lg);">
+        <div class="persona-avatar" id="avatar-preview" style="width: 48px; height: 48px; font-size: 1.5rem;">👤</div>
+        <div>
+          <label class="form-label" style="margin-bottom: 2px; font-size: 0.82rem;">Foto o Avatar representativo (Opcional)</label>
+          <input type="file" id="avatar-input" accept="image/*" class="form-input" style="padding: 2px 4px; font-size: 0.8rem;" />
+          <div class="help-text" style="font-size: 0.72rem;">Procesado 100% en tu navegador. No se envía a ningún servidor.</div>
+        </div>
+      </div>
+
+      <!-- B2C Fields -->
+      <div id="fields-b2c">
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label class="form-label">Nombre ficticio del arquetipo</label>
+            <input type="text" id="b2c-name" class="form-input" value="Laura, la profesional digital" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ubicación y Entorno</label>
+            <input type="text" id="b2c-location" class="form-input" value="Madrid / Grandes ciudades de España" />
+          </div>
+        </div>
+        <div class="form-row form-row--3">
+          <div class="form-group">
+            <label class="form-label">Ocupación / Rol</label>
+            <input type="text" id="b2c-role" class="form-input" value="Project Manager en consultora" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Situación de convivencia</label>
+            <input type="text" id="b2c-living" class="form-input" value="Vive en pareja, sin hijos" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Poder adquisitivo</label>
+            <select id="b2c-income" class="form-select">
+              <option value="Medio">Medio (22.000€ - 35.000€)</option>
+              <option value="Medio-Alto" selected>Medio-Alto (35.000€ - 55.000€)</option>
+              <option value="Alto">Alto (> 55.000€)</option>
+              <option value="Ajustado">Ajustado (&lt; 22.000€)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label class="form-label">Necesidades y objetivos principales</label>
+            <textarea id="b2c-goals" class="form-textarea" rows="3">Ahorrar tiempo en tareas repetitivas y conciliar mejor su vida laboral y personal sin sobrecargarse de trabajo.</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Problemas y puntos de dolor agudos</label>
+            <textarea id="b2c-pains" class="form-textarea" rows="3">Herramientas actuales complejas, falta de sincronización y sensación constante de no llegar a todo.</textarea>
+          </div>
+        </div>
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label class="form-label">Barreras de compra u objeciones</label>
+            <textarea id="b2c-barriers" class="form-textarea" rows="2">Miedo a perder tiempo aprendiendo otra herramienta más; precio percibido alto para uso personal.</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alternativas actuales que utiliza hoy</label>
+            <textarea id="b2c-alts" class="form-textarea" rows="2">Hojas de cálculo en Google Sheets, notas de papel y recordatorios en el móvil.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2B Fields -->
+      <div id="fields-b2b" style="display: none;">
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label class="form-label">Nombre del arquetipo de empresa</label>
+            <input type="text" id="b2b-company" class="form-input" value="Scaleup SaaS B2B en crecimiento" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sector e Industria</label>
+            <input type="text" id="b2b-sector" class="form-input" value="Software, Fintech o E-commerce" />
+          </div>
+        </div>
+        <div class="form-row form-row--3">
+          <div class="form-group">
+            <label class="form-label">Tamaño de empresa</label>
+            <select id="b2b-size" class="form-select">
+              <option value="1-10">1 a 10 empleados (Micro)</option>
+              <option value="11-50" selected>11 a 50 empleados (Startup en tracción)</option>
+              <option value="51-200">51 a 200 empleados (Scaleup)</option>
+              <option value="200+">> 200 empleados (Mid-market)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Persona decisora (Buyer Persona)</label>
+            <input type="text" id="b2b-buyer" class="form-input" value="Director de Operaciones / CFO" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Facturación estimada</label>
+            <input type="text" id="b2b-revenue" class="form-input" value="1M€ - 5M€ anuales" />
+          </div>
+        </div>
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label class="form-label">Problemas de negocio y urgencia</label>
+            <textarea id="b2b-pains" class="form-textarea" rows="3">Procesos manuales propensos a errores financieros; falta de visibilidad en métricas clave para el consejo.</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Proceso de compra y restricciones</label>
+            <textarea id="b2b-process" class="form-textarea" rows="3">Ciclo de decisión de 3 a 6 semanas. Requieren demo técnica, aprobación del CFO y cumplimiento de GDPR.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2B2C Specific Callout -->
+      <div id="fields-b2b2c-notice" style="display: none; background: var(--color-lavender-light); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+        <strong>💡 Modelo B2B2C:</strong> Analizas dos partes simultáneamente: la empresa que te contrata y el usuario final que debe adoptar tu producto para que el contrato se renueve. Los datos anteriores cubren el comprador y este bloque añade el usuario final.
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top: 24px;">
+        <button type="button" class="btn btn-secondary" id="btn-back-2">← Volver al modelo</button>
+        <button type="button" class="btn btn-primary" id="btn-next-2">Validar hipótesis →</button>
+      </div>
+    </div>
+
+    <!-- Wizard Step 3: Hypothesis Tagging -->
+    <div id="step-panel-3" class="tool-panel" style="display: none;">
+      <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--color-ink); margin-bottom: 8px;">Paso 3: Matriz de Validación de Hipótesis</h2>
+      <p style="color: var(--color-ink-70); margin-bottom: 24px;">Indica el nivel de certidumbre de cada aspecto de tu perfil para priorizar entrevistas de descubrimiento.</p>
+
+      <div id="hypo-checklist-container" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Dynamically generated rows with pill toggles -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top: 32px;">
+        <button type="button" class="btn btn-secondary" id="btn-back-3">← Editar datos</button>
+        <button type="button" class="btn btn-primary" id="btn-next-3">Ver Ficha Final →</button>
+      </div>
+    </div>
+
+    <!-- Wizard Step 4: Final Persona Card & Print -->
+    <div id="step-panel-4" style="display: none;">
+      
+      <!-- Top Action in Summary -->
+      <div class="tool-actions">
+        <div class="tool-actions__group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-edit-again">✏️ Editar perfil</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-print-profile">🖨️ Imprimir / Guardar PDF</button>
+        </div>
+        <div class="tool-actions__group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-save-icp">Guardar en navegador</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-export-icp-json">Exportar JSON</button>
+        </div>
+      </div>
+
+      <!-- Printable Persona Dossier -->
+      <div class="persona-card" id="persona-summary-card">
+        <div class="persona-card__header">
+          <div class="persona-avatar" id="summary-avatar">👤</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h2 id="summary-name" style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0;">Laura, la profesional digital</h2>
+              <span class="badge badge-sage" id="summary-model-badge">B2C</span>
+            </div>
+            <p id="summary-subtitle" style="color: var(--color-ink-70); margin: 4px 0 0; font-size: 0.95rem;">Madrid · Project Manager en consultora</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+          <!-- Column 1 -->
+          <div>
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); border-bottom: 2px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px;">Objetivos y Necesidades</h3>
+            <p id="summary-goals" style="font-size: 0.9rem; line-height: 1.6; color: var(--color-ink-70);"></p>
+
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); border-bottom: 2px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px; margin-top: 24px;">Puntos de Dolor Críticos</h3>
+            <p id="summary-pains" style="font-size: 0.9rem; line-height: 1.6; color: var(--color-ink-70);"></p>
+          </div>
+
+          <!-- Column 2 -->
+          <div>
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); border-bottom: 2px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px;">Barreras y Objeciones</h3>
+            <p id="summary-barriers" style="font-size: 0.9rem; line-height: 1.6; color: var(--color-ink-70);"></p>
+
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); border-bottom: 2px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px; margin-top: 24px;">Alternativas Actuales</h3>
+            <p id="summary-alts" style="font-size: 0.9rem; line-height: 1.6; color: var(--color-ink-70);"></p>
+          </div>
+        </div>
+
+        <!-- Hypotheses Summary Matrix in print card -->
+        <div style="margin-top: 32px; padding-top: 20px; border-top: 1px dashed var(--color-border);">
+          <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-ink-50); margin-bottom: 12px;">Estado de Certidumbre y Descubrimiento</h4>
+          <div id="summary-hypo-tags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice" style="margin-top: 40px;">
+      <div class="storage-notice-icon">🔒</div>
+      <div class="storage-notice-text">
+        <strong>Privacidad garantizada:</strong> Tu información no sale de tu ordenador. Si subes una foto, se almacena en memoria temporal durante tu sesión y no se conserva en servidores de ningún tipo.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {saveData, loadData} = __req('storage');
+    const {downloadFile, triggerPrint} = __req('format');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_icp_profiles';
+
+    // State
+    let currentStep = 1;
+    let selectedModel = 'b2c'; // 'b2c' | 'b2b' | 'b2b2c'
+    let avatarDataUrl = null;
+
+    let hypotheses = {
+      pains: 'hypothesis',    // 'hypothesis' | 'validated' | 'pending'
+      goals: 'hypothesis',
+      barriers: 'pending',
+      alts: 'validated',
+      pricing: 'hypothesis'
+    };
+
+    // Step Nav
+    const steps = [1, 2, 3, 4];
+    function setStep(num) {
+      currentStep = num;
+      steps.forEach(s => {
+        const p = document.getElementById(`step-panel-${s}`);
+        const indicator = document.getElementById(`w-step-${s}`);
+        if (p) p.style.display = (s === num) ? 'block' : 'none';
+        if (indicator) {
+          indicator.classList.toggle('is-active', s === num);
+          indicator.classList.toggle('is-done', s < num);
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Model selection in Step 1
+    const cardB2c = document.getElementById('card-b2c');
+    const cardB2b = document.getElementById('card-b2b');
+    const cardB2b2c = document.getElementById('card-b2b2c');
+
+    function selectModel(m) {
+      selectedModel = m;
+      [cardB2c, cardB2b, cardB2b2c].forEach(c => {
+        c.style.border = '1px solid var(--color-border)';
+      });
+      if (m === 'b2c') cardB2c.style.border = '2px solid var(--color-ink)';
+      if (m === 'b2b') cardB2b.style.border = '2px solid var(--color-ink)';
+      if (m === 'b2b2c') cardB2b2c.style.border = '2px solid var(--color-ink)';
+
+      // Toggle field visibility in step 2
+      document.getElementById('active-model-badge').textContent = m.toUpperCase();
+      document.getElementById('fields-b2c').style.display = (m === 'b2c' || m === 'b2b2c') ? 'block' : 'none';
+      document.getElementById('fields-b2b').style.display = (m === 'b2b') ? 'block' : 'none';
+      document.getElementById('fields-b2b2c-notice').style.display = (m === 'b2b2c') ? 'block' : 'none';
+    }
+
+    cardB2c.addEventListener('click', () => selectModel('b2c'));
+    cardB2b.addEventListener('click', () => selectModel('b2b'));
+    cardB2b2c.addEventListener('click', () => selectModel('b2b2c'));
+
+    // Avatar preview
+    document.getElementById('avatar-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          avatarDataUrl = ev.target.result;
+          document.getElementById('avatar-preview').innerHTML = `<img src="${avatarDataUrl}" alt="Avatar" />`;
+          document.getElementById('summary-avatar').innerHTML = `<img src="${avatarDataUrl}" alt="Avatar" />`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Step 1 -> 2
+    document.getElementById('btn-next-1').addEventListener('click', () => setStep(2));
+    // Step 2 -> 1
+    document.getElementById('btn-back-2').addEventListener('click', () => setStep(1));
+
+    // Step 2 -> 3
+    document.getElementById('btn-next-2').addEventListener('click', () => {
+      renderHypothesesMatrix();
+      setStep(3);
+    });
+    // Step 3 -> 2
+    document.getElementById('btn-back-3').addEventListener('click', () => setStep(2));
+
+    // Step 3 -> 4
+    document.getElementById('btn-next-3').addEventListener('click', () => {
+      populateSummaryCard();
+      setStep(4);
+    });
+    // Step 4 -> 2
+    document.getElementById('btn-edit-again').addEventListener('click', () => setStep(2));
+
+    // Wizard step indicators clicks
+    document.querySelectorAll('.wizard-step').forEach(ws => {
+      ws.addEventListener('click', () => {
+        const target = parseInt(ws.dataset.step, 10);
+        if (target <= currentStep || target === 1) {
+          if (target === 3) renderHypothesesMatrix();
+          if (target === 4) populateSummaryCard();
+          setStep(target);
+        }
+      });
+    });
+
+    // Render hypotheses checklist in step 3
+    function renderHypothesesMatrix() {
+      const container = document.getElementById('hypo-checklist-container');
+      const items = [
+        { key: 'pains', label: 'Problemas y Puntos de Dolor', desc: '¿Realmente sufren este dolor con suficiente intensidad como para pagar por una solución?' },
+        { key: 'goals', label: 'Objetivos y Resultados Esperados', desc: '¿Es este el resultado exacto que buscan o tienen otra prioridad más urgente?' },
+        { key: 'barriers', label: 'Barreras de Compra y Objeciones', desc: '¿Qué frenará la decisión en el momento de pedir el pago o la firma?' },
+        { key: 'alts', label: 'Alternativas Existentes', desc: '¿Con qué compites hoy en día (incluyendo Excel o no hacer nada)?' },
+        { key: 'pricing', label: 'Disposición de Pago y Presupuesto', desc: '¿El precio estimado encaja con su poder adquisitivo o partidas presupuestarias?' },
+      ];
+
+      container.innerHTML = '';
+      items.forEach(it => {
+        const row = document.createElement('div');
+        row.style.background = 'var(--color-ivory)';
+        row.style.padding = '14px 18px';
+        row.style.borderRadius = 'var(--radius-md)';
+        row.style.border = '1px solid var(--color-border)';
+        row.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+            <div>
+              <strong style="color:var(--color-ink); font-size:0.95rem;">${it.label}</strong>
+              <div style="font-size:0.8rem; color:var(--color-ink-70); margin-top:2px;">${it.desc}</div>
+            </div>
+            <div class="hypo-selector" data-key="${it.key}">
+              <span class="hypo-pill ${hypotheses[it.key] === 'hypothesis' ? 'active-hypo':''}" data-val="hypothesis">💡 Hipótesis</span>
+              <span class="hypo-pill ${hypotheses[it.key] === 'pending' ? 'active-pend':''}" data-val="pending">⏳ Pendiente</span>
+              <span class="hypo-pill ${hypotheses[it.key] === 'validated' ? 'active-val':''}" data-val="validated">✅ Validado</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      document.querySelectorAll('.hypo-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          const parent = e.target.parentElement;
+          const k = parent.dataset.key;
+          const val = e.target.dataset.val;
+          hypotheses[k] = val;
+          parent.querySelectorAll('.hypo-pill').forEach(p => {
+            p.className = 'hypo-pill';
+          });
+          if (val === 'hypothesis') e.target.classList.add('active-hypo');
+          if (val === 'validated')  e.target.classList.add('active-val');
+          if (val === 'pending')    e.target.classList.add('active-pend');
+        });
+      });
+    }
+
+    // Fill Summary Card (Step 4)
+    function populateSummaryCard() {
+      const isB2B = (selectedModel === 'b2b');
+
+      const name = isB2B ? document.getElementById('b2b-company').value : document.getElementById('b2c-name').value;
+      const subtitle = isB2B
+        ? `${document.getElementById('b2b-sector').value} · ${document.getElementById('b2b-size').value} empleados · Decisor: ${document.getElementById('b2b-buyer').value}`
+        : `${document.getElementById('b2c-location').value} · ${document.getElementById('b2c-role').value} · ${document.getElementById('b2c-income').value}`;
+
+      const goals = isB2B ? 'Eficiencia operativa y automatización de procesos internos' : document.getElementById('b2c-goals').value;
+      const pains = isB2B ? document.getElementById('b2b-pains').value : document.getElementById('b2c-pains').value;
+      const barriers = isB2B ? document.getElementById('b2b-process').value : document.getElementById('b2c-barriers').value;
+      const alts = isB2B ? 'Software legacy y hojas de cálculo internas' : document.getElementById('b2c-alts').value;
+
+      document.getElementById('summary-name').textContent = name;
+      document.getElementById('summary-subtitle').textContent = subtitle;
+      document.getElementById('summary-model-badge').textContent = selectedModel.toUpperCase();
+      document.getElementById('summary-goals').textContent = goals;
+      document.getElementById('summary-pains').textContent = pains;
+      document.getElementById('summary-barriers').textContent = barriers;
+      document.getElementById('summary-alts').textContent = alts;
+
+      // Badges in summary
+      const tagsContainer = document.getElementById('summary-hypo-tags');
+      tagsContainer.innerHTML = '';
+      const labels = { pains: 'Puntos de dolor', goals: 'Objetivos', barriers: 'Barreras', alts: 'Alternativas', pricing: 'Disposición de pago' };
+
+      Object.entries(hypotheses).forEach(([k, status]) => {
+        const badge = document.createElement('span');
+        if (status === 'validated') {
+          badge.className = 'hypo-badge hypo-badge--validated';
+          badge.textContent = `✅ ${labels[k]} (Validado)`;
+        } else if (status === 'hypothesis') {
+          badge.className = 'hypo-badge hypo-badge--hypothesis';
+          badge.textContent = `💡 ${labels[k]} (Hipótesis prioritaria)`;
+        } else {
+          badge.className = 'hypo-badge hypo-badge--pending';
+          badge.textContent = `⏳ ${labels[k]} (Por contrastar)`;
+        }
+        tagsContainer.appendChild(badge);
+      });
+    }
+
+    // Print
+    document.getElementById('btn-print-profile').addEventListener('click', () => {
+      triggerPrint();
+    });
+
+    // Save
+    document.getElementById('btn-save-icp').addEventListener('click', () => {
+      const data = {
+        model: selectedModel,
+        b2c: {
+          name: document.getElementById('b2c-name').value,
+          location: document.getElementById('b2c-location').value,
+          role: document.getElementById('b2c-role').value,
+          living: document.getElementById('b2c-living').value,
+          income: document.getElementById('b2c-income').value,
+          goals: document.getElementById('b2c-goals').value,
+          pains: document.getElementById('b2c-pains').value,
+          barriers: document.getElementById('b2c-barriers').value,
+          alts: document.getElementById('b2c-alts').value,
+        },
+        b2b: {
+          company: document.getElementById('b2b-company').value,
+          sector: document.getElementById('b2b-sector').value,
+          size: document.getElementById('b2b-size').value,
+          buyer: document.getElementById('b2b-buyer').value,
+          revenue: document.getElementById('b2b-revenue').value,
+          pains: document.getElementById('b2b-pains').value,
+          process: document.getElementById('b2b-process').value,
+        },
+        hypotheses
+      };
+      const res = saveData(STORAGE_KEY, data);
+      alert(res.success ? '✓ Perfil de ICP guardado en el navegador.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-icp-json').addEventListener('click', () => {
+      const data = {
+        model: selectedModel,
+        exportedAt: new Date().toISOString(),
+        hypotheses
+      };
+      downloadFile(JSON.stringify(data, null, 2), 'elevia-icp-profile.json', 'application/json');
+    });
+
+    // Init
+    selectModel('b2c');
+  
+})();
+</script>
+
+</body>
+</html>

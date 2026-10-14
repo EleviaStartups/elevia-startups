@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Constructor de Unit Economics y Retención — Elevia Startups</title>
+  <meta name="description" content="Calcula tu margen bruto unitario, período de recuperación (payback) del CAC y proyecta tu LTV real a 12 meses con cohortes de retención." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/unit-economics.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Unit Economics y Retención</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--peach" aria-hidden="true">💎</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--peach">Finanzas y métricas</span>
+          <h1 class="tool-header__title">Constructor de Unit Economics y Retención</h1>
+          <p class="tool-header__desc">
+            Comprende la rentabilidad real de cada cliente y proyecta tu LTV a 12 meses descontando costes variables directos (COGS) y aplicando tu curva de retención real. Evita confundir facturación con margen.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout">
+        <summary>¿Por qué los Unit Economics marcan la supervivencia de tu startup?</summary>
+        <div class="edu-callout__content">
+          <p><strong>1. Facturación vs. Margen Bruto Real:</strong> El ARPU (ingreso por usuario) no es dinero limpio. Cada usuario activo consume servidores, licencias de APIs externas, comisiones de pasarela de pago (Stripe, etc.) y soporte directo. Eso es el <strong>COGS</strong>. Tu margen unitario mensual es <code>ARPU - COGS</code>.</p>
+          <p><strong>2. Payback Period (Recuperación del CAC):</strong> ¿Cuántos meses tarda un cliente en devolverte lo que invertiste en captarlo? Se calcula como <code>CAC / Margen Bruto Unitario Mensual</code>. En fases Seed/Growth, un payback &lt; 12 meses es el estándar para no asfixiar la caja.</p>
+          <p><strong>3. LTV Proyectado con Retención:</strong> Asumir que los clientes duran para siempre infla artificialmente el LTV. Esta herramienta modela el LTV real a 12 meses sumando el margen bruto mensual ponderado por el % de usuarios que siguen vivos en cada mes.</p>
+          <p><strong>4. Punto de Equilibrio Unitario (Break-even):</strong> El momento exacto en el que el flujo de caja acumulado de ese cliente supera a cero y empieza a generar beneficio neto para la compañía.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-preset-saas">Ejemplo SaaS B2B</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-preset-b2c">Ejemplo B2C</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-chart">Exportar gráfico PNG</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-json">Exportar JSON</button>
+      </div>
+    </div>
+
+    <!-- Workspace Grid -->
+    <div class="workspace-grid" style="grid-template-columns: minmax(360px, 1fr) minmax(420px, 1.25fr); gap: 24px;">
+      
+      <!-- Left Column: Inputs -->
+      <section class="tool-panel" aria-labelledby="inputs-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="inputs-heading" class="tool-panel__title">Variables de Economía Unitaria</h2>
+            <div class="tool-panel__subtitle">Introduce costes, ingresos y retención por usuario</div>
+          </div>
+          <span class="badge badge-sage" id="badge-status">Cálculo coherente</span>
+        </div>
+
+        <!-- 1. Currency & General Settings -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <div class="form-group">
+            <label for="currency-select" class="form-label">Moneda</label>
+            <select id="currency-select" class="form-select">
+              <option value="EUR">Euro (€)</option>
+              <option value="USD">Dólar USD ($)</option>
+              <option value="GBP">Libra (£)</option>
+              <option value="MXN">Peso MXN ($)</option>
+              <option value="COP">Peso COP ($)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período de análisis</label>
+            <input type="text" class="form-input" value="12 meses" disabled style="background: var(--color-track, #F4F1EA); font-weight: 600;" />
+          </div>
+        </div>
+
+        <!-- 2. Core Unit Inputs -->
+        <div style="background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg, 12px); padding: 16px; margin-bottom: 20px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: var(--color-ink);">1. Captación e Ingresos Unitarios</h3>
+
+          <!-- CAC Input -->
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label for="input-cac" class="form-label">CAC — Coste de Adquisición de Cliente</label>
+            <div class="input-addon">
+              <input type="number" id="input-cac" class="form-input" placeholder="Ej. 350" min="0" step="5" value="350" />
+              <span class="input-addon__suffix currency-symbol">€</span>
+            </div>
+            <div class="help-text">Gasto total comercial y marketing necesario para adquirir 1 cliente de pago.</div>
+          </div>
+
+          <!-- ARPU Input -->
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label for="input-arpu" class="form-label">ARPU — Ingreso Medio Mensual por Usuario</label>
+            <div class="input-addon">
+              <input type="number" id="input-arpu" class="form-input" placeholder="Ej. 75" min="0" step="1" value="75" />
+              <span class="input-addon__suffix currency-symbol">€</span>
+            </div>
+            <div class="help-text">Cuota o facturación recurrente mensual promedio de un cliente activo.</div>
+          </div>
+
+          <!-- COGS Input -->
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label for="input-cogs" class="form-label">COGS — Costes Variables Mensuales por Usuario</label>
+            <div class="input-addon">
+              <input type="number" id="input-cogs" class="form-input" placeholder="Ej. 15" min="0" step="0.5" value="15" />
+              <span class="input-addon__suffix currency-symbol">€</span>
+            </div>
+            <div class="help-text">Servidores (AWS/GCP), APIs externas, pasarelas de pago (2-3%) y soporte directo.</div>
+          </div>
+
+          <!-- Live Margin Summary Box -->
+          <div id="unit-margin-box" style="background: #F7F5F0; border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--color-ink-70);">Margen Bruto Unitario</div>
+              <div id="box-margin-value" style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 800; color: #1C5E37;">60,00 € / mes</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.75rem; color: var(--color-ink-70);">% s/ ARPU</div>
+              <div id="box-margin-pct" style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 800; color: #1C5E37;">80,0 %</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Retention Table (M1, M3, M6, M12) -->
+        <div style="background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg, 12px); padding: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--color-ink);">2. Tabla de Retención Estimada</h3>
+            <span style="font-size: 0.75rem; color: var(--color-ink-50);">% activos restantes</span>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--color-ink-70); margin: 0 0 16px; line-height: 1.4;">
+            Porcentaje de clientes adquiridos en el Mes 0 que continúan pagando activamente en cada hito temporal:
+          </p>
+
+          <!-- Milestone M1 -->
+          <div class="range-group" style="margin-bottom: 14px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="ret-m1-pct" class="form-label" style="margin: 0; font-size: 0.82rem;">Mes 1 (primer mes tras alta)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="ret-m1-num" class="form-input" min="0" max="100" step="1" value="92" style="width: 68px; padding: 3px 6px; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.8rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="ret-m1-pct" class="form-range" min="0" max="100" step="1" value="92" />
+          </div>
+
+          <!-- Milestone M3 -->
+          <div class="range-group" style="margin-bottom: 14px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="ret-m3-pct" class="form-label" style="margin: 0; font-size: 0.82rem;">Mes 3 (primer trimestre)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="ret-m3-num" class="form-input" min="0" max="100" step="1" value="80" style="width: 68px; padding: 3px 6px; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.8rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="ret-m3-pct" class="form-range" min="0" max="100" step="1" value="80" />
+          </div>
+
+          <!-- Milestone M6 -->
+          <div class="range-group" style="margin-bottom: 14px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="ret-m6-pct" class="form-label" style="margin: 0; font-size: 0.82rem;">Mes 6 (medio año)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="ret-m6-num" class="form-input" min="0" max="100" step="1" value="68" style="width: 68px; padding: 3px 6px; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.8rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="ret-m6-pct" class="form-range" min="0" max="100" step="1" value="68" />
+          </div>
+
+          <!-- Milestone M12 -->
+          <div class="range-group" style="margin-bottom: 14px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="ret-m12-pct" class="form-label" style="margin: 0; font-size: 0.82rem;">Mes 12 (un año)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="ret-m12-num" class="form-input" min="0" max="100" step="1" value="50" style="width: 68px; padding: 3px 6px; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.8rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="ret-m12-pct" class="form-range" min="0" max="100" step="1" value="50" />
+          </div>
+
+          <!-- Curve detail toggle -->
+          <details style="margin-top: 14px; font-size: 0.8rem;">
+            <summary style="cursor: pointer; font-weight: 600; color: var(--color-ink-70);">Ver curva interpolada completa de 12 meses</summary>
+            <div id="curve-preview-list" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; padding: 10px; background: #FAF9F5; border-radius: 6px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </details>
+        </div>
+
+        <!-- Formula Callout -->
+        <div class="formula-box" style="margin-top: 16px; padding: 10px 14px; font-size: 0.8rem;">
+          <strong>Fórmulas clave:</strong>
+          <div style="margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--color-ink-80);">
+            Margen = ARPU - COGS | Payback = CAC / Margen Mensual | LTV(12m) = Σ (Margen × Retención_m)
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Results & Interactive Break-Even Chart -->
+      <section class="tool-panel" aria-labelledby="results-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="results-heading" class="tool-panel__title">Rentabilidad Unitaria y Flujo Acumulado</h2>
+            <div class="tool-panel__subtitle">Visualización del retorno de inversión por cliente</div>
+          </div>
+          <span class="badge badge-peach" id="badge-ratio">Ratio 0.0×</span>
+        </div>
+
+        <!-- 4 Summary Metric Cards -->
+        <div class="metrics-banner" style="grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
+          <!-- Card 1: Margen Bruto -->
+          <div class="metric-box metric-box--sage" style="padding: 12px 14px;">
+            <div class="metric-box__label" style="font-size: 0.74rem;">Margen Bruto Unitario</div>
+            <div class="metric-box__value" id="res-gross-margin" style="font-size: 1.25rem;">0,00 €</div>
+            <div class="metric-box__sub" id="res-gross-margin-pct" style="font-size: 0.72rem;">0% del ARPU</div>
+          </div>
+
+          <!-- Card 2: Payback Period -->
+          <div class="metric-box metric-box--lavender" style="padding: 12px 14px;">
+            <div class="metric-box__label" style="font-size: 0.74rem;">Payback Period (CAC)</div>
+            <div class="metric-box__value" id="res-payback" style="font-size: 1.25rem;">0 meses</div>
+            <div class="metric-box__sub" id="res-payback-sub" style="font-size: 0.72rem;">Punto de equilibrio</div>
+          </div>
+
+          <!-- Card 3: LTV 12m -->
+          <div class="metric-box metric-box--peach" style="padding: 12px 14px;">
+            <div class="metric-box__label" style="font-size: 0.74rem;">LTV Proyectado (12 meses)</div>
+            <div class="metric-box__value" id="res-ltv" style="font-size: 1.25rem;">0,00 €</div>
+            <div class="metric-box__sub" id="res-ltv-sub" style="font-size: 0.72rem;">Margen neto acumulado</div>
+          </div>
+
+          <!-- Card 4: Ratio LTV/CAC -->
+          <div class="metric-box metric-box--lavender" style="padding: 12px 14px;">
+            <div class="metric-box__label" style="font-size: 0.74rem;">Retorno de Inversión (LTV / CAC)</div>
+            <div class="metric-box__value" id="res-ltv-cac" style="font-size: 1.25rem;">0,0×</div>
+            <div class="metric-box__sub" id="res-ltv-cac-sub" style="font-size: 0.72rem;">Estándar recomendado: &gt; 3.0×</div>
+          </div>
+        </div>
+
+        <!-- Interactive Canvas Chart: Cumulative Unit Cash Flow -->
+        <div class="chart-card" style="padding: 16px; background: var(--color-white); margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--color-ink);">Flujo de Caja Unitario Acumulado (Mes 0 a 12)</h3>
+              <p style="font-size: 0.78rem; color: var(--color-ink-60); margin: 2px 0 0;">
+                Arranca en negativo (-CAC) y asciende con el margen mensual retenido hasta cruzar a beneficio.
+              </p>
+            </div>
+            <div id="breakeven-indicator" style="background: #E2F0E7; color: #1C5E37; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px;">
+              Break-even: Mes 6
+            </div>
+          </div>
+
+          <div style="position: relative; width: 100%; height: 260px;">
+            <canvas id="chart-cashflow" style="width: 100%; height: 100%; display: block;" aria-label="Gráfico de flujo de caja acumulado unitario"></canvas>
+          </div>
+        </div>
+
+        <!-- Monthly Breakdown Table Toggle -->
+        <div style="background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg, 12px); overflow: hidden; margin-bottom: 20px;">
+          <details>
+            <summary style="padding: 12px 16px; font-size: 0.85rem; font-weight: 700; color: var(--color-ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+              <span>Tabla de desglose mensual de cohortes (Mes 0 al 12)</span>
+              <span style="font-size: 0.75rem; font-weight: 500; color: var(--color-ink-50);">Ver números detallados ▾</span>
+            </summary>
+            <div style="overflow-x: auto; padding: 0 16px 16px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: right;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-ink-70);">
+                    <th style="padding: 8px 6px; text-align: left;">Mes</th>
+                    <th style="padding: 8px 6px;">Retención</th>
+                    <th style="padding: 8px 6px;">Margen Mes</th>
+                    <th style="padding: 8px 6px;">Margen Acum.</th>
+                    <th style="padding: 8px 6px;">Flujo Neto</th>
+                    <th style="padding: 8px 6px; text-align: center;">Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="table-breakdown-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <!-- Insights and Warnings Container -->
+        <div id="insights-container" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Populated by JS -->
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice" style="margin-top: 32px;">
+      <div class="storage-notice-icon">💾</div>
+      <div class="storage-notice-text">
+        <strong>Privacidad y guardado local</strong>
+        Tus unit economics se almacenan exclusivamente en la memoria local de tu navegador bajo la clave <code>elevia_unit_economics</code>. Ningún dato viaja a servidores externos.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+  <script>
+  (function () {
+    const { initNav, initFooter } = __req('nav');
+    const { calcUnitEconomics, interpolateRetention12, UNIT_ECONOMICS_PRESETS } = __req('unit-economics.calc');
+    const { saveData, loadData } = __req('storage');
+    const { formatCurrency, formatPercent, formatCompact, formatNumber, downloadFile } = __req('format');
+    const { downloadCanvasPNG } = __req('charts');
+
+    // Navigation & footer
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_unit_economics';
+
+    // State
+    let currentCurrency = 'EUR';
+
+    // DOM Elements - Inputs
+    const currencySelect = document.getElementById('currency-select');
+    const currencySymbols = document.querySelectorAll('.currency-symbol');
+    const inputCac = document.getElementById('input-cac');
+    const inputArpu = document.getElementById('input-arpu');
+    const inputCogs = document.getElementById('input-cogs');
+
+    const retM1Pct = document.getElementById('ret-m1-pct');
+    const retM1Num = document.getElementById('ret-m1-num');
+    const retM3Pct = document.getElementById('ret-m3-pct');
+    const retM3Num = document.getElementById('ret-m3-num');
+    const retM6Pct = document.getElementById('ret-m6-pct');
+    const retM6Num = document.getElementById('ret-m6-num');
+    const retM12Pct = document.getElementById('ret-m12-pct');
+    const retM12Num = document.getElementById('ret-m12-num');
+
+    // DOM Elements - Outputs
+    const badgeStatus = document.getElementById('badge-status');
+    const badgeRatio = document.getElementById('badge-ratio');
+    const boxMarginValue = document.getElementById('box-margin-value');
+    const boxMarginPct = document.getElementById('box-margin-pct');
+
+    const resGrossMargin = document.getElementById('res-gross-margin');
+    const resGrossMarginPct = document.getElementById('res-gross-margin-pct');
+    const resPayback = document.getElementById('res-payback');
+    const resPaybackSub = document.getElementById('res-payback-sub');
+    const resLtv = document.getElementById('res-ltv');
+    const resLtvSub = document.getElementById('res-ltv-sub');
+    const resLtvCac = document.getElementById('res-ltv-cac');
+    const resLtvCacSub = document.getElementById('res-ltv-cac-sub');
+
+    const breakevenIndicator = document.getElementById('breakeven-indicator');
+    const canvas = document.getElementById('chart-cashflow');
+    const curvePreviewList = document.getElementById('curve-preview-list');
+    const tableBreakdownBody = document.getElementById('table-breakdown-body');
+    const insightsContainer = document.getElementById('insights-container');
+
+    // Two-way slider <-> number sync
+    function syncPair(rangeEl, numEl) {
+      rangeEl.addEventListener('input', () => {
+        numEl.value = rangeEl.value;
+        recalculate();
+      });
+      numEl.addEventListener('input', () => {
+        const v = parseFloat(numEl.value);
+        if (!isNaN(v)) {
+          rangeEl.value = v;
+          recalculate();
+        }
+      });
+    }
+
+    syncPair(retM1Pct, retM1Num);
+    syncPair(retM3Pct, retM3Num);
+    syncPair(retM6Pct, retM6Num);
+    syncPair(retM12Pct, retM12Num);
+
+    [inputCac, inputArpu, inputCogs].forEach(el => {
+      el.addEventListener('input', recalculate);
+    });
+
+    currencySelect.addEventListener('change', () => {
+      currentCurrency = currencySelect.value;
+      const syms = { EUR: '€', USD: '$', GBP: '£', MXN: 'MXN$', COP: 'COP$' };
+      const s = syms[currentCurrency] || currentCurrency;
+      currencySymbols.forEach(el => el.textContent = s);
+      recalculate();
+    });
+
+    // Custom Canvas Line Chart for Cumulative Cash Flow with Zero Line & Break-even marker
+    function drawCashFlowChart(breakdown, breakEvenMonth) {
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, w, h);
+
+      if (!breakdown || breakdown.length === 0) return;
+
+      const padLeft = 65 * dpr;
+      const padRight = 30 * dpr;
+      const padTop = 30 * dpr;
+      const padBottom = 35 * dpr;
+
+      const plotW = w - padLeft - padRight;
+      const plotH = h - padTop - padBottom;
+
+      const values = breakdown.map(d => d.cumulativeNetCashFlow);
+      const minVal = Math.min(...values, 0);
+      const maxVal = Math.max(...values, 0);
+      const range = (maxVal - minVal) || 1;
+
+      // Expand range slightly for padding
+      const yMin = minVal - range * 0.08;
+      const yMax = maxVal + range * 0.08;
+
+      const toX = (idx) => padLeft + (idx / 12) * plotW;
+      const toY = (val) => padTop + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
+
+      const zeroY = toY(0);
+
+      // 1. Shaded area below zero (negative cash flow zone)
+      ctx.fillStyle = '#FFF5EE';
+      ctx.fillRect(padLeft, zeroY, plotW, (padTop + plotH) - zeroY);
+
+      // 2. Shaded area above zero (positive cash flow zone)
+      ctx.fillStyle = '#F4FAF5';
+      ctx.fillRect(padLeft, padTop, plotW, zeroY - padTop);
+
+      // 3. Grid lines & ticks
+      ctx.strokeStyle = '#E2DDD2';
+      ctx.lineWidth = 1 * dpr;
+      ctx.setLineDash([3 * dpr, 3 * dpr]);
+
+      const tickCount = 4;
+      for (let i = 0; i <= tickCount; i++) {
+        const val = yMin + (i / tickCount) * (yMax - yMin);
+        const yPos = toY(val);
+        ctx.beginPath();
+        ctx.moveTo(padLeft, yPos);
+        ctx.lineTo(padLeft + plotW, yPos);
+        ctx.stroke();
+
+        ctx.fillStyle = '#718096';
+        ctx.font = `${Math.round(10 * dpr)}px 'JetBrains Mono', monospace`;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(formatCompact(val, currentCurrency), padLeft - (8 * dpr), yPos);
+      }
+
+      // 4. Highlight Zero Line (Break-even boundary)
+      ctx.setLineDash([]);
+      ctx.strokeStyle = '#202A36';
+      ctx.lineWidth = 1.5 * dpr;
+      ctx.beginPath();
+      ctx.moveTo(padLeft, zeroY);
+      ctx.lineTo(padLeft + plotW, zeroY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#202A36';
+      ctx.font = `bold ${Math.round(9.5 * dpr)}px Manrope, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.fillText('0 € (Equilibrio)', padLeft + plotW - (75 * dpr), zeroY - (6 * dpr));
+
+      // 5. X-Axis Month labels
+      ctx.fillStyle = '#718096';
+      ctx.font = `${Math.round(10 * dpr)}px Manrope, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+
+      for (let m = 0; m <= 12; m++) {
+        const xPos = toX(m);
+        const label = m === 0 ? 'M0' : `M${m}`;
+        ctx.fillText(label, xPos, padTop + plotH + (8 * dpr));
+      }
+
+      // 6. Plot the Curve
+      ctx.beginPath();
+      ctx.moveTo(toX(0), toY(values[0]));
+      for (let m = 1; m <= 12; m++) {
+        const x0 = toX(m - 1);
+        const y0 = toY(values[m - 1]);
+        const x1 = toX(m);
+        const y1 = toY(values[m]);
+        const midX = (x0 + x1) / 2;
+        ctx.bezierCurveTo(midX, y0, midX, y1, x1, y1);
+      }
+      ctx.strokeStyle = '#2E7D32';
+      ctx.lineWidth = 3 * dpr;
+      ctx.stroke();
+
+      // 7. Data Points
+      breakdown.forEach((pt, idx) => {
+        const x = toX(idx);
+        const y = toY(pt.cumulativeNetCashFlow);
+
+        ctx.beginPath();
+        ctx.arc(x, y, 4 * dpr, 0, Math.PI * 2);
+        ctx.fillStyle = pt.cumulativeNetCashFlow >= 0 ? '#2E7D32' : '#D32F2F';
+        ctx.fill();
+        ctx.lineWidth = 2 * dpr;
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.stroke();
+      });
+
+      // 8. Highlight Break-even point if exists
+      if (breakEvenMonth !== null && breakEvenMonth <= 12) {
+        const beX = padLeft + (breakEvenMonth / 12) * plotW;
+        ctx.strokeStyle = '#8C441A';
+        ctx.lineWidth = 1.5 * dpr;
+        ctx.setLineDash([4 * dpr, 3 * dpr]);
+        ctx.beginPath();
+        ctx.moveTo(beX, padTop);
+        ctx.lineTo(beX, padTop + plotH);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Badge at bottom of break-even line
+        ctx.fillStyle = '#8C441A';
+        ctx.font = `bold ${Math.round(10 * dpr)}px Manrope, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(`★ Mes ${breakEvenMonth}`, beX, padTop + (10 * dpr));
+      }
+    }
+
+    // Core recalculate routine
+    function recalculate() {
+      const cac = parseFloat(inputCac.value) || 0;
+      const arpu = parseFloat(inputArpu.value) || 0;
+      const cogs = parseFloat(inputCogs.value) || 0;
+
+      const m1 = parseFloat(retM1Num.value) || 0;
+      const m3 = parseFloat(retM3Num.value) || 0;
+      const m6 = parseFloat(retM6Num.value) || 0;
+      const m12 = parseFloat(retM12Num.value) || 0;
+
+      const result = calcUnitEconomics({
+        cac,
+        arpu,
+        cogs,
+        retention: { m1, m3, m6, m12 },
+      });
+
+      // Status badges
+      if (result.errors.length > 0) {
+        badgeStatus.textContent = 'Revisar datos';
+        badgeStatus.className = 'badge badge-peach';
+      } else {
+        badgeStatus.textContent = 'Cálculo coherente';
+        badgeStatus.className = 'badge badge-sage';
+      }
+
+      // Margin summary box
+      boxMarginValue.textContent = `${formatCurrency(result.unitGrossMargin, currentCurrency)} / mes`;
+      boxMarginPct.textContent = `${formatPercent(result.grossMarginPercent, 1)}`;
+      if (result.unitGrossMargin < 0) {
+        boxMarginValue.style.color = '#C53030';
+        boxMarginPct.style.color = '#C53030';
+      } else {
+        boxMarginValue.style.color = '#1C5E37';
+        boxMarginPct.style.color = '#1C5E37';
+      }
+
+      // Summary Cards
+      resGrossMargin.textContent = formatCurrency(result.unitGrossMargin, currentCurrency);
+      resGrossMarginPct.textContent = `${formatPercent(result.grossMarginPercent, 1)} del ARPU`;
+
+      if (result.realBreakEvenMonth !== null && result.realBreakEvenMonth <= 12) {
+        resPayback.textContent = `${result.realBreakEvenMonth} meses`;
+        resPaybackSub.textContent = `Equilibrio real con retención`;
+        breakevenIndicator.textContent = `Punto de equilibrio: Mes ${result.realBreakEvenMonth}`;
+        breakevenIndicator.style.background = '#E2F0E7';
+        breakevenIndicator.style.color = '#1C5E37';
+      } else if (result.simplePaybackMonths !== null && result.simplePaybackMonths <= 12) {
+        resPayback.textContent = `> 12 meses (teórico ${result.simplePaybackMonths}m)`;
+        resPaybackSub.textContent = `Churn retrasa el retorno`;
+        breakevenIndicator.textContent = `Recuperación > 12 meses`;
+        breakevenIndicator.style.background = '#FCEFE7';
+        breakevenIndicator.style.color = '#8C441A';
+      } else {
+        resPayback.textContent = 'No recupera';
+        resPaybackSub.textContent = 'LTV inferior al CAC';
+        breakevenIndicator.textContent = 'Sin equilibrio en 12 meses';
+        breakevenIndicator.style.background = '#FCEFE7';
+        breakevenIndicator.style.color = '#C53030';
+      }
+
+      resLtv.textContent = formatCurrency(result.ltv12Months, currentCurrency);
+      resLtvSub.textContent = `Margen acumulado en 12m`;
+
+      if (result.ltvCacRatio !== null) {
+        resLtvCac.textContent = `${result.ltvCacRatio.toFixed(2)}×`;
+        badgeRatio.textContent = `Ratio ${result.ltvCacRatio.toFixed(1)}×`;
+
+        if (result.ltvCacRatio >= 3.0) {
+          badgeRatio.className = 'badge badge-sage';
+          resLtvCacSub.textContent = 'Excelente (Saludable > 3.0×)';
+          resLtvCacSub.style.color = '#1C5E37';
+        } else if (result.ltvCacRatio >= 1.0) {
+          badgeRatio.className = 'badge badge-lavender';
+          resLtvCacSub.textContent = 'Ajustado (Recomendado > 3.0×)';
+          resLtvCacSub.style.color = '#7C3AED';
+        } else {
+          badgeRatio.className = 'badge badge-peach';
+          resLtvCacSub.textContent = 'Crítico: LTV menor que CAC';
+          resLtvCacSub.style.color = '#C53030';
+        }
+      } else {
+        resLtvCac.textContent = '—';
+        badgeRatio.textContent = 'Sin CAC';
+        resLtvCacSub.textContent = 'Indica un CAC > 0';
+      }
+
+      // Update 12-Month Curve Preview List
+      const fullCurve = interpolateRetention12({ m1, m3, m6, m12 });
+      curvePreviewList.innerHTML = '';
+      for (let m = 1; m <= 12; m++) {
+        const item = document.createElement('div');
+        item.style.padding = '4px 2px';
+        item.style.background = '#FFF';
+        item.style.borderRadius = '4px';
+        item.style.border = '1px solid #E2DDD2';
+        item.innerHTML = `<span style="color:#718096; font-size: 0.68rem;">M${m}</span><br><strong>${fullCurve[m]}%</strong>`;
+        curvePreviewList.appendChild(item);
+      }
+
+      // Update Breakdown Table
+      tableBreakdownBody.innerHTML = '';
+      result.monthlyBreakdown.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--color-border)';
+
+        const isPositive = row.cumulativeNetCashFlow >= 0;
+        const color = isPositive ? '#2E7D32' : '#C53030';
+        const badge = row.month === 0
+          ? '<span style="color:#718096;">Inversión inicial</span>'
+          : (isPositive ? '<span style="color:#2E7D32; font-weight:700;">Rentable ✓</span>' : '<span style="color:#C53030;">Amortizando</span>');
+
+        tr.innerHTML = `
+          <td style="padding: 6px; text-align: left; font-weight: 700;">${row.month === 0 ? 'Mes 0 (Adquisición)' : 'Mes ' + row.month}</td>
+          <td style="padding: 6px;">${row.retentionPct}%</td>
+          <td style="padding: 6px;">${formatCurrency(row.monthlyMargin, currentCurrency)}</td>
+          <td style="padding: 6px;">${formatCurrency(row.cumulativeMargin, currentCurrency)}</td>
+          <td style="padding: 6px; font-weight: 700; color: ${color};">${formatCurrency(row.cumulativeNetCashFlow, currentCurrency)}</td>
+          <td style="padding: 6px; text-align: center; font-size: 0.72rem;">${badge}</td>
+        `;
+        tableBreakdownBody.appendChild(tr);
+      });
+
+      // Render Chart
+      drawCashFlowChart(result.monthlyBreakdown, result.realBreakEvenMonth);
+
+      // Insights
+      insightsContainer.innerHTML = '';
+      result.errors.forEach(err => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-error';
+        el.textContent = '⚠️ ' + err;
+        insightsContainer.appendChild(el);
+      });
+      result.warnings.forEach(warn => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = '💡 ' + warn;
+        insightsContainer.appendChild(el);
+      });
+
+      if (result.errors.length === 0 && result.warnings.length === 0) {
+        const el = document.createElement('div');
+        el.className = 'alert alert-info';
+        el.textContent = `ℹ️ Modelo con métricas robustas. Tu LTV a 12 meses supera con creces el CAC en ${result.realBreakEvenMonth ?? 'pocos'} meses.`;
+        insightsContainer.appendChild(el);
+      }
+    }
+
+    // Window resize handler for canvas
+    window.addEventListener('resize', () => recalculate());
+
+    // Presets
+    document.getElementById('btn-preset-saas').addEventListener('click', () => {
+      const p = UNIT_ECONOMICS_PRESETS.saasB2b;
+      inputCac.value = p.cac;
+      inputArpu.value = p.arpu;
+      inputCogs.value = p.cogs;
+      retM1Pct.value = p.retention.m1; retM1Num.value = p.retention.m1;
+      retM3Pct.value = p.retention.m3; retM3Num.value = p.retention.m3;
+      retM6Pct.value = p.retention.m6; retM6Num.value = p.retention.m6;
+      retM12Pct.value = p.retention.m12; retM12Num.value = p.retention.m12;
+      recalculate();
+    });
+
+    document.getElementById('btn-preset-b2c').addEventListener('click', () => {
+      const p = UNIT_ECONOMICS_PRESETS.b2cSubscription;
+      inputCac.value = p.cac;
+      inputArpu.value = p.arpu;
+      inputCogs.value = p.cogs;
+      retM1Pct.value = p.retention.m1; retM1Num.value = p.retention.m1;
+      retM3Pct.value = p.retention.m3; retM3Num.value = p.retention.m3;
+      retM6Pct.value = p.retention.m6; retM6Num.value = p.retention.m6;
+      retM12Pct.value = p.retention.m12; retM12Num.value = p.retention.m12;
+      recalculate();
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      inputCac.value = '350';
+      inputArpu.value = '75';
+      inputCogs.value = '15';
+      retM1Pct.value = '92'; retM1Num.value = '92';
+      retM3Pct.value = '80'; retM3Num.value = '80';
+      retM6Pct.value = '68'; retM6Num.value = '68';
+      retM12Pct.value = '50'; retM12Num.value = '50';
+      recalculate();
+    });
+
+    // Save Data to LocalStorage (elevia_unit_economics)
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        cac: inputCac.value,
+        arpu: inputArpu.value,
+        cogs: inputCogs.value,
+        currency: currentCurrency,
+        retention: {
+          m1: retM1Num.value,
+          m3: retM3Num.value,
+          m6: retM6Num.value,
+          m12: retM12Num.value,
+        },
+        savedAt: new Date().toISOString(),
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Unit Economics guardados localmente con éxito.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load Data from LocalStorage
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state) {
+        alert('No se encontraron datos guardados previamente para Unit Economics.');
+        return;
+      }
+      if (state.currency) {
+        currentCurrency = state.currency;
+        currencySelect.value = currentCurrency;
+      }
+      inputCac.value = state.cac || '350';
+      inputArpu.value = state.arpu || '75';
+      inputCogs.value = state.cogs || '15';
+
+      if (state.retention) {
+        retM1Pct.value = state.retention.m1 || '92'; retM1Num.value = retM1Pct.value;
+        retM3Pct.value = state.retention.m3 || '80'; retM3Num.value = retM3Pct.value;
+        retM6Pct.value = state.retention.m6 || '68'; retM6Num.value = retM6Pct.value;
+        retM12Pct.value = state.retention.m12 || '50'; retM12Num.value = retM12Pct.value;
+      }
+      recalculate();
+      alert('✓ Datos de Unit Economics recuperados correctamente.');
+    });
+
+    // Export PNG
+    document.getElementById('btn-export-chart').addEventListener('click', () => {
+      downloadCanvasPNG(canvas, 'elevia-unit-economics-flujo.png');
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const state = {
+        cac: inputCac.value,
+        arpu: inputArpu.value,
+        cogs: inputCogs.value,
+        currency: currentCurrency,
+        retention: {
+          m1: retM1Num.value,
+          m3: retM3Num.value,
+          m6: retM6Num.value,
+          m12: retM12Num.value,
+        },
+        exportedAt: new Date().toISOString(),
+      };
+      downloadFile(JSON.stringify(state, null, 2), 'elevia-unit-economics.json', 'application/json');
+    });
+
+    // Initial run
+    recalculate();
+  })();
+  </script>
+
+</body>
+</html>

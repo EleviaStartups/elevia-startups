@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estructurador de Data Room (Due Diligence) — Elevia Startups</title>
+  <meta name="description" content="Organiza la documentación exigida por inversores en la Due Diligence. Checklist interactivo con seguimiento de progreso y exportación de carpetas." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/data-room.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+  <style>
+    .data-room-item {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 12px);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      transition: all var(--duration-fast, 150ms) ease;
+    }
+    .data-room-item:hover {
+      border-color: var(--color-ink-30, #CBD5E0);
+      box-shadow: var(--shadow-sm);
+    }
+    .data-room-item.is-completed {
+      border-left: 4px solid #2E7D32;
+      background: #FAFCFA;
+    }
+    .data-room-item.is-in-progress {
+      border-left: 4px solid #D97706;
+      background: #FFFCF5;
+    }
+    .data-room-item.is-pending {
+      border-left: 4px solid var(--color-border);
+    }
+    .status-btn-group {
+      display: inline-flex;
+      background: var(--color-track, #F4F1EA);
+      padding: 3px;
+      border-radius: 8px;
+      gap: 2px;
+    }
+    .status-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-ink-70);
+      transition: all var(--duration-fast, 150ms) ease;
+    }
+    .status-btn.active[data-status="pending"] {
+      background: var(--color-white);
+      color: var(--color-ink);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .status-btn.active[data-status="in_progress"] {
+      background: #FEF3C7;
+      color: #92400E;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .status-btn.active[data-status="completed"] {
+      background: #D1FAE5;
+      color: #065F46;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .copy-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #202A36;
+      color: #FFF;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 200ms ease;
+      pointer-events: none;
+    }
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Estructurador de Data Room</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--lavender" aria-hidden="true">📁</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--lavender">Fundraising y Due Diligence</span>
+          <h1 class="tool-header__title">Estructurador de Data Room (Due Diligence)</h1>
+          <p class="tool-header__desc">
+            Checklist operativo y organizativo para preparar toda la documentación que los inversores exigirán antes de firmar la inversión. Sin subida de archivos: gestiona el estado, añade enlaces a tus carpetas en la nube y copia la estructura para tu equipo.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout">
+        <summary>¿Qué es un Data Room de inversión y cuándo debes prepararlo?</summary>
+        <div class="edu-callout__content">
+          <p>Un <strong>Data Room</strong> es una carpeta organizada (generalmente en Google Drive, Notion o Dropbox) donde recopilas la documentación legal, contable y operativa de la startup para que los inversores puedan auditarla durante la <strong>Due Diligence</strong> tras firmar un Term Sheet.</p>
+          <ul>
+            <li><strong>Anticípate:</strong> Tener el Data Room preparado antes de abrir la ronda acorta los tiempos de cierre de 2-3 meses a pocas semanas.</li>
+            <li><strong>Sin sorpresas:</strong> Los inversores profesionales revisan minuciosamente que la sociedad esté al corriente de sus obligaciones fiscales, laborales y que el software pertenezca legalmente a la empresa.</li>
+            <li><strong>Privacidad garantizada:</strong> Esta herramienta no almacena ningún archivo confidencial; se ejecuta 100% en tu navegador y te permite asociar enlaces seguros de lectura.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <!-- Global Progress & Action Bar -->
+    <div style="background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-xl, 16px); padding: 20px 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--color-ink);">Progreso de preparación del Data Room</h2>
+            <span class="badge badge-lavender" id="badge-progress-count">0 / 14 completados</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-ink-70); margin: 4px 0 0;">
+            Seguimiento ponderado de documentos en estado completado y en proceso.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary btn-sm" id="btn-copy-structure">
+            📋 Copiar estructura de carpetas
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-save">
+            💾 Guardar local
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-load">
+            Recuperar
+          </button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">
+            Restablecer
+          </button>
+        </div>
+      </div>
+
+      <!-- Animated Progress Bar -->
+      <div style="width: 100%; height: 12px; background: var(--color-track, #F4F1EA); border-radius: 999px; overflow: hidden; margin-bottom: 8px;">
+        <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #B9D8C2 0%, #7CB993 100%); transition: width 300ms ease; border-radius: 999px;"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--color-ink-70);">
+        <span id="label-progress-pct">0% completado</span>
+        <span id="label-progress-details">0 pendientes · 0 en proceso · 0 completados</span>
+      </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+      <!-- Category Tabs -->
+      <div class="filter-chips" role="group" aria-label="Filtrar por categoría">
+        <button type="button" class="chip chip--active" data-cat-filter="all">Todas las áreas (5)</button>
+        <button type="button" class="chip" data-cat-filter="legal">Legal / Societario</button>
+        <button type="button" class="chip" data-cat-filter="finance">Financiero</button>
+        <button type="button" class="chip" data-cat-filter="team">Equipo</button>
+        <button type="button" class="chip" data-cat-filter="product">Producto / IP</button>
+        <button type="button" class="chip" data-cat-filter="commercial">Comercial</button>
+      </div>
+
+      <!-- Status Filter -->
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="font-size: 0.8rem; color: var(--color-ink-70); font-weight: 600;">Estado:</span>
+        <select id="status-filter" class="form-select" style="padding: 4px 10px; font-size: 0.82rem; width: auto;">
+          <option value="all">Todos los estados</option>
+          <option value="pending">Pendientes</option>
+          <option value="in_progress">En proceso</option>
+          <option value="completed">Completados</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main Checklist Sections Container -->
+    <div id="sections-container" style="display: flex; flex-direction: column; gap: 24px;">
+      <!-- Populated dynamically by JS -->
+    </div>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice" style="margin-top: 36px;">
+      <div class="storage-notice-icon">💾</div>
+      <div class="storage-notice-text">
+        <strong>Almacenamiento seguro en tu navegador</strong>
+        Tus estados y notas se guardan de forma privada en tu dispositivo bajo la clave <code>elevia_data_room</code>. Ningún dato ni enlace se envía a ningún servidor.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="copy-toast">✓ Estructura de carpetas copiada al portapapeles</div>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+  <script>
+  (function () {
+    const { initNav, initFooter } = __req('nav');
+    const { DEFAULT_DATA_ROOM_SECTIONS, createDefaultDataRoom, calcDataRoomStats, generateFolderStructureText } = __req('data-room.calc');
+    const { saveData, loadData } = __req('storage');
+    const { downloadFile } = __req('format');
+
+    // Navigation & footer
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_data_room';
+
+    // State
+    let dataRoom = createDefaultDataRoom();
+    let currentCatFilter = 'all';
+    let currentStatusFilter = 'all';
+
+    // DOM Elements
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const badgeProgressCount = document.getElementById('badge-progress-count');
+    const labelProgressPct = document.getElementById('label-progress-pct');
+    const labelProgressDetails = document.getElementById('label-progress-details');
+    const sectionsContainer = document.getElementById('sections-container');
+    const statusFilter = document.getElementById('status-filter');
+    const toast = document.getElementById('toast');
+
+    function showToast(msg) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Render All Sections and Items
+    function renderChecklist() {
+      sectionsContainer.innerHTML = '';
+
+      const stats = calcDataRoomStats(dataRoom);
+
+      // Update global progress bar
+      progressBarFill.style.width = `${stats.progressPercent}%`;
+      labelProgressPct.textContent = `${stats.progressPercent}% completado`;
+      badgeProgressCount.textContent = `${stats.completedCount} / ${stats.totalItems} completados`;
+      labelProgressDetails.textContent = `${stats.pendingCount} pendientes · ${stats.inProgressCount} en proceso · ${stats.completedCount} completados`;
+
+      dataRoom.forEach(sec => {
+        // Apply Category Filter
+        if (currentCatFilter !== 'all' && sec.id !== currentCatFilter) {
+          return;
+        }
+
+        const catStats = stats.categoryStats[sec.id] || { total: 0, completed: 0, inProgress: 0, progressPercent: 0 };
+
+        // Filter items within section by status
+        const visibleItems = (sec.items || []).filter(item => {
+          if (currentStatusFilter === 'all') return true;
+          return item.status === currentStatusFilter;
+        });
+
+        if (visibleItems.length === 0 && currentStatusFilter !== 'all') {
+          return;
+        }
+
+        const sectionCard = document.createElement('div');
+        sectionCard.className = 'tool-panel';
+        sectionCard.style.padding = '20px 24px';
+
+        // Section Header
+        const headerDiv = document.createElement('div');
+        headerDiv.style.display = 'flex';
+        headerDiv.style.justifyContent = 'space-between';
+        headerDiv.style.alignItems = 'center';
+        headerDiv.style.flexWrap = 'wrap';
+        headerDiv.style.gap = '8px';
+        headerDiv.style.marginBottom = '14px';
+
+        headerDiv.innerHTML = `
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.25rem;">${sec.icon}</span>
+              <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--color-ink);">${sec.name}</h3>
+              <span class="badge ${catStats.completed === catStats.total ? 'badge-sage' : 'badge-lavender'}" style="font-size: 0.72rem;">
+                ${catStats.completed} / ${catStats.total} listos
+              </span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--color-ink-70); margin: 3px 0 0;">
+              ${sec.description}
+            </p>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: #1C5E37;">
+            ${catStats.progressPercent}%
+          </div>
+        `;
+        sectionCard.appendChild(headerDiv);
+
+        // Section Items Container
+        const itemsList = document.createElement('div');
+        itemsList.style.display = 'flex';
+        itemsList.style.flexDirection = 'column';
+        itemsList.style.gap = '10px';
+
+        visibleItems.forEach(item => {
+          const itemEl = document.createElement('div');
+          itemEl.className = `data-room-item is-${item.status.replace('_', '-')}`;
+
+          itemEl.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+              <div style="flex: 1; min-width: 240px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong style="font-size: 0.92rem; color: var(--color-ink);">${item.name}</strong>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--color-ink-70); margin-top: 3px; line-height: 1.4;">
+                  ${item.description}
+                </div>
+              </div>
+
+              <!-- Status Buttons Group -->
+              <div class="status-btn-group" role="group" aria-label="Cambiar estado del documento">
+                <button type="button" class="status-btn ${item.status === 'pending' ? 'active' : ''}" data-status="pending" data-item-id="${item.id}">⚪ Pendiente</button>
+                <button type="button" class="status-btn ${item.status === 'in_progress' ? 'active' : ''}" data-status="in_progress" data-item-id="${item.id}">⏳ En proceso</button>
+                <button type="button" class="status-btn ${item.status === 'completed' ? 'active' : ''}" data-status="completed" data-item-id="${item.id}">✅ Completado</button>
+              </div>
+            </div>
+
+            <!-- Notes & Drive link input -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+              <span style="font-size: 0.8rem; color: var(--color-ink-60);">🔗</span>
+              <input type="text" class="form-input item-notes-input" data-item-id="${item.id}" placeholder="Notas o enlace a Google Drive / Notion (ej. https://drive.google.com/...)" value="${escapeHtml(item.notes || '')}" style="font-size: 0.78rem; padding: 4px 8px; border-radius: 6px;" />
+            </div>
+          `;
+
+          // Event listeners for status change
+          const statusBtns = itemEl.querySelectorAll('.status-btn');
+          statusBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const newStatus = e.currentTarget.getAttribute('data-status');
+              item.status = newStatus;
+              autoSave();
+              renderChecklist();
+            });
+          });
+
+          // Notes input listener
+          const notesInput = itemEl.querySelector('.item-notes-input');
+          notesInput.addEventListener('input', (e) => {
+            item.notes = e.target.value;
+            autoSave();
+          });
+
+          itemsList.appendChild(itemEl);
+        });
+
+        sectionCard.appendChild(itemsList);
+        sectionsContainer.appendChild(sectionCard);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // AutoSave quietly on changes
+    function autoSave() {
+      saveData(STORAGE_KEY, {
+        sections: dataRoom,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    // Category Filter Buttons
+    document.querySelectorAll('[data-cat-filter]').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        document.querySelectorAll('[data-cat-filter]').forEach(c => c.classList.remove('chip--active'));
+        e.currentTarget.classList.add('chip--active');
+        currentCatFilter = e.currentTarget.getAttribute('data-cat-filter');
+        renderChecklist();
+      });
+    });
+
+    // Status Filter Select
+    statusFilter.addEventListener('change', (e) => {
+      currentStatusFilter = e.target.value;
+      renderChecklist();
+    });
+
+    // Copy Folder Structure Button
+    document.getElementById('btn-copy-structure').addEventListener('click', () => {
+      const text = generateFolderStructureText(dataRoom, 'notion');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('✓ ¡Estructura de carpetas copiada al portapapeles!');
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    });
+
+    function fallbackCopyText(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('✓ ¡Estructura de carpetas copiada al portapapeles!');
+    }
+
+    // Manual Save Button
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const res = saveData(STORAGE_KEY, {
+        sections: dataRoom,
+        updatedAt: new Date().toISOString(),
+      });
+      alert(res.success ? '✓ Data Room guardado localmente con éxito.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Manual Load Button
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state || !state.sections) {
+        alert('No se encontraron datos guardados previamente para el Data Room.');
+        return;
+      }
+      dataRoom = state.sections;
+      renderChecklist();
+      alert('✓ Datos del Data Room recuperados correctamente.');
+    });
+
+    // Reset Button
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (confirm('¿Restablecer el checklist a su estado inicial? Se borrarán notas y estados actuales.')) {
+        dataRoom = createDefaultDataRoom();
+        autoSave();
+        renderChecklist();
+      }
+    });
+
+    // Load initial state from LocalStorage if present
+    const saved = loadData(STORAGE_KEY, null);
+    if (saved && saved.sections && Array.isArray(saved.sections)) {
+      dataRoom = saved.sections;
+    }
+
+    renderChecklist();
+  })();
+  </script>
+
+</body>
+</html>

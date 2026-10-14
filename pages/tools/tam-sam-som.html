@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora TAM / SAM / SOM — Elevia Startups</title>
+  <meta name="description" content="Estima el tamaño de tu mercado potencial con métodos Top-down y Bottom-up. Resultados verificables, escenarios y análisis de coherencia para startups." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/tam-sam-som.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">TAM / SAM / SOM</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--sage" aria-hidden="true">📊</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--sage">Mercado y estrategia</span>
+          <h1 class="tool-header__title">Calculadora TAM / SAM / SOM</h1>
+          <p class="tool-header__desc">
+            Estima con rigor el tamaño de tu oportunidad de negocio. Diferencia entre el universo total del mercado (TAM), el segmento al que puedes servir con tu modelo actual (SAM) y el mercado que razonablemente aspiras a captar a corto o medio plazo (SOM).
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout">
+        <summary>¿Qué significan estos conceptos y cómo elegirlos?</summary>
+        <div class="edu-callout__content">
+          <p><strong>TAM (Total Addressable Market):</strong> El volumen total de negocio si captaras el 100% de la demanda en el sector o problema que resuelves. No tiene por qué ser global; depende del alcance de tu propuesta.</p>
+          <p><strong>SAM (Serviceable Addressable Market):</strong> La porción del TAM a la que realmente puedes atender considerando tu geografía inicial, canal de distribución, idioma y limitaciones de producto.</p>
+          <p><strong>SOM (Serviceable Obtainable Market):</strong> Tu objetivo realista de cuota de mercado en un horizonte de 1 a 3 años, teniendo en cuenta la competencia, tu capacidad comercial y los recursos disponibles.</p>
+          <p><em>Principio de Elevia:</em> Utiliza el método <strong>Top-down</strong> cuando cuentes con informes de analistas reconocidos para contrastar, y el método <strong>Bottom-up</strong> (recomendado por inversores) para basar tu mercado en clientes reales y precio medio unitario.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Tool Actions Bar -->
+    <div class="tool-actions">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo demostrativo</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-chart">Exportar gráfico PNG</button>
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace-grid">
+      
+      <!-- Inputs Column -->
+      <section class="tool-panel" aria-labelledby="inputs-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="inputs-heading" class="tool-panel__title">Hipótesis de mercado</h2>
+            <div class="tool-panel__subtitle">Configura tus variables de cálculo</div>
+          </div>
+          <!-- Method switcher -->
+          <div class="tab-list" role="tablist">
+            <button type="button" role="tab" aria-selected="true" class="tab-item is-active" id="tab-topdown">Top-down</button>
+            <button type="button" role="tab" aria-selected="false" class="tab-item" id="tab-bottomup">Bottom-up</button>
+          </div>
+        </div>
+
+        <!-- Global controls: Currency & Timeframe -->
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label for="currency-select" class="form-label">Moneda</label>
+            <select id="currency-select" class="form-select">
+              <option value="EUR">Euro (€)</option>
+              <option value="USD">Dólar USD ($)</option>
+              <option value="GBP">Libra esterlina (£)</option>
+              <option value="MXN">Peso mexicano (MXN$)</option>
+              <option value="COP">Peso colombiano (COP$)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="timeframe-select" class="form-label">Unidad temporal</label>
+            <select id="timeframe-select" class="form-select">
+              <option value="annual">Anual (estándar)</option>
+              <option value="monthly">Mensual (convierte x12 para TAM)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Form Top-down -->
+        <div id="form-topdown" class="method-form">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Calcular TAM por:</label>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="btn-td-mode-currency" class="btn btn-sm btn-primary" style="flex: 1; padding: 6px 10px; font-size: 0.82rem; justify-content: center;">💶 Importe en <span class="currency-label">€</span></button>
+              <button type="button" id="btn-td-mode-users" class="btn btn-sm btn-ghost" style="flex: 1; padding: 6px 10px; font-size: 0.82rem; justify-content: center;">👥 Número de usuarios</button>
+            </div>
+          </div>
+
+          <!-- Currency block -->
+          <div id="td-block-currency">
+            <div class="form-group">
+              <label for="td-ref-market" class="form-label">Tamaño de mercado de referencia (TAM global/sector)</label>
+              <div class="input-addon">
+                <input type="number" id="td-ref-market" class="form-input" placeholder="Ej. 500000000" min="0" step="1000" value="250000000" />
+                <span class="input-addon__suffix currency-label">€</span>
+              </div>
+              <div class="help-text">Volumen total estimado del sector según fuentes o estudios.</div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="td-ticket-currency" class="form-label">Ticket / Gasto medio anual por cliente <span style="font-weight: 400; color: var(--color-ink-50);">(opcional)</span></label>
+              <div class="input-addon">
+                <input type="number" id="td-ticket-currency" class="form-input" placeholder="Ej. 200" min="0" step="10" value="" />
+                <span class="input-addon__suffix currency-label">€</span>
+              </div>
+              <div class="help-text">Si lo indicas, calculará también el número estimado de clientes en TAM, SAM y SOM.</div>
+            </div>
+          </div>
+
+          <!-- Users block -->
+          <div id="td-block-users" style="display: none;">
+            <div class="form-group">
+              <label for="td-users-count" class="form-label">Total de usuarios / clientes potenciales (TAM)</label>
+              <div class="input-addon">
+                <input type="number" id="td-users-count" class="form-input" placeholder="Ej. 1000000" min="1" step="1000" value="1000000" />
+                <span class="input-addon__suffix">👥</span>
+              </div>
+              <div class="help-text">Población o empresas totales del mercado objetivo a nivel global.</div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="td-ticket-users" class="form-label">Ticket / Gasto medio anual por cliente <span style="font-weight: 400; color: var(--color-ink-50);">(opcional)</span></label>
+              <div class="input-addon">
+                <input type="number" id="td-ticket-users" class="form-input" placeholder="Ej. 250" min="0" step="10" value="250" />
+                <span class="input-addon__suffix currency-label">€</span>
+              </div>
+              <div class="help-text">Si lo indicas, calculará el valor en <span class="currency-label">€</span> además del número de usuarios.</div>
+            </div>
+          </div>
+
+          <div class="range-group" style="margin-bottom: 16px; margin-top: 14px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="td-sam-pct" class="form-label" style="margin:0;">Segmento relevante (SAM %)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="td-sam-num" class="form-input" min="0.1" max="100" step="0.5" value="12" style="width: 72px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.85rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="td-sam-pct" class="form-range" min="0.1" max="100" step="0.5" value="12" />
+            <div class="help-text">Porción que encaja con tu tecnología, idioma y geografía.</div>
+          </div>
+
+          <div class="range-group" style="margin-bottom: 16px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="td-som-pct" class="form-label" style="margin:0;">Cuota capturable (SOM % sobre SAM)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="td-som-num" class="form-input" min="0.1" max="50" step="0.1" value="4" style="width: 72px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.85rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="td-som-pct" class="form-range" min="0.1" max="50" step="0.1" value="4" />
+            <div class="help-text">Objetivo realista a 1-3 años con tus recursos comerciales.</div>
+          </div>
+        </div>
+
+        <!-- Form Bottom-up -->
+        <div id="form-bottomup" class="method-form" style="display: none;">
+          <div class="form-group">
+            <label for="bu-total-customers" class="form-label">Número total de clientes potenciales en el universo</label>
+            <input type="number" id="bu-total-customers" class="form-input" placeholder="Ej. 120000" min="1" step="100" value="85000" />
+            <div class="help-text">Total de empresas o personas con el problema analizado.</div>
+          </div>
+
+          <div class="range-group" style="margin-bottom: 16px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="bu-addressable-pct" class="form-label" style="margin:0;">% con encaje y alcance (SAM %)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="bu-addressable-num" class="form-input" min="0.5" max="100" step="0.5" value="20" style="width: 72px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.85rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="bu-addressable-pct" class="form-range" min="0.5" max="100" step="0.5" value="20" />
+            <div class="help-text">Filtrado por tamaño, presupuesto o madurez técnica.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="bu-arpu" class="form-label">Ingreso medio anual por cliente (ARPU anual)</label>
+            <div class="input-addon">
+              <input type="number" id="bu-arpu" class="form-input" placeholder="Ej. 2400" min="1" step="10" value="1800" />
+              <span class="input-addon__suffix currency-label">€</span>
+            </div>
+            <div class="help-text">Ticket medio anual por cliente.</div>
+          </div>
+
+          <div class="range-group" style="margin-bottom: 16px;">
+            <div class="range-group__header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="bu-capture-pct" class="form-label" style="margin:0;">% de clientes SAM a captar (SOM %)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="bu-capture-num" class="form-input" min="0.1" max="50" step="0.1" value="5" style="width: 72px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; text-align: right;" />
+                <span style="font-weight: 700; font-size: 0.85rem;">%</span>
+              </div>
+            </div>
+            <input type="range" id="bu-capture-pct" class="form-range" min="0.1" max="50" step="0.1" value="5" />
+            <div class="help-text">Cuota realista según tu capacidad de ejecución comercial.</div>
+          </div>
+        </div>
+
+        <!-- Formula display -->
+        <div class="formula-box" id="formula-display" style="padding: 10px 14px; font-size: 0.8rem; margin-top: 14px;">
+          <strong>Fórmula aplicada:</strong>
+          <span id="formula-text">TAM = Mercado Referencia | SAM = TAM × SAM% | SOM = SAM × SOM%</span>
+        </div>
+      </section>
+
+      <!-- Results Column (Concentric Circles & Primary Metrics) -->
+      <section class="tool-panel" aria-labelledby="results-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="results-heading" class="tool-panel__title">Dimensionamiento TAM / SAM / SOM</h2>
+            <div class="tool-panel__subtitle">Visualización concéntrica en tiempo real</div>
+          </div>
+          <span class="badge badge-sage" id="results-status-badge">Cálculo coherente</span>
+        </div>
+
+        <!-- Concentric Circles Diagram (HubSpot style with Elevia brand colors) -->
+        <div class="chart-card" style="padding: 14px 16px; margin-bottom: 14px; background: var(--color-white); text-align: center;">
+          <svg id="svg-tam-circles" viewBox="0 0 460 310" style="width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto;" aria-label="Diagrama concéntrico de TAM, SAM y SOM">
+            <!-- TAM circle (outer, peach) -->
+            <circle cx="230" cy="155" r="145" fill="#FCEFE7" stroke="#F0C6A8" stroke-width="2.5" />
+            <!-- SAM circle (middle, lavender) -->
+            <circle cx="230" cy="190" r="105" fill="#F1ECF9" stroke="#D8C9F0" stroke-width="2.5" />
+            <!-- SOM circle (inner, sage) -->
+            <circle cx="230" cy="235" r="58" fill="#E2F0E7" stroke="#B9D8C2" stroke-width="2.5" />
+
+            <!-- TAM Labels -->
+            <text x="230" y="34" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="11.5" fill="#8C441A" letter-spacing="0.06em">TAM · MERCADO TOTAL DISPONIBLE</text>
+            <text x="230" y="52" text-anchor="middle" id="svg-tam-val" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="14.5" fill="#202A36">250,00M €</text>
+            <text x="230" y="67" text-anchor="middle" id="svg-tam-sub-val" font-family="Manrope, sans-serif" font-weight="600" font-size="10.5" fill="#7C320A"></text>
+
+            <!-- SAM Labels -->
+            <text x="230" y="106" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="11" fill="#3D2963" letter-spacing="0.06em">SAM · MERCADO ALCANZABLE</text>
+            <text x="230" y="124" text-anchor="middle" id="svg-sam-val" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="14" fill="#202A36">30,00M € (12%)</text>
+            <text x="230" y="139" text-anchor="middle" id="svg-sam-sub-val" font-family="Manrope, sans-serif" font-weight="600" font-size="10.5" fill="#4B3B73"></text>
+
+            <!-- SOM Labels -->
+            <text x="230" y="214" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="10.5" fill="#1C5E37" letter-spacing="0.06em">SOM · CAPTURABLE (1-3 AÑOS)</text>
+            <text x="230" y="232" text-anchor="middle" id="svg-som-val" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="13.5" fill="#202A36">1,20M €</text>
+            <text x="230" y="248" text-anchor="middle" id="svg-som-sub-val" font-family="Manrope, sans-serif" font-weight="600" font-size="10" fill="#2E4A37">4% del SAM</text>
+          </svg>
+        </div>
+
+        <!-- Metrics cards (compact row directly below concentric diagram) -->
+        <div class="metrics-banner" style="grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 0;">
+          <div class="metric-box metric-box--peach" style="padding: 8px 10px;">
+            <div class="metric-box__label" style="font-size: 0.72rem;">TAM Total</div>
+            <div class="metric-box__value" id="res-tam" style="font-size: 1.05rem;">0 €</div>
+            <div class="metric-box__sub" id="res-tam-sub" style="font-size: 0.68rem;">100% oportunidad</div>
+          </div>
+          <div class="metric-box metric-box--lavender" style="padding: 8px 10px;">
+            <div class="metric-box__label" style="font-size: 0.72rem;">SAM Relevante</div>
+            <div class="metric-box__value" id="res-sam" style="font-size: 1.05rem;">0 €</div>
+            <div class="metric-box__sub" id="res-sam-sub" style="font-size: 0.68rem;">0% del TAM</div>
+          </div>
+          <div class="metric-box metric-box--sage" style="padding: 8px 10px;">
+            <div class="metric-box__label" style="font-size: 0.72rem;">SOM Objetivo</div>
+            <div class="metric-box__value" id="res-som" style="font-size: 1.05rem;">0 €</div>
+            <div class="metric-box__sub" id="res-som-sub" style="font-size: 0.68rem;">0% del SAM</div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- Secondary Section Below Fold: Bar Chart Comparison & Scenario Analysis -->
+    <section class="tool-panel" style="margin-top: 24px;">
+      <div class="tool-panel__header">
+        <div>
+          <h2 class="tool-panel__title">Comparativa de Magnitud y Escenarios</h2>
+          <div class="tool-panel__subtitle">Distribución relativa y sensibilidad a variaciones de cuota</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: start;">
+        <!-- Chart comparison (bar chart) -->
+        <div class="chart-card" style="margin-bottom: 0;">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Comparativa de barras (TAM vs SAM vs SOM)</h3>
+            <span style="font-size: 0.75rem; color: var(--color-ink-50);">Escala visual</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-tam" width="480" height="200" aria-label="Gráfico de barras comparativo de TAM, SAM y SOM"></canvas>
+          </div>
+        </div>
+
+        <!-- Scenarios table & Insights -->
+        <div>
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 0 0 10px;">Análisis de sensibilidad de escenarios</h3>
+          <div class="scenarios-grid" style="margin-top: 0; margin-bottom: 16px;">
+            <div class="scenario-card scenario-card--conservative">
+              <div class="scenario-card__title">Conservador</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: #8C441A;" id="scen-cons-som">0 €</div>
+              <div style="font-size: 0.75rem; color: var(--color-ink-70); margin-top: 4px;">Cuota reducida en 50%</div>
+            </div>
+            <div class="scenario-card scenario-card--base">
+              <div class="scenario-card__title">Escenario Base</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--color-ink);" id="scen-base-som">0 €</div>
+              <div style="font-size: 0.75rem; color: var(--color-ink-70); margin-top: 4px;">Tus hipótesis actuales</div>
+            </div>
+            <div class="scenario-card scenario-card--optimistic">
+              <div class="scenario-card__title">Optimista</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: #1E663B;" id="scen-opt-som">0 €</div>
+              <div style="font-size: 0.75rem; color: var(--color-ink-70); margin-top: 4px;">Aceleración comercial</div>
+            </div>
+          </div>
+
+          <!-- Alerts & Insights -->
+          <div id="insights-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Storage notice -->
+    <div class="storage-notice" style="margin-top: 32px;">
+      <div class="storage-notice-icon">💾</div>
+      <div class="storage-notice-text">
+        <strong>Almacenamiento en tu navegador</strong>
+        Tus cálculos se conservan en la memoria local de tu dispositivo. No se transmiten a ningún servidor externo. Si borras las cookies o usas navegación privada, los datos no se mantendrán.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {calcTopDown, calcBottomUp, generateScenarios, analyzeResults} = __req('tam-sam-som.calc');
+    const {saveData, loadData} = __req('storage');
+    const {formatCurrency, formatPercent, formatCompact, formatNumber} = __req('format');
+    const {renderBarChart, downloadCanvasPNG} = __req('charts');
+
+    // Initialize Navigation & Footer
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    // Storage key
+    const STORAGE_KEY = 'elevia_v1_tam_sam_som';
+
+    // State
+    let activeMethod = 'top-down'; // 'top-down' | 'bottom-up'
+    let currentCurrency = 'EUR';
+    let currentTimeframe = 'annual';
+    let tdInputMode = 'currency'; // 'currency' | 'users'
+
+    // DOM Elements
+    const tabTopdown = document.getElementById('tab-topdown');
+    const tabBottomup = document.getElementById('tab-bottomup');
+    const formTopdown = document.getElementById('form-topdown');
+    const formBottomup = document.getElementById('form-bottomup');
+    const currencySelect = document.getElementById('currency-select');
+    const timeframeSelect = document.getElementById('timeframe-select');
+    const currencyLabels = document.querySelectorAll('.currency-label');
+
+    // Top-down inputs & modes
+    const btnTdModeCurrency = document.getElementById('btn-td-mode-currency');
+    const btnTdModeUsers = document.getElementById('btn-td-mode-users');
+    const tdBlockCurrency = document.getElementById('td-block-currency');
+    const tdBlockUsers = document.getElementById('td-block-users');
+    const tdRefMarket = document.getElementById('td-ref-market');
+    const tdTicketCurrency = document.getElementById('td-ticket-currency');
+    const tdUsersCount = document.getElementById('td-users-count');
+    const tdTicketUsers = document.getElementById('td-ticket-users');
+    const tdSamPct = document.getElementById('td-sam-pct');
+    const tdSamNum = document.getElementById('td-sam-num');
+    const tdSomPct = document.getElementById('td-som-pct');
+    const tdSomNum = document.getElementById('td-som-num');
+
+    // Bottom-up inputs
+    const buTotalCustomers = document.getElementById('bu-total-customers');
+    const buAddressablePct = document.getElementById('bu-addressable-pct');
+    const buAddressableNum = document.getElementById('bu-addressable-num');
+    const buArpu = document.getElementById('bu-arpu');
+    const buCapturePct = document.getElementById('bu-capture-pct');
+    const buCaptureNum = document.getElementById('bu-capture-num');
+
+    // Results elements
+    const resTam = document.getElementById('res-tam');
+    const resTamSub = document.getElementById('res-tam-sub');
+    const resSam = document.getElementById('res-sam');
+    const resSom = document.getElementById('res-som');
+    const resSamSub = document.getElementById('res-sam-sub');
+    const resSomSub = document.getElementById('res-som-sub');
+    const formulaText = document.getElementById('formula-text');
+    const insightsContainer = document.getElementById('insights-container');
+    const scenConsSom = document.getElementById('scen-cons-som');
+    const scenBaseSom = document.getElementById('scen-base-som');
+    const scenOptSom = document.getElementById('scen-opt-som');
+    const canvas = document.getElementById('chart-tam');
+    const resultsStatusBadge = document.getElementById('results-status-badge');
+
+    // SVG Concentric diagram elements
+    const svgTamVal = document.getElementById('svg-tam-val');
+    const svgTamSubVal = document.getElementById('svg-tam-sub-val');
+    const svgSamVal = document.getElementById('svg-sam-val');
+    const svgSamSubVal = document.getElementById('svg-sam-sub-val');
+    const svgSomVal = document.getElementById('svg-som-val');
+    const svgSomSubVal = document.getElementById('svg-som-sub-val');
+
+    // Sync currency symbols
+    function updateCurrencySymbols() {
+      const symbols = { EUR: '€', USD: '$', GBP: '£', MXN: 'MXN$', COP: 'COP$' };
+      const sym = symbols[currentCurrency] || currentCurrency;
+      currencyLabels.forEach(el => el.textContent = sym);
+    }
+
+    // Top-down mode switcher
+    function setTdInputMode(mode) {
+      tdInputMode = mode;
+      if (mode === 'currency') {
+        btnTdModeCurrency.className = 'btn btn-sm btn-primary';
+        btnTdModeUsers.className = 'btn btn-sm btn-ghost';
+        tdBlockCurrency.style.display = 'block';
+        tdBlockUsers.style.display = 'none';
+      } else {
+        btnTdModeCurrency.className = 'btn btn-sm btn-ghost';
+        btnTdModeUsers.className = 'btn btn-sm btn-primary';
+        tdBlockCurrency.style.display = 'none';
+        tdBlockUsers.style.display = 'block';
+      }
+      recalculate();
+    }
+
+    if (btnTdModeCurrency) btnTdModeCurrency.addEventListener('click', () => setTdInputMode('currency'));
+    if (btnTdModeUsers) btnTdModeUsers.addEventListener('click', () => setTdInputMode('users'));
+
+    // Tab switcher
+    tabTopdown.addEventListener('click', () => {
+      activeMethod = 'top-down';
+      tabTopdown.classList.add('is-active');
+      tabTopdown.setAttribute('aria-selected', 'true');
+      tabBottomup.classList.remove('is-active');
+      tabBottomup.setAttribute('aria-selected', 'false');
+      formTopdown.style.display = 'block';
+      formBottomup.style.display = 'none';
+      recalculate();
+    });
+
+    tabBottomup.addEventListener('click', () => {
+      activeMethod = 'bottom-up';
+      tabBottomup.classList.add('is-active');
+      tabBottomup.setAttribute('aria-selected', 'true');
+      tabTopdown.classList.remove('is-active');
+      tabTopdown.setAttribute('aria-selected', 'false');
+      formBottomup.style.display = 'block';
+      formTopdown.style.display = 'none';
+      recalculate();
+    });
+
+    // Two-way sync: slider <-> number input
+    tdSamPct.addEventListener('input', () => { tdSamNum.value = tdSamPct.value; recalculate(); });
+    tdSamNum.addEventListener('input', () => {
+      const v = parseFloat(tdSamNum.value);
+      if (!isNaN(v)) { tdSamPct.value = v; recalculate(); }
+    });
+
+    tdSomPct.addEventListener('input', () => { tdSomNum.value = tdSomPct.value; recalculate(); });
+    tdSomNum.addEventListener('input', () => {
+      const v = parseFloat(tdSomNum.value);
+      if (!isNaN(v)) { tdSomPct.value = v; recalculate(); }
+    });
+
+    buAddressablePct.addEventListener('input', () => { buAddressableNum.value = buAddressablePct.value; recalculate(); });
+    buAddressableNum.addEventListener('input', () => {
+      const v = parseFloat(buAddressableNum.value);
+      if (!isNaN(v)) { buAddressablePct.value = v; recalculate(); }
+    });
+
+    buCapturePct.addEventListener('input', () => { buCaptureNum.value = buCapturePct.value; recalculate(); });
+    buCaptureNum.addEventListener('input', () => {
+      const v = parseFloat(buCaptureNum.value);
+      if (!isNaN(v)) { buCapturePct.value = v; recalculate(); }
+    });
+
+    // Numeric inputs listener
+    [tdRefMarket, tdTicketCurrency, tdUsersCount, tdTicketUsers, buTotalCustomers, buArpu].forEach(el => {
+      if (el) el.addEventListener('input', recalculate);
+    });
+
+    currencySelect.addEventListener('change', () => {
+      currentCurrency = currencySelect.value;
+      updateCurrencySymbols();
+      recalculate();
+    });
+
+    timeframeSelect.addEventListener('change', () => {
+      currentTimeframe = timeframeSelect.value;
+      recalculate();
+    });
+
+    // Core Calculation Routine
+    function recalculate() {
+      let results;
+      let scenarios;
+      const multiplier = (currentTimeframe === 'monthly') ? 12 : 1;
+
+      if (activeMethod === 'top-down') {
+        const samP = parseFloat(tdSamPct.value) || 0;
+        const somP = parseFloat(tdSomPct.value) || 0;
+
+        if (tdInputMode === 'users') {
+          const uCount = parseFloat(tdUsersCount.value) || 0;
+          const tPrice = (parseFloat(tdTicketUsers.value) || 0) * multiplier;
+
+          results = calcTopDown({
+            inputMode: 'users',
+            usersCount: uCount,
+            ticketAverage: tPrice,
+            samPercent: samP,
+            somPercent: somP,
+          });
+
+          scenarios = generateScenarios('top-down', {
+            inputMode: 'users',
+            usersCount: uCount,
+            ticketAverage: tPrice,
+            samPercent: samP,
+            somPercent: somP,
+          });
+
+          if (tPrice > 0) {
+            formulaText.textContent = `TAM = ${formatNumber(uCount)} usu. × ${formatCurrency(tPrice, currentCurrency)} | SAM = TAM × ${samP}% | SOM = SAM × ${somP}%`;
+          } else {
+            formulaText.textContent = `TAM = ${formatNumber(uCount)} usuarios | SAM = TAM × ${samP}% | SOM = SAM × ${somP}% (en usuarios)`;
+          }
+        } else {
+          const refVal = (parseFloat(tdRefMarket.value) || 0) * multiplier;
+          const tPrice = (parseFloat(tdTicketCurrency.value) || 0) * multiplier;
+
+          results = calcTopDown({
+            inputMode: 'currency',
+            referenceMarket: refVal,
+            ticketAverage: tPrice,
+            samPercent: samP,
+            somPercent: somP,
+          });
+
+          scenarios = generateScenarios('top-down', {
+            inputMode: 'currency',
+            referenceMarket: refVal,
+            ticketAverage: tPrice,
+            samPercent: samP,
+            somPercent: somP,
+          });
+
+          if (tPrice > 0) {
+            formulaText.textContent = `TAM = ${formatCurrency(refVal, currentCurrency)} (${formatNumber(Math.round(results.tamUsers))} usuarios equiv.) | SAM = TAM × ${samP}% | SOM = SAM × ${somP}%`;
+          } else {
+            formulaText.textContent = `TAM = Mercado Referencia | SAM = TAM × ${samP}% | SOM = SAM × ${somP}%`;
+          }
+        }
+      } else {
+        const customers = parseFloat(buTotalCustomers.value) || 0;
+        const addrP = parseFloat(buAddressablePct.value) || 0;
+        const arpu = (parseFloat(buArpu.value) || 0) * multiplier;
+        const capP = parseFloat(buCapturePct.value) || 0;
+
+        results = calcBottomUp({
+          totalPotentialCustomers: customers,
+          addressablePercent: addrP,
+          avgAnnualRevenuePerCustomer: arpu,
+          capturePercent: capP,
+        });
+
+        scenarios = generateScenarios('bottom-up', {
+          totalPotentialCustomers: customers,
+          addressablePercent: addrP,
+          avgAnnualRevenuePerCustomer: arpu,
+          capturePercent: capP,
+        });
+
+        formulaText.textContent = `TAM = Clientes (${formatNumber(customers)}) × ARPU (${formatCurrency(arpu, currentCurrency)}) | SAM = TAM × ${addrP}% | SOM = Clientes SAM × ${capP}% × ARPU`;
+      }
+
+      // Display metrics
+      if (results.errors.length > 0) {
+        resultsStatusBadge.textContent = 'Revisar datos';
+        resultsStatusBadge.className = 'badge badge-peach';
+      } else {
+        resultsStatusBadge.textContent = 'Cálculo coherente';
+        resultsStatusBadge.className = 'badge badge-sage';
+      }
+
+      const isMonetary = results.hasMonetary !== false;
+      const hasUsers = results.hasUsers && results.tamUsers > 0;
+
+      const samPctOfTam = results.tam > 0 ? (results.sam / results.tam) * 100 : (results.tamUsers > 0 ? (results.samUsers / results.tamUsers) * 100 : 0);
+      const somPctOfSam = results.sam > 0 ? (results.som / results.sam) * 100 : (results.samUsers > 0 ? (results.somUsers / results.samUsers) * 100 : 0);
+
+      // Cards
+      if (isMonetary) {
+        resTam.textContent = formatCurrency(results.tam, currentCurrency);
+        resSam.textContent = formatCurrency(results.sam, currentCurrency);
+        resSom.textContent = formatCurrency(results.som, currentCurrency);
+
+        if (hasUsers) {
+          if (resTamSub) resTamSub.textContent = '100% · ' + formatCompact(results.tamUsers, null) + ' clientes';
+          resSamSub.textContent = `${formatPercent(samPctOfTam, 1)} · ${formatCompact(results.samUsers, null)} cli.`;
+          resSomSub.textContent = `${formatPercent(somPctOfSam, 1)} · ${formatCompact(results.somUsers, null)} cli.`;
+        } else {
+          if (resTamSub) resTamSub.textContent = '100% oportunidad';
+          resSamSub.textContent = `${formatPercent(samPctOfTam, 1)} del TAM`;
+          resSomSub.textContent = `${formatPercent(somPctOfSam, 1)} del SAM`;
+        }
+      } else {
+        // Purely users
+        resTam.textContent = `${formatNumber(Math.round(results.tamUsers))} usu.`;
+        resSam.textContent = `${formatNumber(Math.round(results.samUsers))} usu.`;
+        resSom.textContent = `${formatNumber(Math.round(results.somUsers))} usu.`;
+
+        if (resTamSub) resTamSub.textContent = '100% del universo';
+        resSamSub.textContent = `${formatPercent(samPctOfTam, 1)} del TAM`;
+        resSomSub.textContent = `${formatPercent(somPctOfSam, 1)} del SAM`;
+      }
+
+      // Update SVG Concentric Circles text
+      if (isMonetary) {
+        if (svgTamVal) svgTamVal.textContent = formatCompact(results.tam, currentCurrency);
+        if (svgSamVal) svgSamVal.textContent = `${formatCompact(results.sam, currentCurrency)} (${formatPercent(samPctOfTam, 1)})`;
+        if (svgSomVal) svgSomVal.textContent = formatCompact(results.som, currentCurrency);
+
+        if (hasUsers) {
+          if (svgTamSubVal) svgTamSubVal.textContent = `${formatCompact(results.tamUsers, null)} usuarios`;
+          if (svgSamSubVal) svgSamSubVal.textContent = `${formatCompact(results.samUsers, null)} usuarios`;
+          if (svgSomSubVal) svgSomSubVal.textContent = `${formatPercent(somPctOfSam, 1)} del SAM · ${formatCompact(results.somUsers, null)} usu.`;
+        } else {
+          if (svgTamSubVal) svgTamSubVal.textContent = '';
+          if (svgSamSubVal) svgSamSubVal.textContent = '';
+          if (svgSomSubVal) svgSomSubVal.textContent = `${formatPercent(somPctOfSam, 1)} del SAM`;
+        }
+      } else {
+        // Purely users
+        if (svgTamVal) svgTamVal.textContent = `${formatNumber(Math.round(results.tamUsers))} usuarios`;
+        if (svgTamSubVal) svgTamSubVal.textContent = '';
+        if (svgSamVal) svgSamVal.textContent = `${formatNumber(Math.round(results.samUsers))} usu. (${formatPercent(samPctOfTam, 1)})`;
+        if (svgSamSubVal) svgSamSubVal.textContent = '';
+        if (svgSomVal) svgSomVal.textContent = `${formatNumber(Math.round(results.somUsers))} usuarios`;
+        if (svgSomSubVal) svgSomSubVal.textContent = `${formatPercent(somPctOfSam, 1)} del SAM`;
+      }
+
+      // Display scenarios
+      if (scenarios) {
+        if (isMonetary) {
+          scenConsSom.textContent = formatCompact(scenarios.conservative.results.som, currentCurrency);
+          scenBaseSom.textContent = formatCompact(scenarios.base.results.som, currentCurrency);
+          scenOptSom.textContent = formatCompact(scenarios.optimistic.results.som, currentCurrency);
+        } else {
+          scenConsSom.textContent = formatCompact(scenarios.conservative.results.som, null) + ' usu.';
+          scenBaseSom.textContent = formatCompact(scenarios.base.results.som, null) + ' usu.';
+          scenOptSom.textContent = formatCompact(scenarios.optimistic.results.som, null) + ' usu.';
+        }
+      }
+
+      // Insights & Warnings
+      renderInsights(results.errors, results.warnings, results);
+
+      // Render Bar Chart
+      updateChart(results);
+    }
+
+    function renderInsights(errors, warnings, results) {
+      insightsContainer.innerHTML = '';
+
+      errors.forEach(err => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-error';
+        el.textContent = '⚠️ ' + err;
+        insightsContainer.appendChild(el);
+      });
+
+      warnings.forEach(warn => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = '💡 ' + warn;
+        insightsContainer.appendChild(el);
+      });
+
+      const analysis = analyzeResults(results);
+      analysis.slice(0, 2).forEach(msg => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-info';
+        el.textContent = 'ℹ️ ' + msg;
+        insightsContainer.appendChild(el);
+      });
+    }
+
+    function updateChart(results) {
+      const isMonetary = results.hasMonetary !== false;
+      const data = [
+        { label: 'TAM', value: (isMonetary ? results.tam : results.tamUsers) || 0, max: (isMonetary ? results.tam : results.tamUsers) || 1, color: '#B9D8C2' },
+        { label: 'SAM', value: (isMonetary ? results.sam : results.samUsers) || 0, max: (isMonetary ? results.tam : results.tamUsers) || 1, color: '#D8C9F0' },
+        { label: 'SOM', value: (isMonetary ? results.som : results.somUsers) || 0, max: (isMonetary ? results.tam : results.tamUsers) || 1, color: '#F0C6A8' },
+      ];
+      renderBarChart(canvas, data, {
+        format: (val) => isMonetary ? formatCompact(val, currentCurrency) : formatCompact(val, null) + ' usu.',
+        animated: false
+      });
+    }
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      activeMethod = 'top-down';
+      tabTopdown.click();
+      setTdInputMode('currency');
+      tdRefMarket.value = '450000000';
+      tdTicketCurrency.value = '150';
+      tdUsersCount.value = '3000000';
+      tdTicketUsers.value = '150';
+      tdSamPct.value = '15';
+      if (tdSamNum) tdSamNum.value = '15';
+      tdSomPct.value = '3.5';
+      if (tdSomNum) tdSomNum.value = '3.5';
+      currencySelect.value = 'EUR';
+      currentCurrency = 'EUR';
+      updateCurrencySymbols();
+      recalculate();
+    });
+
+    // Reset Form
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      setTdInputMode('currency');
+      tdRefMarket.value = '250000000';
+      tdTicketCurrency.value = '';
+      tdUsersCount.value = '1000000';
+      tdTicketUsers.value = '250';
+      tdSamPct.value = '12';
+      if (tdSamNum) tdSamNum.value = '12';
+      tdSomPct.value = '4';
+      if (tdSomNum) tdSomNum.value = '4';
+      buTotalCustomers.value = '85000';
+      buAddressablePct.value = '20';
+      if (buAddressableNum) buAddressableNum.value = '20';
+      buArpu.value = '1800';
+      buCapturePct.value = '5';
+      if (buCaptureNum) buCaptureNum.value = '5';
+      recalculate();
+    });
+
+    // Save Data
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        activeMethod,
+        currentCurrency,
+        currentTimeframe,
+        tdInputMode,
+        topDown: {
+          mode: tdInputMode,
+          ref: tdRefMarket.value,
+          ticketCurrency: tdTicketCurrency.value,
+          usersCount: tdUsersCount.value,
+          ticketUsers: tdTicketUsers.value,
+          samPct: tdSamPct.value,
+          somPct: tdSomPct.value
+        },
+        bottomUp: {
+          customers: buTotalCustomers.value,
+          addrPct: buAddressablePct.value,
+          arpu: buArpu.value,
+          capPct: buCapturePct.value
+        }
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Datos guardados localmente con éxito.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load Data
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state) {
+        alert('No se encontraron datos guardados previamente para esta herramienta.');
+        return;
+      }
+      currentCurrency = state.currentCurrency || 'EUR';
+      currencySelect.value = currentCurrency;
+      currentTimeframe = state.currentTimeframe || 'annual';
+      timeframeSelect.value = currentTimeframe;
+      updateCurrencySymbols();
+
+      if (state.topDown) {
+        if (state.topDown.mode) {
+          setTdInputMode(state.topDown.mode);
+        }
+        tdRefMarket.value = state.topDown.ref || '250000000';
+        tdTicketCurrency.value = state.topDown.ticketCurrency || '';
+        tdUsersCount.value = state.topDown.usersCount || '1000000';
+        tdTicketUsers.value = state.topDown.ticketUsers || '250';
+        tdSamPct.value = state.topDown.samPct || '12';
+        if (tdSamNum) tdSamNum.value = tdSamPct.value;
+        tdSomPct.value = state.topDown.somPct || '4';
+        if (tdSomNum) tdSomNum.value = tdSomPct.value;
+      }
+      if (state.bottomUp) {
+        buTotalCustomers.value = state.bottomUp.customers || '85000';
+        buAddressablePct.value = state.bottomUp.addrPct || '20';
+        if (buAddressableNum) buAddressableNum.value = buAddressablePct.value;
+        buArpu.value = state.bottomUp.arpu || '1800';
+        buCapturePct.value = state.bottomUp.capPct || '5';
+        if (buCaptureNum) buCaptureNum.value = buCapturePct.value;
+      }
+      if (state.activeMethod === 'bottom-up') {
+        tabBottomup.click();
+      } else {
+        tabTopdown.click();
+      }
+      recalculate();
+      alert('✓ Datos cargados correctamente.');
+    });
+
+    // Export PNG
+    document.getElementById('btn-export-chart').addEventListener('click', () => {
+      downloadCanvasPNG(canvas, 'elevia-tam-sam-som.png');
+    });
+
+    // Initial calculation on load
+    updateCurrencySymbols();
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('td') === 'users') {
+      setTdInputMode('users');
+    } else {
+      recalculate();
+    }
+  
+})();
+</script>
+
+</body>
+</html>

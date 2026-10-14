@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suite de Pruebas Unitarias — Elevia Startups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: #F7F5F0;
+      color: #202A36;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .test-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #E8E4DC;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 16px rgba(32,42,54,0.06);
+    }
+    h1 { margin-top: 0; font-size: 1.75rem; }
+    .summary-card {
+      display: flex;
+      gap: 20px;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+    .summary-card.all-pass { background: #D9EDE0; color: #183C28; border: 1px solid #B9D8C2; }
+    .summary-card.has-fail { background: #FDECEC; color: #E05252; border: 1px solid #E05252; }
+    .test-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .test-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #E8E4DC;
+      font-size: 0.9rem;
+      background: #FAFAF8;
+    }
+    .test-item.pass { border-left: 4px solid #4CAF79; }
+    .test-item.fail { border-left: 4px solid #E05252; background: #FFF5F5; }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .badge-pass { background: #D9EDE0; color: #183C28; }
+    .badge-fail { background: #FDECEC; color: #E05252; }
+  </style>
+</head>
+<body>
+
+  <div class="test-container">
+    <h1>Suite de Validación de Fórmulas y Cálculos</h1>
+    <p style="color: #718096; margin-bottom: 24px;">Elevia Startups — Pruebas unitarias de rigor matemático, límites y validaciones.</p>
+
+    <div id="test-summary" class="summary-card">Ejecutando pruebas...</div>
+
+    <div id="test-results-list" class="test-list"></div>
+  </div>
+
+  <script src="../src/js/elevia.bundle.js"></script>
+  <script>
+    function executeTestSuite() {
+      // Pull modules from bundle registry
+      const { calcTopDown, calcBottomUp, generateScenarios } = __req('tam-sam-som.calc');
+      const { calcDilution } = __req('dilution.calc');
+      const { calcCAC, calcLTVSubscription, calcLTVSimple, calcRatios } = __req('cac-ltv.calc');
+      const { calcBurnRate } = __req('burn-rate.calc');
+      const { calcBerkus, calcScorecard, calcVentureCapital, calcRevenueMultiples, calcDCF, calcRiskFactors, calcComparables, median, getRecommendedMethods } = __req('valuation.calc');
+      const { calcKRProgress, calcObjectiveProgress, reorderArray } = __req('okr.calc');
+
+      const results = [];
+      let passed = 0;
+      let failed = 0;
+
+      function assert(name, condition, details = '') {
+        if (condition) {
+          passed++;
+          results.push({ name, status: 'PASS', details });
+        } else {
+          failed++;
+          results.push({ name, status: 'FAIL', details: details || 'Assertion failed' });
+          console.error(`[FAIL] ${name}:`, details);
+        }
+      }
+
+      // 1. TAM / SAM / SOM
+      const td = calcTopDown({ referenceMarket: 500000000, samPercent: 10, somPercent: 5 });
+      assert('TAM/SAM/SOM: Top-down TAM coincide con mercado referencia (500M)', td.tam === 500000000);
+      assert('TAM/SAM/SOM: Top-down SAM es 10% del TAM (50M)', td.sam === 50000000);
+      assert('TAM/SAM/SOM: Top-down SOM es 5% del SAM (2.5M)', td.som === 2500000);
+      assert('TAM/SAM/SOM: Sin errores en cálculo estándar', td.errors.length === 0);
+
+      const tdInvalid = calcTopDown({ referenceMarket: 1000000, samPercent: 10, somPercent: 120 });
+      assert('TAM/SAM/SOM: Error si SOM > SAM o porcentaje > 100', tdInvalid.errors.length > 0);
+
+      const bu = calcBottomUp({ totalPotentialCustomers: 100000, addressablePercent: 20, avgAnnualRevenuePerCustomer: 1200, capturePercent: 5 });
+      assert('TAM/SAM/SOM: Bottom-up TAM = Clientes * ARPU (120M)', bu.tam === 120000000);
+      assert('TAM/SAM/SOM: Bottom-up SAM = TAM * 20% (24M)', bu.sam === 24000000);
+      assert('TAM/SAM/SOM: Bottom-up SOM = SAM * 5% (1.2M)', bu.som === 1200000);
+
+      const buZero = calcBottomUp({ totalPotentialCustomers: 0, addressablePercent: 20, avgAnnualRevenuePerCustomer: 1200, capturePercent: 5 });
+      assert('TAM/SAM/SOM: Rechaza cero clientes', buZero.errors.length > 0);
+
+      const scen = generateScenarios('top-down', { referenceMarket: 100000000, samPercent: 10, somPercent: 5 });
+      assert('TAM/SAM/SOM: Genera 3 escenarios', !!(scen.conservative && scen.base && scen.optimistic));
+      assert('TAM/SAM/SOM: SOM conservador < SOM base', scen.conservative.results.som < scen.base.results.som);
+
+      // 2. Dilución
+      const founders = [{ name: 'Alice', percent: 60 }, { name: 'Bob', percent: 40 }];
+      const dil = calcDilution({ preMoney: 1500000, investment: 300000, founders });
+      assert('Dilución: Post-money = Pre-money + Inversión (1.8M)', dil.postMoney === 1800000);
+      assert('Dilución: Inversor = 300k / 1.8M = 16.67%', Math.abs(dil.investorPercent - 16.6667) < 0.01);
+
+      const alicePost = dil.founders.find(f => f.name === 'Alice').postPercent;
+      const bobPost = dil.founders.find(f => f.name === 'Bob').postPercent;
+      assert('Dilución: Alice diluida proporcionalmente (50%)', Math.abs(alicePost - 50.0) < 0.05);
+      assert('Dilución: Bob diluido proporcionalmente (33.33%)', Math.abs(bobPost - 33.33) < 0.05);
+      assert('Dilución: Suma total de participaciones es 100%', Math.abs(alicePost + bobPost + dil.investorPercent - 100) < 0.05);
+
+      const dilErr = calcDilution({ preMoney: 0, investment: 100000, founders });
+      assert('Dilución: Pre-money cero produce error', dilErr.errors.length > 0);
+
+      // 3. CAC / LTV
+      const cacRes = calcCAC({ totalSpend: 10000, customersAcquired: 50 });
+      assert('CAC/LTV: CAC = 10000 / 50 = 200 €', cacRes.cac === 200);
+
+      const cacZero = calcCAC({ totalSpend: 10000, customersAcquired: 0 });
+      assert('CAC/LTV: Rechaza 0 clientes', cacZero.errors.length > 0);
+
+      const ltvSub = calcLTVSubscription({ avgMonthlyRevenue: 100, grossMargin: 80, monthlyChurn: 4 });
+      assert('CAC/LTV: LTV SaaS = (ARPU * Margen) / Churn = 2000 €', Math.abs(ltvSub.ltv - 2000) < 1);
+
+      const ltvTx = calcLTVSimple({ avgOrderValue: 60, purchaseFrequency: 3, grossMargin: 50, customerLifetimeYears: 2 });
+      assert('CAC/LTV: LTV transaccional = 180 €', ltvTx.ltv === 180);
+
+      const rat = calcRatios({ ltv: 2000, cac: 200, avgMonthlyRevenue: 100, grossMargin: 80 });
+      assert('CAC/LTV: Ratio LTV/CAC = 10x', rat.ltvCacRatio === 10);
+      assert('CAC/LTV: Payback period = 2.5 meses', Math.abs(rat.paybackMonths - 2.5) < 0.01);
+
+      // 4. Burn Rate
+      const expenses = [
+        { category: 'Nóminas', amount: 15000 },
+        { category: 'Servidores', amount: 3000 },
+        { category: 'Marketing', amount: 2000 }
+      ];
+      const burn = calcBurnRate({ initialCash: 120000, monthlyRevenue: 10000, monthlyExpenses: expenses });
+      assert('Burn Rate: Gross Burn = 20k', burn.grossBurn === 20000);
+      assert('Burn Rate: Net Burn = 10k', burn.netBurn === 10000);
+      assert('Burn Rate: Runway = 12 meses', burn.runway === 12);
+      assert('Burn Rate: Proyección a 12 meses completa', burn.projections.length === 12);
+
+      const profitable = calcBurnRate({ initialCash: 50000, monthlyRevenue: 25000, monthlyExpenses: expenses });
+      assert('Burn Rate: Generando caja si ingresos > gastos', profitable.runway === null);
+
+      // 5. Valoración
+      const berkusComps = [
+        { name: 'Idea', value: 300000, maxValue: 500000 },
+        { name: 'Prototype', value: 400000, maxValue: 500000 },
+        { name: 'Team', value: 400000, maxValue: 500000 },
+        { name: 'Partners', value: 100000, maxValue: 500000 },
+        { name: 'Traction', value: 200000, maxValue: 500000 }
+      ];
+      assert('Valoración Berkus: Suma = 1.400.000 €', calcBerkus(berkusComps).total === 1400000);
+
+      const scFactors = [
+        { name: 'Team', weight: 40, score: 1.25 },
+        { name: 'Market', weight: 40, score: 1.00 },
+        { name: 'Product', weight: 20, score: 1.50 }
+      ];
+      const scRes = calcScorecard(1500000, scFactors);
+      assert('Valoración Scorecard: Multiplicador 1.20', Math.abs(scRes.multiplier - 1.20) < 0.01);
+      assert('Valoración Scorecard: Valoración 1.800.000 €', Math.abs(scRes.valuation - 1800000) < 1);
+
+      const vcRes = calcVentureCapital({ exitValue: 10000000, horizon: 5, requiredMultiple: 10, investment: 300000 });
+      assert('Valoración VC: Post-money = 1.000.000 €', vcRes.postMoney === 1000000);
+      assert('Valoración VC: Pre-money = 700.000 €', vcRes.preMoney === 700000);
+
+      const multRes = calcRevenueMultiples({ revenue: 200000, multipleMin: 4, multipleMid: 6, multipleMax: 8 });
+      assert('Valoración Múltiplos: Mín = 800k', multRes.valuationMin === 800000);
+      assert('Valoración Múltiplos: Central = 1.2M', multRes.valuationMid === 1200000);
+      assert('Valoración Múltiplos: Máx = 1.6M', multRes.valuationMax === 1600000);
+
+      const dcfInvalid = calcDCF({ cashFlows: [10000, 20000, 30000], discountRate: 10, terminalGrowthRate: 15 });
+      assert('Valoración DCF: Rechaza g >= r', dcfInvalid.errors.length > 0);
+
+      const dcfValid = calcDCF({ cashFlows: [50000, 80000, 120000], discountRate: 20, terminalGrowthRate: 3 });
+      assert('Valoración DCF: Calcula valor presente sin errores cuando g < r', dcfValid.errors.length === 0 && dcfValid.equityValue > 0);
+
+      const rfRes = calcRiskFactors({ baseValuation: 1500000, factors: [{ name: 'Team', adjustment: 250000 }, { name: 'Competition', adjustment: -100000 }] });
+      assert('Valoración Risk Factor: Ajuste total = 150k', rfRes.totalAdjustment === 150000);
+      assert('Valoración Risk Factor: Final = 1.650.000 €', rfRes.finalValuation === 1650000);
+
+      assert('Helpers: Mediana impar', median([10, 20, 30]) === 20);
+      assert('Helpers: Mediana par', median([10, 20, 30, 40]) === 25);
+
+      const compRes = calcComparables([{ valuation: 1000000 }, { valuation: 1500000 }, { valuation: 2000000 }]);
+      assert('Valoración Comparables: Mediana = 1.5M', compRes.median === 1500000);
+
+      assert('Valoración: Idea recomienda Berkus', getRecommendedMethods('idea').includes('berkus'));
+      assert('Valoración: Pre-seed recomienda Scorecard', getRecommendedMethods('pre-seed').includes('scorecard'));
+
+      // 6. OKR
+      const kr = { currentValue: 15, targetValue: 30, tasks: [{ completed: true }, { completed: true }, { completed: false }] };
+      assert('OKR: Progreso de KR es métrico puro (15/30 = 50%)', calcKRProgress(kr) === 50);
+
+      const obj = { keyResults: [{ currentValue: 10, targetValue: 10 }, { currentValue: 0, targetValue: 50 }, { currentValue: 25, targetValue: 50 }] };
+      assert('OKR: Progreso de Objetivo es el promedio de KRs (50%)', calcObjectiveProgress(obj) === 50);
+
+      const arr = ['A', 'B', 'C'];
+      const reordered = reorderArray(arr, 0, 2);
+      assert('OKR: Reordenación de arrays no muta original', arr[0] === 'A' && reordered[2] === 'A');
+
+      // Update UI
+      const summary = document.getElementById('test-summary');
+      const list = document.getElementById('test-results-list');
+
+      if (failed === 0) {
+        summary.className = 'summary-card all-pass';
+        summary.innerHTML = `✓ TODAS LAS PRUEBAS PASARON EXITOSAMENTE: ${passed} de ${passed + failed} verificadas`;
+      } else {
+        summary.className = 'summary-card has-fail';
+        summary.innerHTML = `✕ ALGUNAS PRUEBAS FALLARON: ${passed} pasadas, ${failed} fallidas de ${passed + failed}`;
+      }
+
+      results.forEach(res => {
+        const item = document.createElement('div');
+        item.className = `test-item ${res.status.toLowerCase()}`;
+        item.innerHTML = `
+          <span>${res.name}</span>
+          <span class="badge badge-${res.status.toLowerCase()}">${res.status}</span>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', executeTestSuite);
+    } else {
+      executeTestSuite();
+    }
+  </script>
+
+</body>
+</html>

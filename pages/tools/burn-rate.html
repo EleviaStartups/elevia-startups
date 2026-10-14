@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Burn Rate y Runway — Elevia Startups</title>
+  <meta name="description" content="Calcula la tasa de quema de caja (Burn Rate) y la autonomía financiera (Runway) de tu startup. Proyección a 12 meses y escenarios para fundadores." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/burn-rate.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Burn rate y runway</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--peach" aria-hidden="true">🔥</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--peach">Finanzas y métricas</span>
+          <h1 class="tool-header__title">Calculadora de Burn Rate y Runway</h1>
+          <p class="tool-header__desc">
+            Anticípate a las necesidades de liquidez de tu startup. Proyecta tu saldo bancario a 12 meses, detecta en qué mes exacto se agotará la caja si no modificas tus gastos o ingresos, y prepara tu próxima ronda de inversión con tiempo suficiente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout">
+        <summary>Conceptos clave para fundadores no financieros</summary>
+        <div class="edu-callout__content">
+          <p><strong>Caja disponible:</strong> El saldo líquido actual en el banco disponible para operar.</p>
+          <p><strong>Burn Rate Bruto:</strong> El gasto operativo mensual total que sale de tu cuenta (nóminas, servidores, alquiler, marketing).</p>
+          <p><strong>Burn Rate Neto:</strong> <code>Gastos mensuales − Ingresos mensuales</code>. Es la cantidad neta de caja que se destruye cada mes. Si los ingresos superan los gastos, tu burn neto es negativo (¡estás generando caja!).</p>
+          <p><strong>Runway:</strong> Los meses que puede sobrevivir la startup al ritmo actual de gasto antes de quedarse sin saldo (<code>Caja / Burn Neto</code>). La recomendación habitual es iniciar una ronda con al menos 6 meses de runway restante.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo startup</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-json">Exportar JSON</button>
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace-grid">
+      
+      <!-- Inputs Column -->
+      <section class="tool-panel" aria-labelledby="cash-flow-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="cash-flow-heading" class="tool-panel__title">Caja y Flujos Mensuales</h2>
+            <div class="tool-panel__subtitle">Ingresos, costes y liquidez inicial</div>
+          </div>
+          <!-- Scenario tabs -->
+          <div class="tab-list" role="tablist">
+            <button type="button" role="tab" class="tab-item is-active" id="scen-base-btn">Base</button>
+            <button type="button" role="tab" class="tab-item" id="scen-cons-btn">Conservador</button>
+            <button type="button" role="tab" class="tab-item" id="scen-opt-btn">Optimista</button>
+          </div>
+        </div>
+
+        <div class="form-row form-row--2">
+          <div class="form-group">
+            <label for="initial-cash" class="form-label">Caja actual en banco (€)</label>
+            <div class="input-addon">
+              <input type="number" id="initial-cash" class="form-input" min="0" step="1000" value="120000" />
+              <span class="input-addon__suffix">€</span>
+            </div>
+            <div class="help-text">Saldo real líquido hoy disponible.</div>
+          </div>
+          <div class="form-group">
+            <label for="monthly-revenue" class="form-label">Ingresos mensuales recurrentes (€)</label>
+            <div class="input-addon">
+              <input type="number" id="monthly-revenue" class="form-input" min="0" step="500" value="8500" />
+              <span class="input-addon__suffix">€/mes</span>
+            </div>
+            <div class="help-text">Facturación recurrente mensual actual (MRR neto).</div>
+          </div>
+        </div>
+
+        <!-- Expense categories -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 24px 0 12px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 0;">Gastos mensuales por categoría</h3>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-add-expense">+ Añadir gasto</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="expenses-table">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th style="width: 150px;">Importe mensual (€)</th>
+                <th style="width: 40px;"></th>
+              </tr>
+            </thead>
+            <tbody id="expenses-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- One-off events -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 24px 0 12px; border-top: 1px solid var(--color-border-soft); padding-top: 16px;">
+          <div>
+            <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 0;">Eventos puntuales previstos (Inflows / Outflows)</h3>
+            <div class="help-text">Subvenciones, pagos anuales, compra de equipamiento, etc.</div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-add-event">+ Añadir evento</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="events-table">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Descripción</th>
+                <th style="width: 140px;">Impacto (€)</th>
+                <th style="width: 40px;"></th>
+              </tr>
+            </thead>
+            <tbody id="events-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- Results Column -->
+      <section class="tool-panel" aria-labelledby="runway-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="runway-heading" class="tool-panel__title">Autonomía Financiera</h2>
+            <div class="tool-panel__subtitle">Diagnóstico y proyección de liquidez</div>
+          </div>
+          <span class="badge" id="runway-status-badge">Calculado</span>
+        </div>
+
+        <!-- Line chart: Cash balance at top to align with inputs -->
+        <div class="chart-card" style="margin-bottom: 16px;">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Evolución de caja proyectada (12 meses)</h3>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-cash" width="480" height="190" aria-label="Evolución mensual de caja"></canvas>
+          </div>
+        </div>
+
+        <!-- Metrics cards -->
+        <div class="metrics-banner" style="margin-bottom: 20px;">
+          <div class="metric-box metric-box--peach">
+            <div class="metric-box__label">Burn Bruto</div>
+            <div class="metric-box__value" id="res-gross-burn">0 €</div>
+            <div class="metric-box__sub">Gastos fijos/mes</div>
+          </div>
+          <div class="metric-box metric-box--peach">
+            <div class="metric-box__label">Burn Neto</div>
+            <div class="metric-box__value" id="res-net-burn">0 €</div>
+            <div class="metric-box__sub">Pérdida mensual de caja</div>
+          </div>
+          <div class="metric-box metric-box--sage">
+            <div class="metric-box__label">Runway Estimado</div>
+            <div class="metric-box__value" id="res-runway">0 m</div>
+            <div class="metric-box__sub" id="res-runway-sub">Meses de vida</div>
+          </div>
+          <div class="metric-box metric-box--ink">
+            <div class="metric-box__label">Mes Crítico</div>
+            <div class="metric-box__value" id="res-zero-month">—</div>
+            <div class="metric-box__sub">Fin de la caja</div>
+          </div>
+        </div>
+
+        <!-- 12-Month Projection Table -->
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 20px 0 10px;">Proyección mensual detallada</h3>
+        <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Ingresos</th>
+                <th>Gastos</th>
+                <th>Burn Neto</th>
+                <th>Saldo de Caja</th>
+              </tr>
+            </thead>
+            <tbody id="projection-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Donut chart: Expense Breakdown -->
+        <div class="chart-card" style="margin-top: 20px;">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Desglose de gastos por categoría</h3>
+          </div>
+          <div class="chart-canvas-wrap" style="max-width: 340px; margin: 0 auto;">
+            <canvas id="chart-expenses" width="340" height="260" aria-label="Gráfico de distribución de gastos"></canvas>
+          </div>
+        </div>
+
+        <!-- Insights and Warnings -->
+        <div id="burn-alerts" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"></div>
+
+      </section>
+
+    </div>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice">
+      <div class="storage-notice-icon">🔒</div>
+      <div class="storage-notice-text">
+        <strong>Confidencialidad:</strong> Los números de caja y gastos de tu empresa permanecen únicamente en la memoria local de este navegador.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {calcBurnRate, calcScenarios} = __req('burn-rate.calc');
+    const {saveData, loadData} = __req('storage');
+    const {formatCurrency, formatNumber, downloadFile} = __req('format');
+    const {renderLineChart, renderDonut} = __req('charts');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_burn_rate';
+
+    // State
+    let activeScenario = 'base'; // 'base' | 'conservative' | 'optimistic'
+    let expenses = [
+      { id: 1, category: 'Personal / Nóminas', amount: 14000 },
+      { id: 2, category: 'Servidores e Infraestructura', amount: 1800 },
+      { id: 3, category: 'Marketing y Ads', amount: 3500 },
+      { id: 4, category: 'Software y Herramientas (SaaS)', amount: 1200 },
+      { id: 5, category: 'Asesoría y Gestoría', amount: 600 },
+    ];
+    let oneTimeEvents = [];
+
+    // DOM Elements
+    const initialCashInput = document.getElementById('initial-cash');
+    const monthlyRevenueInput = document.getElementById('monthly-revenue');
+    const expensesTbody = document.getElementById('expenses-tbody');
+    const eventsTbody = document.getElementById('events-tbody');
+
+    const resGrossBurn = document.getElementById('res-gross-burn');
+    const resNetBurn = document.getElementById('res-net-burn');
+    const resRunway = document.getElementById('res-runway');
+    const resRunwaySub = document.getElementById('res-runway-sub');
+    const resZeroMonth = document.getElementById('res-zero-month');
+    const runwayStatusBadge = document.getElementById('runway-status-badge');
+    const projectionTbody = document.getElementById('projection-tbody');
+    const burnAlerts = document.getElementById('burn-alerts');
+
+    const chartCashCanvas = document.getElementById('chart-cash');
+    const chartExpensesCanvas = document.getElementById('chart-expenses');
+
+    // Scenario buttons
+    const scenBaseBtn = document.getElementById('scen-base-btn');
+    const scenConsBtn = document.getElementById('scen-cons-btn');
+    const scenOptBtn = document.getElementById('scen-opt-btn');
+
+    scenBaseBtn.addEventListener('click', () => setScenario('base'));
+    scenConsBtn.addEventListener('click', () => setScenario('conservative'));
+    scenOptBtn.addEventListener('click', () => setScenario('optimistic'));
+
+    function setScenario(scen) {
+      activeScenario = scen;
+      [scenBaseBtn, scenConsBtn, scenOptBtn].forEach(b => b.classList.remove('is-active'));
+      if (scen === 'base') scenBaseBtn.classList.add('is-active');
+      if (scen === 'conservative') scenConsBtn.classList.add('is-active');
+      if (scen === 'optimistic') scenOptBtn.classList.add('is-active');
+      recalculate();
+    }
+
+    function renderExpensesInputs() {
+      expensesTbody.innerHTML = '';
+      expenses.forEach((exp, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" class="form-input exp-cat" value="${exp.category}" data-idx="${idx}" /></td>
+          <td>
+            <div class="input-addon">
+              <input type="number" class="form-input exp-amt" value="${exp.amount}" min="0" step="50" data-idx="${idx}" />
+              <span class="input-addon__suffix">€</span>
+            </div>
+          </td>
+          <td>
+            ${expenses.length > 1 ? `<button type="button" class="btn btn-ghost btn-sm exp-del" data-idx="${idx}" style="color:var(--color-error); padding:4px 8px;">✕</button>` : ''}
+          </td>
+        `;
+        expensesTbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.exp-cat').forEach(inp => {
+        inp.addEventListener('input', e => {
+          expenses[parseInt(e.target.dataset.idx, 10)].category = e.target.value;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.exp-amt').forEach(inp => {
+        inp.addEventListener('input', e => {
+          expenses[parseInt(e.target.dataset.idx, 10)].amount = parseFloat(e.target.value) || 0;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.exp-del').forEach(btn => {
+        btn.addEventListener('click', e => {
+          expenses.splice(parseInt(e.currentTarget.dataset.idx, 10), 1);
+          renderExpensesInputs();
+          recalculate();
+        });
+      });
+    }
+
+    document.getElementById('btn-add-expense').addEventListener('click', () => {
+      expenses.push({ id: Date.now(), category: `Gasto ${expenses.length + 1}`, amount: 500 });
+      renderExpensesInputs();
+      recalculate();
+    });
+
+    function renderEventsInputs() {
+      eventsTbody.innerHTML = '';
+      oneTimeEvents.forEach((evt, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="width: 80px;">
+            <select class="form-select evt-month" data-idx="${idx}">
+              ${Array.from({length: 12}, (_, i) => `<option value="${i+1}" ${evt.month === i+1 ? 'selected':''}>M${i+1}</option>`).join('')}
+            </select>
+          </td>
+          <td><input type="text" class="form-input evt-label" value="${evt.label}" data-idx="${idx}" /></td>
+          <td>
+            <div class="input-addon">
+              <input type="number" class="form-input evt-amt" value="${evt.amount}" step="500" data-idx="${idx}" placeholder="+/- €" />
+              <span class="input-addon__suffix">€</span>
+            </div>
+          </td>
+          <td>
+            <button type="button" class="btn btn-ghost btn-sm evt-del" data-idx="${idx}" style="color:var(--color-error); padding:4px 8px;">✕</button>
+          </td>
+        `;
+        eventsTbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.evt-month').forEach(sel => {
+        sel.addEventListener('change', e => {
+          oneTimeEvents[parseInt(e.target.dataset.idx, 10)].month = parseInt(e.target.value, 10);
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.evt-label').forEach(inp => {
+        inp.addEventListener('input', e => {
+          oneTimeEvents[parseInt(e.target.dataset.idx, 10)].label = e.target.value;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.evt-amt').forEach(inp => {
+        inp.addEventListener('input', e => {
+          oneTimeEvents[parseInt(e.target.dataset.idx, 10)].amount = parseFloat(e.target.value) || 0;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.evt-del').forEach(btn => {
+        btn.addEventListener('click', e => {
+          oneTimeEvents.splice(parseInt(e.currentTarget.dataset.idx, 10), 1);
+          renderEventsInputs();
+          recalculate();
+        });
+      });
+    }
+
+    document.getElementById('btn-add-event').addEventListener('click', () => {
+      oneTimeEvents.push({ id: Date.now(), month: 3, label: 'Subvención / Cobro', amount: 15000 });
+      renderEventsInputs();
+      recalculate();
+    });
+
+    initialCashInput.addEventListener('input', recalculate);
+    monthlyRevenueInput.addEventListener('input', recalculate);
+
+    function recalculate() {
+      const initialCash = parseFloat(initialCashInput.value) || 0;
+      let revenue = parseFloat(monthlyRevenueInput.value) || 0;
+      let appliedExpenses = expenses.map(e => ({ category: e.category, amount: e.amount }));
+
+      // Apply scenario multipliers
+      if (activeScenario === 'conservative') {
+        revenue *= 0.85; // 15% lower revenue
+        appliedExpenses = appliedExpenses.map(e => ({ category: e.category, amount: e.amount * 1.15 })); // 15% higher expenses
+      } else if (activeScenario === 'optimistic') {
+        revenue *= 1.25; // 25% higher revenue
+        appliedExpenses = appliedExpenses.map(e => ({ category: e.category, amount: e.amount * 0.95 })); // 5% lower expenses
+      }
+
+      const results = calcBurnRate({
+        initialCash,
+        monthlyRevenue: revenue,
+        monthlyExpenses: appliedExpenses,
+        oneTimeEvents,
+      });
+
+      resGrossBurn.textContent = formatCurrency(results.grossBurn, 'EUR');
+      resNetBurn.textContent = formatCurrency(results.netBurn, 'EUR');
+
+      if (results.runway === null) {
+        resRunway.textContent = '∞';
+        resRunwaySub.textContent = 'Generando caja neta';
+        runwayStatusBadge.className = 'badge badge-sage';
+        runwayStatusBadge.textContent = 'Autosuficiente';
+      } else {
+        resRunway.textContent = `${results.runway.toFixed(1)} m`;
+        resRunwaySub.textContent = results.runway < 6 ? '¡Atención prioritaria!' : 'Horizonte proyectado';
+
+        if (results.runway < 3) {
+          runwayStatusBadge.className = 'badge badge-peach';
+          runwayStatusBadge.textContent = 'Alerta crítica (<3m)';
+        } else if (results.runway < 6) {
+          runwayStatusBadge.className = 'badge badge-peach';
+          runwayStatusBadge.textContent = 'Precaución (<6m)';
+        } else {
+          runwayStatusBadge.className = 'badge badge-sage';
+          runwayStatusBadge.textContent = 'Saludable (>6m)';
+        }
+      }
+
+      resZeroMonth.textContent = results.zeroMonth ? `Mes ${results.zeroMonth}` : 'No se agota en 12m';
+
+      // 12-month table
+      projectionTbody.innerHTML = '';
+      const monthsLabels = [];
+      const cashSeries = [];
+
+      results.projections.forEach(p => {
+        monthsLabels.push(`M${p.month}`);
+        cashSeries.push(p.cashBalance);
+
+        const tr = document.createElement('tr');
+        if (p.isNegative) tr.style.background = 'rgba(224, 82, 82, 0.08)';
+        tr.innerHTML = `
+          <td><strong>Mes ${p.month}</strong></td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem;">${formatCurrency(p.revenue, 'EUR')}</td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem;">${formatCurrency(p.expenses, 'EUR')}</td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem; color:${p.netBurn > 0 ? 'var(--color-error)' : 'var(--color-success)'};">${formatCurrency(p.netBurn, 'EUR')}</td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem; font-weight:700; color:${p.cashBalance < 0 ? 'var(--color-error)' : 'var(--color-ink)'};">${formatCurrency(p.cashBalance, 'EUR')}</td>
+        `;
+        projectionTbody.appendChild(tr);
+      });
+
+      // Update Line Chart (Cash evolution)
+      renderLineChart(chartCashCanvas, [
+        { label: 'Saldo de caja', values: cashSeries, color: '#202A36' }
+      ], {
+        labels: monthsLabels,
+        yAxis: { format: val => formatCurrency(val, 'EUR') }
+      });
+
+      // Update Donut Chart (Expenses by category)
+      const colors = ['#B9D8C2', '#D8C9F0', '#F0C6A8', '#A48DD4', '#7CB993', '#F7DFCA'];
+      const donutData = appliedExpenses.map((exp, idx) => ({
+        label: exp.category,
+        value: exp.amount,
+        color: colors[idx % colors.length]
+      }));
+      renderDonut(chartExpensesCanvas, donutData, {
+        showLegend: true,
+        centerLabel: 'Gastos/mes',
+        formatValue: val => formatCurrency(val, 'EUR')
+      });
+
+      // Alerts & Warnings
+      burnAlerts.innerHTML = '';
+      results.errors.forEach(err => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-error';
+        el.textContent = '⚠️ ' + err;
+        burnAlerts.appendChild(el);
+      });
+      results.warnings.forEach(warn => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = '💡 ' + warn;
+        burnAlerts.appendChild(el);
+      });
+
+      if (results.runway && results.runway < 4) {
+        const urgent = document.createElement('div');
+        urgent.className = 'alert alert-error';
+        urgent.textContent = '🚨 Runway crítico: Menos de 4 meses de liquidez. Si planeas levantar capital, una ronda seed suele tardar de 3 a 6 meses. Necesitas recortar gastos no esenciales de inmediato o asegurar un puente de financiación.';
+        burnAlerts.appendChild(urgent);
+      }
+    }
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      initialCashInput.value = '150000';
+      monthlyRevenueInput.value = '12000';
+      expenses = [
+        { id: 1, category: 'Nóminas (Equipo dev y fundadores)', amount: 16000 },
+        { id: 2, category: 'Infraestructura Cloud (AWS)', amount: 2200 },
+        { id: 3, category: 'Performance Marketing (Ads)', amount: 4000 },
+        { id: 4, category: 'SaaS & Workspace (GitHub, Figma, etc.)', amount: 950 },
+        { id: 5, category: 'Espacio de trabajo / Coworking', amount: 800 },
+      ];
+      oneTimeEvents = [
+        { id: 10, month: 4, label: 'Cobro de subvención ENISA', amount: 35000 },
+        { id: 11, month: 7, label: 'Renovación licencias anuales', amount: -4500 }
+      ];
+      renderExpensesInputs();
+      renderEventsInputs();
+      setScenario('base');
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      initialCashInput.value = '120000';
+      monthlyRevenueInput.value = '8500';
+      expenses = [
+        { id: 1, category: 'Personal / Nóminas', amount: 14000 },
+        { id: 2, category: 'Servidores e Infraestructura', amount: 1800 },
+        { id: 3, category: 'Marketing y Ads', amount: 3500 },
+        { id: 4, category: 'Software y Herramientas (SaaS)', amount: 1200 },
+        { id: 5, category: 'Asesoría y Gestoría', amount: 600 },
+      ];
+      oneTimeEvents = [];
+      renderExpensesInputs();
+      renderEventsInputs();
+      setScenario('base');
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        initialCash: initialCashInput.value,
+        monthlyRevenue: monthlyRevenueInput.value,
+        expenses,
+        oneTimeEvents,
+        activeScenario
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Previsión de caja guardada localmente.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state) {
+        alert('No se encontraron previsiones guardadas en este navegador.');
+        return;
+      }
+      initialCashInput.value = state.initialCash || 120000;
+      monthlyRevenueInput.value = state.monthlyRevenue || 8500;
+      if (state.expenses) expenses = state.expenses;
+      if (state.oneTimeEvents) oneTimeEvents = state.oneTimeEvents;
+      renderExpensesInputs();
+      renderEventsInputs();
+      setScenario(state.activeScenario || 'base');
+      alert('✓ Datos cargados correctamente.');
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const state = {
+        initialCash: initialCashInput.value,
+        monthlyRevenue: monthlyRevenueInput.value,
+        expenses,
+        oneTimeEvents,
+        exportedAt: new Date().toISOString()
+      };
+      downloadFile(JSON.stringify(state, null, 2), 'elevia-burn-rate.json', 'application/json');
+    });
+
+    // Init
+    renderExpensesInputs();
+    renderEventsInputs();
+    recalculate();
+  
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Constructor de OKR — Elevia Startups</title>
+  <meta name="description" content="Estructura tus Objetivos, Resultados Clave (KR) e Iniciativas operativas. Gestión visual de OKR con progreso métrico real y exportación para startups." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/okr-builder.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+  <style>
+    .objective-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 5px solid var(--color-sage);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-xs);
+    }
+    .okr-obj-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .okr-progress-bar-wrap {
+      background: var(--color-ink-10, #E2E8F0);
+      border-radius: var(--radius-full);
+      height: 7px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+    .okr-progress-bar-fill {
+      height: 100%;
+      background: var(--color-sage-dark, #7CB993);
+      transition: width var(--transition-base, 220ms ease);
+    }
+    .kr-card {
+      background: var(--color-ivory);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-lavender);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 8px;
+      background: var(--color-white);
+      border: 1px solid var(--color-border-soft);
+      border-radius: var(--radius-sm);
+      margin-bottom: 4px;
+    }
+    .task-item--done {
+      opacity: 0.65;
+      text-decoration: line-through;
+    }
+    .reorder-btn {
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      color: var(--color-ink-70);
+    }
+    .reorder-btn:hover {
+      background: var(--color-ivory);
+      color: var(--color-ink);
+    }
+
+    /* Flow / Tree View Styles */
+    .okr-flow-wrapper {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(32, 42, 54, 0.04);
+    }
+    .okr-flow-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--color-border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .flow-zoom-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--color-ivory);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 2px 5px;
+    }
+    .flow-zoom-btn {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-ink);
+      line-height: 1;
+      padding: 0;
+    }
+    .flow-zoom-btn:hover {
+      background: rgba(32, 42, 54, 0.08);
+    }
+    .okr-flow-viewport {
+      position: relative;
+      overflow: hidden;
+      height: 620px;
+      background-color: #F8F9FA;
+      background-image: radial-gradient(#CBD5E1 1.2px, transparent 1.2px);
+      background-size: 20px 20px;
+      cursor: grab;
+      user-select: none;
+    }
+    .okr-flow-viewport.is-panning {
+      cursor: grabbing;
+    }
+    .okr-flow-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      padding: 28px;
+      will-change: transform;
+    }
+    .flow-branches-list {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      min-width: 1100px;
+    }
+    .flow-obj-branch {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .flow-node {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      box-shadow: 0 2px 8px rgba(32, 42, 54, 0.05);
+      position: relative;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      user-select: auto;
+    }
+    .flow-node:hover {
+      border-color: var(--color-ink-30);
+      box-shadow: 0 4px 12px rgba(32, 42, 54, 0.08);
+    }
+    .flow-node--objective {
+      width: 290px;
+      flex-shrink: 0;
+    }
+    .flow-branch-connector {
+      width: 50px;
+      flex-shrink: 0;
+      align-self: stretch;
+      position: relative;
+    }
+    .flow-krs-column {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .flow-kr-row {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .flow-node--kr {
+      width: 280px;
+      flex-shrink: 0;
+    }
+    .flow-tasks-connector {
+      width: 50px;
+      flex-shrink: 0;
+      align-self: stretch;
+      position: relative;
+    }
+    .flow-tasks-column {
+      width: 350px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .flow-node--task {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-peach-dark, #D4885A);
+      box-shadow: 0 1px 4px rgba(32, 42, 54, 0.04);
+      position: relative;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .flow-node--task:hover {
+      border-color: var(--color-ink-30);
+      box-shadow: 0 3px 8px rgba(32, 42, 54, 0.07);
+    }
+    .flow-node--task.is-done {
+      background: #F8FAFC;
+      opacity: 0.75;
+    }
+    .flow-task-imp,
+    .flow-task-urg {
+      font-size: 0.68rem !important;
+      font-weight: 600 !important;
+      height: 22px !important;
+      padding: 1px 18px 1px 5px !important;
+      border-radius: var(--radius-sm, 6px) !important;
+      background-position: right 4px center !important;
+      background-size: 8px 8px !important;
+      cursor: pointer !important;
+      border-color: var(--color-border) !important;
+      background-color: #FFFFFF !important;
+    }
+    .flow-port {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-white);
+      border: 2px solid #94A3B8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #64748B;
+      z-index: 2;
+    }
+    .flow-port--output {
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .flow-port--input {
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Eisenhower Matrix Styles */
+    .eisenhower-section {
+      margin-top: 24px;
+      padding: 24px 28px 32px;
+      background: #FAF8F5;
+      border-top: 1px solid var(--color-border);
+      max-width: 1040px;
+      margin-inline: auto;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+    @media (max-width: 768px) {
+      .eisenhower-section {
+        padding: 16px 12px 24px;
+      }
+    }
+    .eisenhower-wrapper {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+    .eisenhower-axis-y {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 8px;
+      width: 48px;
+      flex-shrink: 0;
+      padding-bottom: 28px;
+      user-select: none;
+    }
+    .eisenhower-axis-y-labels {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 28px;
+      flex-shrink: 0;
+      padding: 2px 0;
+    }
+    .eisenhower-axis-label-top,
+    .eisenhower-axis-label-bottom {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0F172A;
+      line-height: 1;
+    }
+    .eisenhower-axis-text-y {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      font-size: 0.80rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      color: #0F172A;
+      margin: auto 0;
+      white-space: nowrap;
+    }
+    .eisenhower-axis-y-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 12px;
+      flex-shrink: 0;
+    }
+    .eisenhower-axis-arrow-top {
+      color: #EAB308;
+      font-size: 13px;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .eisenhower-axis-line-bar {
+      flex: 1;
+      width: 3px;
+      background: #EAB308;
+      border-radius: 1.5px;
+    }
+    .eisenhower-grid-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .eisenhower-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px) {
+      .eisenhower-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .eisenhower-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 14px 14px 12px;
+      box-shadow: 0 2px 8px rgba(32, 42, 54, 0.03);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 190px;
+      transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+    .eisenhower-card:hover {
+      box-shadow: 0 4px 14px rgba(32, 42, 54, 0.06);
+    }
+    .eisenhower-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #F59E0B;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-top-left-radius: var(--radius-xl);
+      border-bottom-right-radius: 10px;
+      letter-spacing: 0.05em;
+    }
+    .eisenhower-card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .eisenhower-icon {
+      margin-top: 2px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .eisenhower-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #0F172A;
+      margin: 0 0 2px;
+      letter-spacing: 0.02em;
+    }
+    .eisenhower-subtitle {
+      font-size: 0.70rem;
+      font-weight: 600;
+      color: var(--color-ink-60);
+      margin-bottom: 3px;
+    }
+    .eisenhower-desc {
+      font-size: 0.71rem;
+      line-height: 1.35;
+      color: var(--color-ink-70);
+      margin: 0 0 6px;
+      max-width: 320px;
+    }
+    .eisenhower-divider {
+      width: 44px;
+      height: 1.5px;
+      background: #F59E0B;
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+    .eisenhower-axis-x {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      gap: 10px;
+      padding-right: 20px;
+      user-select: none;
+    }
+    .eisenhower-axis-label-left,
+    .eisenhower-axis-label-right {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0F172A;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .eisenhower-axis-line-x {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+    .eisenhower-axis-line-x-bar {
+      flex: 1;
+      height: 3px;
+      background: #EAB308;
+      border-radius: 1.5px;
+    }
+    .eisenhower-axis-arrow-right {
+      color: #EAB308;
+      font-size: 13px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-left: -6px;
+    }
+    .eisenhower-axis-text-x {
+      font-size: 0.80rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      color: #0F172A;
+      padding: 0 6px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .eisenhower-tasks-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .eisenhower-task-item {
+      background: #F8FAFC;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 6px 8px;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+    .eisenhower-task-item:hover {
+      background: #FFFFFF;
+      border-color: var(--color-ink-30);
+    }
+    .eisenhower-task-item.is-completed {
+      opacity: 0.65;
+      background: #F1F5F9;
+    }
+    .eisenhower-task-imp,
+    .eisenhower-task-urg {
+      font-size: 0.68rem !important;
+      font-weight: 600 !important;
+      height: 22px !important;
+      line-height: 1 !important;
+      min-width: 108px !important;
+      width: 108px !important;
+      padding: 1px 22px 1px 6px !important;
+      border-radius: var(--radius-sm, 6px) !important;
+      background-position: right 5px center !important;
+      background-size: 9px 9px !important;
+      cursor: pointer !important;
+      border-color: var(--color-border) !important;
+      color: var(--color-ink-80) !important;
+      background-color: #FFFFFF !important;
+    }
+    .eisenhower-task-imp:focus,
+    .eisenhower-task-urg:focus {
+      border-color: #F59E0B !important;
+      outline: none !important;
+    }
+    .eisenhower-empty-msg {
+      text-align: center;
+      font-size: 0.74rem;
+      color: var(--color-ink-40);
+      padding: 12px 6px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Constructor de OKR</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header" style="padding: 16px 20px; margin-bottom: 16px;">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--lavender" aria-hidden="true" style="width: 44px; height: 44px; font-size: 1.4rem;">🎯</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--lavender" style="font-size: 0.72rem; padding: 2px 8px;">Organización y planificación</span>
+          <h1 class="tool-header__title" style="font-size: 1.4rem; margin: 0 0 4px;">Constructor de OKR e Iniciativas</h1>
+          <p class="tool-header__desc" style="font-size: 0.85rem; line-height: 1.45; margin: 0;">
+            Alinea a tu equipo: <strong>Objetivo</strong> (hacia dónde vamos) → <strong>Resultados Clave</strong> (cómo medimos el impacto) → <strong>Iniciativas</strong> (qué ejecutamos).
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout" style="margin-top: 10px;">
+        <summary style="font-size: 0.85rem;">Regla de oro de los OKR: KRs vs Tareas</summary>
+        <div class="edu-callout__content" style="font-size: 0.82rem;">
+          <p><strong>Completar tareas no significa haber logrado el objetivo.</strong></p>
+          <p>El <strong>progreso de un KR</strong> depende estrictamente de su propia métrica cuantitativa (ej. pasar de 10 a 50 clientes = 80%). Las <strong>iniciativas/tareas</strong> son hipótesis de trabajo.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions" style="margin-bottom: 16px; padding: 10px 14px;">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-add-objective">+ Nuevo Objetivo</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo Q1</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-json">Exportar JSON</button>
+        <label class="btn btn-ghost btn-sm" style="margin:0; cursor:pointer;">
+          Importar JSON <input type="file" id="file-import-json" accept=".json" style="display:none;" />
+        </label>
+      </div>
+    </div>
+
+    <!-- View Switcher Tabs -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+      <div class="tab-list" role="tablist">
+        <button type="button" role="tab" class="tab-item is-active" id="btn-view-list">📋 Vista Lista</button>
+        <button type="button" role="tab" class="tab-item" id="btn-view-flow">🔀 Vista Flujo (Diagrama)</button>
+      </div>
+      <div style="font-size: 0.8rem; color: var(--color-ink-70);">
+        Sincronización en tiempo real entre la lista estructurada y el diagrama de flujo visual.
+      </div>
+    </div>
+
+    <!-- OKR Project Canvas -->
+    <section aria-label="Lienzo de OKRs">
+      <div id="okr-container" class="okr-tree">
+        <!-- Objectives rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice" style="margin-top: 40px;">
+      <div class="storage-notice-icon">💾</div>
+      <div class="storage-notice-text">
+        <strong>Persistencia local:</strong> Tus objetivos y tareas se guardan automáticamente en tu navegador. Puedes exportar el archivo JSON para compartirlo con tu equipo o recuperarlo en otro dispositivo.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {createObjective,
+      createKeyResult,
+      createTask,
+      calcKRProgress,
+      calcObjectiveProgress,
+      getProgressStatus,
+      reorderArray,
+      serializeProject,
+      parseProject,
+      getEisenhowerClassification} = __req('okr.calc');
+    const {saveData, loadData} = __req('storage');
+    const {downloadFile} = __req('format');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_okr_projects';
+
+    // State
+    let project = {
+      id: 'project-q1',
+      title: 'Plan Estratégico Q1 — Validación y Primeros Clientes',
+      period: 'Q1',
+      objectives: []
+    };
+
+    const okrContainer = document.getElementById('okr-container');
+
+    // Create Initial Objective if empty
+    function ensureInitialData() {
+      if (project.objectives.length === 0) {
+        const obj = createObjective('Validar el Product-Market Fit con los primeros 30 clientes recurrentes');
+        obj.owner = 'CEO';
+        obj.deadline = 'Fin de Q1';
+        
+        // Customize first 3 KRs
+        obj.keyResults[0].title = 'Aumentar el número de clientes activos de pago de 5 a 30';
+        obj.keyResults[0].currentValue = 12;
+        obj.keyResults[0].targetValue = 30;
+        obj.keyResults[0].unit = 'clientes';
+        obj.keyResults[0].tasks = [
+          { id: 't1', title: 'Lanzar prospección directa a 100 cuentas cualificadas', completed: true, important: true, urgent: true },
+          { id: 't2', title: 'Realizar 20 demos de producto con fundadores', completed: true, important: true, urgent: true },
+          { id: 't3', title: 'Implementar onboarding guiado con activación en 24h', completed: false, important: true, urgent: false }
+        ];
+
+        obj.keyResults[1].title = 'Alcanzar un NPS (Net Promoter Score) superior a 50';
+        obj.keyResults[1].currentValue = 42;
+        obj.keyResults[1].targetValue = 50;
+        obj.keyResults[1].unit = 'puntos';
+        obj.keyResults[1].tasks = [
+          { id: 't4', title: 'Configurar microencuesta tras 14 días de uso activo', completed: true, important: false, urgent: true },
+          { id: 't5', title: 'Entrevistar a los 5 usuarios que reportaron fricción', completed: false, important: true, urgent: false },
+          { id: 't6', title: 'Resolver los 3 errores más comunes del panel principal', completed: false, important: true, urgent: true }
+        ];
+
+        obj.keyResults[2].title = 'Reducir la tasa de churn mensual al 3%';
+        obj.keyResults[2].currentValue = 5.2;
+        obj.keyResults[2].targetValue = 3.0;
+        obj.keyResults[2].unit = '%';
+        obj.keyResults[2].tasks = [
+          { id: 't7', title: 'Activar secuencia de reactivación por email a inactivos', completed: true, important: false, urgent: true },
+          { id: 't8', title: 'Publicar centro de ayuda con 5 guías rápidas', completed: true, important: true, urgent: false },
+          { id: 't9', title: 'Definir alerta preventiva para cuentas con uso descendente', completed: false, important: false, urgent: false }
+        ];
+
+        project.objectives.push(obj);
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentView = urlParams.get('view') === 'flow' ? 'flow' : 'list';
+    let flowZoom = 1;
+    let flowPanX = 24;
+    let flowPanY = 24;
+    const btnViewList = document.getElementById('btn-view-list');
+    const btnViewFlow = document.getElementById('btn-view-flow');
+
+    if (currentView === 'flow' && btnViewFlow && btnViewList) {
+      btnViewFlow.classList.add('is-active');
+      btnViewList.classList.remove('is-active');
+    }
+
+    if (btnViewList && btnViewFlow) {
+      btnViewList.addEventListener('click', () => {
+        currentView = 'list';
+        btnViewList.classList.add('is-active');
+        btnViewFlow.classList.remove('is-active');
+        renderAll();
+      });
+      btnViewFlow.addEventListener('click', () => {
+        currentView = 'flow';
+        btnViewFlow.classList.add('is-active');
+        btnViewList.classList.remove('is-active');
+        renderAll();
+      });
+    }
+
+    function renderAll() {
+      okrContainer.innerHTML = '';
+
+      if (project.objectives.length === 0) {
+        okrContainer.innerHTML = `
+          <div class="empty-state" style="padding: 48px; text-align: center; background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-border);">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🎯</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-ink);">Sin objetivos configurados</h3>
+            <p style="color: var(--color-ink-70); max-width: 420px; margin: 0 auto 20px;">Comienza creando tu primer objetivo trimestral o carga el ejemplo predeterminado.</p>
+            <button type="button" class="btn btn-primary" id="btn-create-first">+ Crear primer objetivo</button>
+          </div>
+        `;
+        document.getElementById('btn-create-first')?.addEventListener('click', () => {
+          project.objectives.push(createObjective('Nuevo Objetivo Estratégico'));
+          renderAll();
+        });
+        return;
+      }
+
+      if (currentView === 'flow') {
+        renderFlowView();
+      } else {
+        renderListView();
+      }
+    }
+
+    function renderListView() {
+      project.objectives.forEach((obj, objIdx) => {
+        const objProg = calcObjectiveProgress(obj);
+        const objCard = document.createElement('article');
+        objCard.className = 'objective-card';
+        objCard.innerHTML = `
+          <div class="okr-obj-header">
+            <div style="flex: 1;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span class="badge badge-sage">Objetivo ${objIdx + 1}</span>
+                <span style="font-size:0.75rem; color:var(--color-ink-50);">Responsable: <strong>${obj.owner || 'Sin asignar'}</strong> | Límite: ${obj.deadline || 'Q1'}</span>
+              </div>
+              <input type="text" class="form-input obj-title-input" value="${obj.title}" data-obj-idx="${objIdx}" style="font-size:1.1rem; font-weight:700; border:1px solid transparent; padding:3px 6px; border-radius:6px;" />
+            </div>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <button type="button" class="reorder-btn btn-obj-up" data-obj-idx="${objIdx}" title="Mover arriba" ${objIdx === 0 ? 'disabled':''}>▲</button>
+              <button type="button" class="reorder-btn btn-obj-down" data-obj-idx="${objIdx}" title="Mover abajo" ${objIdx === project.objectives.length - 1 ? 'disabled':''}>▼</button>
+              <button type="button" class="btn btn-ghost btn-sm btn-del-obj" data-obj-idx="${objIdx}" style="color:var(--color-error); padding:3px 6px;" title="Eliminar objetivo">✕</button>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:600; color:var(--color-ink-70);">
+            <span>Progreso del Objetivo (Promedio KRs)</span>
+            <span>${objProg.toFixed(0)}%</span>
+          </div>
+          <div class="okr-progress-bar-wrap">
+            <div class="okr-progress-bar-fill" style="width: ${objProg}%;"></div>
+          </div>
+
+          <!-- Key Results List -->
+          <div class="kr-list" data-obj-idx="${objIdx}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+              <span style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-lavender-dark, #A48DD4);">Resultados Clave (KRs)</span>
+              <button type="button" class="btn btn-secondary btn-sm btn-add-kr" data-obj-idx="${objIdx}" style="font-size:0.78rem; padding:3px 8px;">+ Añadir KR</button>
+            </div>
+            <div class="krs-inner-container"></div>
+          </div>
+        `;
+
+        const krsContainer = objCard.querySelector('.krs-inner-container');
+        obj.keyResults.forEach((kr, krIdx) => {
+          const krProg = calcKRProgress(kr);
+          const krCard = document.createElement('div');
+          krCard.className = 'kr-card';
+          krCard.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span class="tag" style="background:var(--color-lavender); color:#32195E; font-weight:700; font-size:0.75rem;">KR ${krIdx + 1}</span>
+                  <input type="text" class="form-input kr-title-input" value="${kr.title}" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="font-size:0.9rem; font-weight:600; padding:3px 6px; flex:1;" />
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <button type="button" class="reorder-btn btn-kr-up" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" title="Mover arriba" ${krIdx === 0 ? 'disabled':''}>▲</button>
+                <button type="button" class="reorder-btn btn-kr-down" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" title="Mover abajo" ${krIdx === obj.keyResults.length - 1 ? 'disabled':''}>▼</button>
+                <button type="button" class="btn btn-ghost btn-sm btn-del-kr" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="color:var(--color-error); padding:2px 6px;">✕</button>
+              </div>
+            </div>
+
+            <!-- Metric Inputs -->
+            <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:6px; font-size:0.82rem; color:var(--color-ink-70);">
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span>Actual:</span>
+                <input type="number" class="form-input kr-curr-val" value="${kr.currentValue}" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="width:70px; padding:2px 5px; font-size:0.82rem;" />
+              </div>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span>Objetivo:</span>
+                <input type="number" class="form-input kr-target-val" value="${kr.targetValue}" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="width:70px; padding:2px 5px; font-size:0.82rem;" />
+              </div>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span>Unidad:</span>
+                <input type="text" class="form-input kr-unit-val" value="${kr.unit || 'uds'}" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="width:65px; padding:2px 5px; font-size:0.82rem;" />
+              </div>
+              <div style="margin-left:auto; font-weight:700; color:var(--color-ink);">
+                Progreso: ${krProg.toFixed(0)}%
+              </div>
+            </div>
+
+            <div class="okr-progress-bar-wrap" style="height:5px;">
+              <div class="okr-progress-bar-fill" style="width: ${krProg}%; background:var(--color-lavender-dark, #A48DD4);"></div>
+            </div>
+
+            <!-- Tasks / Initiatives inside KR -->
+            <div class="task-list">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-size:0.72rem; font-weight:700; color:var(--color-peach-dark, #D4885A); text-transform:uppercase;">Iniciativas operativas</span>
+                <button type="button" class="btn btn-ghost btn-sm btn-add-task" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" style="font-size:0.72rem; padding:2px 6px;">+ Tarea</button>
+              </div>
+              <div class="tasks-inner-container"></div>
+            </div>
+          `;
+
+          const tasksContainer = krCard.querySelector('.tasks-inner-container');
+          kr.tasks.forEach((task, taskIdx) => {
+            const taskItem = document.createElement('div');
+            taskItem.className = `task-item ${task.completed ? 'task-item--done' : ''}`;
+            taskItem.innerHTML = `
+              <input type="checkbox" class="task-check" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" ${task.completed ? 'checked':''} />
+              <input type="text" class="form-input task-title-input" value="${task.title || ''}" placeholder="Definir iniciativa o tarea..." data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="flex:1; border:none; background:transparent; font-size:0.82rem;" />
+              <button type="button" class="btn btn-ghost btn-sm btn-del-task" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="color:var(--color-error); padding:0 4px;">✕</button>
+            `;
+            tasksContainer.appendChild(taskItem);
+          });
+
+          krsContainer.appendChild(krCard);
+        });
+
+        okrContainer.appendChild(objCard);
+      });
+
+      attachListeners();
+    }
+
+    function updateFlowTransform() {
+      const stage = document.getElementById('flow-stage');
+      const label = document.getElementById('flow-zoom-label');
+      if (stage) {
+        stage.style.transform = `translate(${flowPanX}px, ${flowPanY}px) scale(${flowZoom})`;
+      }
+      if (label) {
+        label.textContent = `${Math.round(flowZoom * 100)}%`;
+      }
+    }
+
+    function setupFlowViewportInteractivity(wrap) {
+      const viewport = wrap.querySelector('#flow-viewport');
+      if (!viewport) return;
+
+      updateFlowTransform();
+
+      // Mouse Wheel Zoom restricted to flow canvas viewport only
+      viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const rect = viewport.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
+        const nextZoom = Math.min(1.8, Math.max(0.4, flowZoom + zoomDelta));
+
+        flowPanX -= (mouseX - flowPanX) * (nextZoom / flowZoom - 1);
+        flowPanY -= (mouseY - flowPanY) * (nextZoom / flowZoom - 1);
+        flowZoom = nextZoom;
+
+        updateFlowTransform();
+      }, { passive: false });
+
+      // Drag to Pan
+      let isPanning = false;
+      let startX = 0, startY = 0;
+
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.target.closest('input, textarea, button, select, label')) return;
+        isPanning = true;
+        startX = e.clientX - flowPanX;
+        startY = e.clientY - flowPanY;
+        viewport.classList.add('is-panning');
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        flowPanX = e.clientX - startX;
+        flowPanY = e.clientY - startY;
+        updateFlowTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isPanning) {
+          isPanning = false;
+          viewport.classList.remove('is-panning');
+        }
+      });
+
+      // Zoom Controls Buttons
+      wrap.querySelector('#flow-zoom-in')?.addEventListener('click', () => {
+        flowZoom = Math.min(1.8, flowZoom + 0.15);
+        updateFlowTransform();
+      });
+      wrap.querySelector('#flow-zoom-out')?.addEventListener('click', () => {
+        flowZoom = Math.max(0.4, flowZoom - 0.15);
+        updateFlowTransform();
+      });
+      wrap.querySelector('#flow-zoom-reset')?.addEventListener('click', () => {
+        flowZoom = 1;
+        flowPanX = 24;
+        flowPanY = 24;
+        updateFlowTransform();
+        requestAnimationFrame(drawFlowLines);
+      });
+    }
+
+    function drawFlowLines() {
+      const z = flowZoom || 1;
+
+      // 1. Objectives -> KRs
+      document.querySelectorAll('.flow-obj-branch').forEach(branch => {
+        const objNode = branch.querySelector('.flow-node--objective');
+        const krNodes = branch.querySelectorAll('.flow-node--kr');
+        const conn = branch.querySelector('.flow-branch-connector');
+        if (!objNode || !conn) return;
+
+        conn.innerHTML = '';
+        if (krNodes.length === 0) return;
+
+        const connRect = conn.getBoundingClientRect();
+        const objRect = objNode.getBoundingClientRect();
+        if (connRect.height === 0 || objRect.height === 0) return;
+
+        const startY = ((objRect.top + objRect.height / 2) - connRect.top) / z;
+        const unscaledHeight = connRect.height / z;
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'flow-connector-svg');
+        svg.setAttribute('width', '50');
+        svg.setAttribute('height', String(unscaledHeight));
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.overflow = 'visible';
+        svg.style.pointerEvents = 'none';
+
+        krNodes.forEach(kr => {
+          const krRect = kr.getBoundingClientRect();
+          const endY = ((krRect.top + krRect.height / 2) - connRect.top) / z;
+
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', `M 0 ${startY} C 25 ${startY}, 25 ${endY}, 50 ${endY}`);
+          path.setAttribute('stroke', '#94A3B8');
+          path.setAttribute('stroke-width', '2');
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke-linecap', 'round');
+          svg.appendChild(path);
+        });
+
+        conn.appendChild(svg);
+      });
+
+      // 2. KRs -> Tasks
+      document.querySelectorAll('.flow-kr-row').forEach(row => {
+        const krNode = row.querySelector('.flow-node--kr');
+        const taskNodes = row.querySelectorAll('.flow-node--task');
+        const conn = row.querySelector('.flow-tasks-connector');
+        if (!krNode || !conn) return;
+
+        conn.innerHTML = '';
+        if (taskNodes.length === 0) return;
+
+        const connRect = conn.getBoundingClientRect();
+        const krRect = krNode.getBoundingClientRect();
+        if (connRect.height === 0 || krRect.height === 0) return;
+
+        const startY = ((krRect.top + krRect.height / 2) - connRect.top) / z;
+        const unscaledHeight = connRect.height / z;
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'flow-connector-svg');
+        svg.setAttribute('width', '50');
+        svg.setAttribute('height', String(unscaledHeight));
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.overflow = 'visible';
+        svg.style.pointerEvents = 'none';
+
+        taskNodes.forEach(task => {
+          const taskRect = task.getBoundingClientRect();
+          const endY = ((taskRect.top + taskRect.height / 2) - connRect.top) / z;
+
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', `M 0 ${startY} C 25 ${startY}, 25 ${endY}, 50 ${endY}`);
+          path.setAttribute('stroke', '#CBD5E1');
+          path.setAttribute('stroke-width', '2');
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke-linecap', 'round');
+          svg.appendChild(path);
+        });
+
+        conn.appendChild(svg);
+      });
+    }
+
+    function renderEisenhowerMatrix(container) {
+      const classification = getEisenhowerClassification(project);
+
+      const totalCountEl = container.querySelector('#eisenhower-total-tasks');
+      if (totalCountEl) totalCountEl.textContent = classification.total;
+
+      const renderList = (elementId, items) => {
+        const listEl = container.querySelector('#' + elementId);
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        if (items.length === 0) {
+          listEl.innerHTML = `<div class="eisenhower-empty-msg">Sin iniciativas clasificadas en este cuadrante</div>`;
+          return;
+        }
+
+        items.forEach(item => {
+          const { task, objIdx, krIdx, taskIdx, objTitle, krTitle, objNumber, krNumber } = item;
+          const isImp = task.important !== false;
+          const isUrg = task.urgent !== false;
+
+          const div = document.createElement('div');
+          div.className = `eisenhower-task-item ${task.completed ? 'is-completed' : ''}`;
+          div.innerHTML = `
+            <div style="display: flex; align-items: flex-start; gap: 8px;">
+              <input type="checkbox" class="eisenhower-task-check" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" ${task.completed ? 'checked' : ''} style="margin-top: 3px; cursor: pointer; width: 14px; height: 14px;" />
+              <div style="flex: 1; min-width: 0;">
+                <div class="eisenhower-task-title" style="font-size: 0.80rem; font-weight: 600; line-height: 1.35; color: var(--color-ink); ${task.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">
+                  ${task.title || '(Sin título)'}
+                </div>
+                <div style="display: flex; gap: 5px; align-items: center; margin-top: 3px; flex-wrap: wrap;">
+                  <span class="badge badge-lavender" style="font-size: 0.66rem; padding: 1px 5px;">KR ${krNumber}</span>
+                  <span style="font-size: 0.68rem; color: var(--color-ink-50); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;" title="${krTitle}">${krTitle}</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;">
+                <select class="form-select eisenhower-task-imp" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}">
+                  <option value="true" ${isImp ? 'selected' : ''}>⭐ Importante</option>
+                  <option value="false" ${!isImp ? 'selected' : ''}>⚪ No imp.</option>
+                </select>
+                <select class="form-select eisenhower-task-urg" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}">
+                  <option value="true" ${isUrg ? 'selected' : ''}>🔥 Urgente</option>
+                  <option value="false" ${!isUrg ? 'selected' : ''}>⏳ No urg.</option>
+                </select>
+              </div>
+            </div>
+          `;
+          listEl.appendChild(div);
+        });
+      };
+
+      renderList('eisenhower-list-cii', classification.cii);
+      renderList('eisenhower-list-ci', classification.ci);
+      renderList('eisenhower-list-civ', classification.civ);
+      renderList('eisenhower-list-ciii', classification.ciii);
+    }
+
+    function attachFlowEditingListeners(wrap) {
+      // Objective title
+      wrap.querySelectorAll('.flow-obj-title').forEach(t => {
+        t.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          project.objectives[o].title = e.target.value;
+          requestAnimationFrame(drawFlowLines);
+        });
+      });
+
+      // Objective owner & deadline
+      wrap.querySelectorAll('.flow-obj-owner').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          project.objectives[o].owner = e.target.value;
+        });
+      });
+      wrap.querySelectorAll('.flow-obj-deadline').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          project.objectives[o].deadline = e.target.value;
+        });
+      });
+
+      // Delete objective
+      wrap.querySelectorAll('.flow-del-obj').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          if (confirm('¿Eliminar este objetivo y todos sus resultados clave?')) {
+            project.objectives.splice(o, 1);
+            renderAll();
+          }
+        });
+      });
+
+      // Add KR to objective
+      wrap.querySelectorAll('.flow-add-kr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          project.objectives[o].keyResults.push(createKeyResult(project.objectives[o].id, 'Nuevo Resultado Clave'));
+          renderAll();
+        });
+      });
+
+      // Add objective from flow view
+      wrap.querySelector('#btn-flow-add-obj')?.addEventListener('click', () => {
+        project.objectives.push(createObjective('Nuevo Objetivo Estratégico'));
+        renderAll();
+      });
+
+      // KR title
+      wrap.querySelectorAll('.flow-kr-title').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].title = e.target.value;
+        });
+      });
+
+      // KR metric values
+      wrap.querySelectorAll('.flow-kr-curr').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].currentValue = parseFloat(e.target.value) || 0;
+          renderAll();
+        });
+      });
+      wrap.querySelectorAll('.flow-kr-target').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].targetValue = parseFloat(e.target.value) || 0;
+          renderAll();
+        });
+      });
+      wrap.querySelectorAll('.flow-kr-unit').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].unit = e.target.value;
+        });
+      });
+
+      // Delete KR
+      wrap.querySelectorAll('.flow-del-kr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          project.objectives[o].keyResults.splice(k, 1);
+          renderAll();
+        });
+      });
+
+      // Tasks checkboxes
+      wrap.querySelectorAll('.flow-task-check').forEach(chk => {
+        chk.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].completed = e.target.checked;
+          renderAll();
+        });
+      });
+
+      // Task title
+      wrap.querySelectorAll('.flow-task-title').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].title = e.target.value;
+        });
+        inp.addEventListener('change', () => {
+          renderEisenhowerMatrix(wrap);
+        });
+      });
+
+      // Task importance selector (Flow View)
+      wrap.querySelectorAll('.flow-task-imp').forEach(sel => {
+        sel.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].important = (e.target.value === 'true');
+          renderAll();
+        });
+      });
+
+      // Task urgency selector (Flow View)
+      wrap.querySelectorAll('.flow-task-urg').forEach(sel => {
+        sel.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].urgent = (e.target.value === 'true');
+          renderAll();
+        });
+      });
+
+      // Add task
+      wrap.querySelectorAll('.flow-add-task').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].tasks.push(createTask(project.objectives[o].keyResults[k].id, 'Nueva iniciativa'));
+          renderAll();
+        });
+      });
+
+      // Delete task
+      wrap.querySelectorAll('.flow-del-task').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          const t = parseInt(e.currentTarget.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks.splice(t, 1);
+          renderAll();
+        });
+      });
+
+      // Eisenhower Matrix Checkbox listeners
+      wrap.querySelectorAll('.eisenhower-task-check').forEach(chk => {
+        chk.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].completed = e.target.checked;
+          renderAll();
+        });
+      });
+
+      // Eisenhower Matrix Importance selector
+      wrap.querySelectorAll('.eisenhower-task-imp').forEach(sel => {
+        sel.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].important = (e.target.value === 'true');
+          renderAll();
+        });
+      });
+
+      // Eisenhower Matrix Urgency selector
+      wrap.querySelectorAll('.eisenhower-task-urg').forEach(sel => {
+        sel.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].urgent = (e.target.value === 'true');
+          renderAll();
+        });
+      });
+    }
+
+    function renderFlowView() {
+      const totalObjs = project.objectives.length;
+      let totalKrs = 0;
+      let totalTasks = 0;
+      let objProgressSum = 0;
+
+      project.objectives.forEach(obj => {
+        objProgressSum += calcObjectiveProgress(obj);
+        totalKrs += obj.keyResults.length;
+        totalTasks += obj.keyResults.reduce((acc, kr) => acc + kr.tasks.length, 0);
+      });
+      const overallProg = totalObjs > 0 ? (objProgressSum / totalObjs) : 0;
+
+      const flowWrap = document.createElement('div');
+      flowWrap.className = 'okr-flow-wrapper';
+
+      const colors = ['sage', 'lavender', 'peach'];
+
+      let branchesHtml = '';
+      project.objectives.forEach((obj, oIdx) => {
+        const objProg = calcObjectiveProgress(obj);
+        const badgeColor = colors[oIdx % 3];
+
+        let krsRowsHtml = '';
+        obj.keyResults.forEach((kr, kIdx) => {
+          const krProg = calcKRProgress(kr);
+          const completedCount = kr.tasks.filter(t => t.completed).length;
+
+          let tasksHtml = '';
+          kr.tasks.forEach((t, tIdx) => {
+            const isImp = t.important !== false;
+            const isUrg = t.urgent !== false;
+
+            let quadBadge = '';
+            if (isImp && isUrg) {
+              quadBadge = '<span class="badge" style="background:#FEF3C7; color:#B45309; font-size:0.67rem; font-weight:800; padding:2px 6px;">CI · Ahora</span>';
+            } else if (isImp && !isUrg) {
+              quadBadge = '<span class="badge" style="background:#ECFDF5; color:#047857; font-size:0.67rem; font-weight:800; padding:2px 6px;">CII · Planificar</span>';
+            } else if (!isImp && isUrg) {
+              quadBadge = '<span class="badge" style="background:#EEF2FF; color:#4338CA; font-size:0.67rem; font-weight:800; padding:2px 6px;">CIII · Delegar</span>';
+            } else {
+              quadBadge = '<span class="badge" style="background:#F1F5F9; color:#475569; font-size:0.67rem; font-weight:800; padding:2px 6px;">CIV · Eliminar</span>';
+            }
+
+            tasksHtml += `
+              <div class="flow-node flow-node--task ${t.completed ? 'is-done' : ''}" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}">
+                <div class="flow-port flow-port--input">●</div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                  <input type="checkbox" class="flow-task-check" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}" ${t.completed ? 'checked' : ''} style="cursor: pointer; width: 14px; height: 14px;" />
+                  <input type="text" class="form-input flow-task-title" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}" value="${t.title}" placeholder="Definir iniciativa..." style="flex: 1; font-size: 0.78rem; font-weight: 600; padding: 2px 6px; border: 1px solid var(--color-border-soft); ${t.completed ? 'text-decoration: line-through; opacity: 0.65;' : ''}" />
+                  <button type="button" class="btn btn-ghost btn-sm flow-del-task" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}" style="color: var(--color-error); padding: 1px 4px; font-size: 0.72rem;" title="Eliminar tarea">✕</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <select class="form-select flow-task-imp" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}">
+                    <option value="true" ${isImp ? 'selected' : ''}>⭐ Importante</option>
+                    <option value="false" ${!isImp ? 'selected' : ''}>⚪ No imp.</option>
+                  </select>
+                  <select class="form-select flow-task-urg" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}">
+                    <option value="true" ${isUrg ? 'selected' : ''}>🔥 Urgente</option>
+                    <option value="false" ${!isUrg ? 'selected' : ''}>⏳ No urg.</option>
+                  </select>
+                  <div style="margin-left: auto;">
+                    ${quadBadge}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          krsRowsHtml += `
+            <div class="flow-kr-row" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}">
+              <!-- KR Node -->
+              <div class="flow-node flow-node--kr" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" style="border-left: 4px solid var(--color-lavender-dark, #A48DD4);">
+                <div class="flow-port flow-port--input">●</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span class="badge badge-lavender" style="font-size: 0.7rem; padding: 1px 6px;">KR ${oIdx + 1}.${kIdx + 1}</span>
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-ink);">${krProg.toFixed(0)}%</span>
+                    <button type="button" class="btn btn-ghost btn-sm flow-del-kr" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" style="color: var(--color-error); padding: 1px 4px; font-size: 0.72rem;" title="Eliminar KR">✕</button>
+                  </div>
+                </div>
+
+                <!-- Title -->
+                <input type="text" class="form-input flow-kr-title" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" value="${kr.title}" style="font-size: 0.85rem; font-weight: 600; width: 100%; margin-bottom: 6px; padding: 3px 6px;" />
+
+                <!-- Metrics -->
+                <div style="display: flex; gap: 6px; align-items: center; font-size: 0.75rem; color: var(--color-ink-70); margin-bottom: 6px; flex-wrap: wrap;">
+                  <span>Actual:</span>
+                  <input type="number" class="form-input flow-kr-curr" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" value="${kr.currentValue}" style="width: 58px; padding: 2px 4px; font-size: 0.78rem;" />
+                  <span>Meta:</span>
+                  <input type="number" class="form-input flow-kr-target" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" value="${kr.targetValue}" style="width: 58px; padding: 2px 4px; font-size: 0.78rem;" />
+                  <span>Ud:</span>
+                  <input type="text" class="form-input flow-kr-unit" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" value="${kr.unit || 'uds'}" style="width: 48px; padding: 2px 4px; font-size: 0.78rem;" />
+                </div>
+
+                <div class="okr-progress-bar-wrap" style="height: 4px; margin: 0;">
+                  <div class="okr-progress-bar-fill" style="width: ${krProg}%; background: var(--color-lavender-dark, #A48DD4);"></div>
+                </div>
+
+                <div class="flow-port flow-port--output">›</div>
+              </div>
+
+              <!-- Connector from KR to its Tasks -->
+              <div class="flow-tasks-connector" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}"></div>
+
+              <!-- Dedicated Tasks Column on the Right -->
+              <div class="flow-tasks-column" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                  <span style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--color-ink-50); letter-spacing: 0.04em;">
+                    Iniciativas (${completedCount}/${kr.tasks.length})
+                  </span>
+                  <button type="button" class="btn btn-ghost btn-sm flow-add-task" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" style="font-size: 0.7rem; padding: 1px 6px; color: var(--color-ink-70);">
+                    + Tarea
+                  </button>
+                </div>
+                ${tasksHtml.length > 0 ? tasksHtml : '<div style="font-size:0.75rem; color:var(--color-ink-40); font-style:italic; padding:6px 0;">Sin iniciativas vinculadas</div>'}
+              </div>
+            </div>
+          `;
+        });
+
+        branchesHtml += `
+          <div class="flow-obj-branch" data-obj-idx="${oIdx}">
+            <!-- Objective Node (Tier 1) -->
+            <div class="flow-node flow-node--objective" data-obj-idx="${oIdx}" style="border-left: 4px solid var(--color-${badgeColor});">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span class="badge badge-${badgeColor}" style="font-size: 0.72rem; padding: 2px 6px;">Objetivo ${oIdx + 1}</span>
+                <button type="button" class="btn btn-ghost btn-sm flow-del-obj" data-obj-idx="${oIdx}" style="color: var(--color-error); padding: 1px 5px; font-size: 0.78rem;" title="Eliminar objetivo">✕</button>
+              </div>
+
+              <textarea class="form-input flow-obj-title" data-obj-idx="${oIdx}" rows="2" style="font-size: 0.92rem; font-weight: 700; width: 100%; padding: 4px 6px; resize: none; margin-bottom: 4px; line-height: 1.3;">${obj.title}</textarea>
+
+              <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" class="form-input flow-obj-owner" data-obj-idx="${oIdx}" value="${obj.owner || ''}" placeholder="Responsable" style="font-size: 0.72rem; padding: 2px 5px; flex: 1;" />
+                <input type="text" class="form-input flow-obj-deadline" data-obj-idx="${oIdx}" value="${obj.deadline || ''}" placeholder="Límite" style="font-size: 0.72rem; width: 75px; padding: 2px 5px;" />
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--color-ink-70); margin-bottom: 3px;">
+                <span>Progreso</span>
+                <span>${objProg.toFixed(0)}%</span>
+              </div>
+              <div class="okr-progress-bar-wrap" style="height: 5px; margin: 0;">
+                <div class="okr-progress-bar-fill" style="width: ${objProg}%;"></div>
+              </div>
+
+              <div class="flow-port flow-port--output">›</div>
+            </div>
+
+            <!-- Connector Column (Tier 1 -> Tier 2) -->
+            <div class="flow-branch-connector" data-obj-idx="${oIdx}"></div>
+
+            <!-- KRs Column containing KR Rows (Tier 2 + Connector + Tier 3) -->
+            <div class="flow-krs-column" data-obj-idx="${oIdx}">
+              ${krsRowsHtml}
+              <button type="button" class="btn btn-secondary btn-sm flow-add-kr" data-obj-idx="${oIdx}" style="font-size: 0.75rem; padding: 3px 10px; align-self: flex-start;">+ Añadir KR</button>
+            </div>
+          </div>
+        `;
+      });
+
+      flowWrap.innerHTML = `
+        <!-- Header Bar above the canvas -->
+        <div class="okr-flow-header-bar">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="badge badge-sage" style="font-weight: 700; font-size: 0.75rem;">PLAN · ${project.period || 'Q1'}</span>
+            <strong style="font-size: 0.95rem; color: var(--color-ink);">${project.title}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-left: auto; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.78rem; font-weight: 600; color: var(--color-ink-70);">Progreso Global:</span>
+              <strong style="font-size: 0.85rem; font-family: var(--font-mono);">${overallProg.toFixed(0)}%</strong>
+              <div class="okr-progress-bar-wrap" style="width: 100px; height: 5px; margin: 0;">
+                <div class="okr-progress-bar-fill" style="width: ${overallProg}%;"></div>
+              </div>
+              <span style="font-size: 0.74rem; color: var(--color-ink-50);">(${totalObjs} obj · ${totalKrs} KRs · ${totalTasks} tareas)</span>
+            </div>
+            <!-- Zoom Controls -->
+            <div class="flow-zoom-controls">
+              <button type="button" class="flow-zoom-btn" id="flow-zoom-out" title="Alejar (o rueda del ratón)">−</button>
+              <span id="flow-zoom-label" style="font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono); min-width: 40px; text-align: center;">${Math.round(flowZoom * 100)}%</span>
+              <button type="button" class="flow-zoom-btn" id="flow-zoom-in" title="Acercar (o rueda del ratón)">+</button>
+              <button type="button" class="flow-zoom-btn" id="flow-zoom-reset" title="Restablecer posición y zoom (100%)" style="font-size: 0.8rem;">↺</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flow Viewport with dot grid -->
+        <div class="okr-flow-viewport" id="flow-viewport" title="Usa la rueda del ratón para acercar/alejar, y arrastra para moverte">
+          <div class="okr-flow-stage" id="flow-stage">
+            <div class="flow-branches-list">
+              ${branchesHtml}
+              <div style="margin-top: 4px;">
+                <button type="button" class="btn btn-primary btn-sm" id="btn-flow-add-obj" style="font-size: 0.82rem; padding: 6px 14px;">
+                  + Añadir nuevo objetivo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matriz de Eisenhower (Directamente debajo del lienzo) -->
+        <section class="eisenhower-section" id="eisenhower-section">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+                <span class="badge" style="background: #FEF3C7; color: #B45309; font-weight: 800; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;">Priorización Operativa</span>
+                <span style="font-size: 0.76rem; color: var(--color-ink-60);">Sincronizada en tiempo real con el flujo de OKRs</span>
+              </div>
+              <h2 style="font-size: 1.3rem; font-weight: 900; margin: 0; color: var(--color-ink); letter-spacing: -0.02em;">
+                <span style="color: #D97706;">MATRIZ</span> DE EISENHOWER
+              </h2>
+              <p style="font-size: 0.80rem; color: var(--color-ink-70); margin: 3px 0 0; max-width: 720px; line-height: 1.4;">
+                Clasifica automáticamente todas tus iniciativas según su importancia y urgencia para enfocar el esfuerzo de tu startup en lo que realmente mueve la aguja.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge badge-lavender" style="font-size: 0.78rem; padding: 4px 10px; font-weight: 700;">
+                Total: <span id="eisenhower-total-tasks" style="font-weight: 800; font-family: var(--font-mono); margin-left: 2px;">0</span> iniciativas
+              </span>
+            </div>
+          </div>
+
+          <!-- Matriz 2x2 con Ejes Y y X -->
+          <div class="eisenhower-wrapper">
+            <!-- Eje Y: IMPORTANTE (vertical) -->
+            <div class="eisenhower-axis-y" aria-hidden="true">
+              <div class="eisenhower-axis-y-labels">
+                <span class="eisenhower-axis-label-top">ALTO</span>
+                <span class="eisenhower-axis-text-y">IMPORTANTE</span>
+                <span class="eisenhower-axis-label-bottom">BAJO</span>
+              </div>
+              <div class="eisenhower-axis-y-track">
+                <span class="eisenhower-axis-arrow-top">▲</span>
+                <div class="eisenhower-axis-line-bar"></div>
+              </div>
+            </div>
+
+            <!-- Contenedor de la Cuadrícula + Eje X -->
+            <div class="eisenhower-grid-container">
+              <div class="eisenhower-grid">
+                <!-- Cuadrante CII: PLANIFICAR (Arriba - Izquierda) -->
+                <div class="eisenhower-card" id="quadrant-cii">
+                  <div class="eisenhower-badge">CII</div>
+                  <div class="eisenhower-card-header">
+                    <div class="eisenhower-icon" aria-hidden="true">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <path d="m9 16 2 2 4-4"></path>
+                      </svg>
+                    </div>
+                    <div class="eisenhower-divider" style="margin-bottom: 6px;"></div>
+                    <h3 class="eisenhower-title">PLANIFICAR</h3>
+                    <div class="eisenhower-subtitle">Importante · No urgente</div>
+                    <p class="eisenhower-desc">Dedica tiempo a lo que genera valor y previene problemas futuros.</p>
+                  </div>
+                  <div class="eisenhower-tasks-list" id="eisenhower-list-cii"></div>
+                </div>
+
+                <!-- Cuadrante CI: HACER AHORA (Arriba - Derecha) -->
+                <div class="eisenhower-card" id="quadrant-ci">
+                  <div class="eisenhower-badge">CI</div>
+                  <div class="eisenhower-card-header">
+                    <div class="eisenhower-icon" aria-hidden="true">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="13" r="8"></circle>
+                        <path d="M12 9v4l2 2"></path>
+                        <path d="M5 3 2 6"></path>
+                        <path d="m22 6-3-3"></path>
+                        <path d="M12 2v3"></path>
+                      </svg>
+                    </div>
+                    <div class="eisenhower-divider" style="margin-bottom: 6px;"></div>
+                    <h3 class="eisenhower-title">HACER AHORA</h3>
+                    <div class="eisenhower-subtitle">Importante · Urgente</div>
+                    <p class="eisenhower-desc">Atiende las tareas críticas que requieren acción inmediata.</p>
+                  </div>
+                  <div class="eisenhower-tasks-list" id="eisenhower-list-ci"></div>
+                </div>
+
+                <!-- Cuadrante CIV: DEJAR DE HACER (Abajo - Izquierda) -->
+                <div class="eisenhower-card" id="quadrant-civ">
+                  <div class="eisenhower-badge">CIV</div>
+                  <div class="eisenhower-card-header">
+                    <div class="eisenhower-icon" aria-hidden="true">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                      </svg>
+                    </div>
+                    <div class="eisenhower-divider" style="margin-bottom: 6px;"></div>
+                    <h3 class="eisenhower-title">DEJAR DE HACER</h3>
+                    <div class="eisenhower-subtitle">No importante · No urgente</div>
+                    <p class="eisenhower-desc">Elimina lo que no aporta valor y te aleja de tus objetivos.</p>
+                  </div>
+                  <div class="eisenhower-tasks-list" id="eisenhower-list-civ"></div>
+                </div>
+
+                <!-- Cuadrante CIII: DELEGAR (Abajo - Derecha) -->
+                <div class="eisenhower-card" id="quadrant-ciii">
+                  <div class="eisenhower-badge">CIII</div>
+                  <div class="eisenhower-card-header">
+                    <div class="eisenhower-icon" aria-hidden="true">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div class="eisenhower-divider" style="margin-bottom: 6px;"></div>
+                    <h3 class="eisenhower-title">DELEGAR</h3>
+                    <div class="eisenhower-subtitle">No importante · Urgente</div>
+                    <p class="eisenhower-desc">Confía en tu equipo o aliados para tareas que no requieren tu enfoque directo.</p>
+                  </div>
+                  <div class="eisenhower-tasks-list" id="eisenhower-list-ciii"></div>
+                </div>
+              </div>
+
+              <!-- Eje X: URGENTE (horizontal) -->
+              <div class="eisenhower-axis-x" aria-hidden="true">
+                <span class="eisenhower-axis-label-left">BAJO</span>
+                <div class="eisenhower-axis-line-x">
+                  <div class="eisenhower-axis-line-x-bar"></div>
+                  <span class="eisenhower-axis-text-x">URGENTE</span>
+                  <div class="eisenhower-axis-line-x-bar"></div>
+                  <span class="eisenhower-axis-arrow-right">▶</span>
+                </div>
+                <span class="eisenhower-axis-label-right">ALTO</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      okrContainer.appendChild(flowWrap);
+
+      // Render tasks in the Eisenhower matrix
+      renderEisenhowerMatrix(flowWrap);
+
+      // Setup zoom and pan
+      setupFlowViewportInteractivity(flowWrap);
+
+      // Attach editing listeners
+      attachFlowEditingListeners(flowWrap);
+
+      // Draw SVG lines after DOM layout stabilizes
+      requestAnimationFrame(() => {
+        drawFlowLines();
+      });
+    }
+
+    function attachListeners() {
+      // Objective titles
+      document.querySelectorAll('.obj-title-input').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const idx = parseInt(e.target.dataset.objIdx, 10);
+          project.objectives[idx].title = e.target.value;
+        });
+      });
+
+      // KR titles
+      document.querySelectorAll('.kr-title-input').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].title = e.target.value;
+        });
+      });
+
+      // KR values
+      document.querySelectorAll('.kr-curr-val').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].currentValue = parseFloat(e.target.value) || 0;
+          renderAll();
+        });
+      });
+      document.querySelectorAll('.kr-target-val').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].targetValue = parseFloat(e.target.value) || 1;
+          renderAll();
+        });
+      });
+      document.querySelectorAll('.kr-unit-val').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].unit = e.target.value;
+        });
+      });
+
+      // Tasks
+      document.querySelectorAll('.task-check').forEach(chk => {
+        chk.addEventListener('change', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].completed = e.target.checked;
+          renderAll();
+        });
+      });
+      document.querySelectorAll('.task-title-input').forEach(inp => {
+        inp.addEventListener('input', e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].title = e.target.value;
+        });
+      });
+
+      // Add Buttons
+      document.querySelectorAll('.btn-add-kr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          project.objectives[o].keyResults.push(createKeyResult(project.objectives[o].id, 'Nuevo Resultado Clave'));
+          renderAll();
+        });
+      });
+      document.querySelectorAll('.btn-add-task').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          project.objectives[o].keyResults[k].tasks.push(createTask(project.objectives[o].keyResults[k].id, 'Nueva tarea'));
+          renderAll();
+        });
+      });
+
+      // Delete Buttons
+      document.querySelectorAll('.btn-del-obj').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          if (confirm('¿Eliminar este objetivo y todos sus KRs asociados?')) {
+            project.objectives.splice(o, 1);
+            renderAll();
+          }
+        });
+      });
+      document.querySelectorAll('.btn-del-kr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          project.objectives[o].keyResults.splice(k, 1);
+          renderAll();
+        });
+      });
+      document.querySelectorAll('.btn-del-task').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          const t = parseInt(e.currentTarget.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks.splice(t, 1);
+          renderAll();
+        });
+      });
+
+      // Reorder buttons (Objective)
+      document.querySelectorAll('.btn-obj-up').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          if (o > 0) {
+            project.objectives = reorderArray(project.objectives, o, o - 1);
+            renderAll();
+          }
+        });
+      });
+      document.querySelectorAll('.btn-obj-down').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          if (o < project.objectives.length - 1) {
+            project.objectives = reorderArray(project.objectives, o, o + 1);
+            renderAll();
+          }
+        });
+      });
+
+      // Reorder buttons (KR)
+      document.querySelectorAll('.btn-kr-up').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          if (k > 0) {
+            project.objectives[o].keyResults = reorderArray(project.objectives[o].keyResults, k, k - 1);
+            renderAll();
+          }
+        });
+      });
+      document.querySelectorAll('.btn-kr-down').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const o = parseInt(e.currentTarget.dataset.objIdx, 10);
+          const k = parseInt(e.currentTarget.dataset.krIdx, 10);
+          if (k < project.objectives[o].keyResults.length - 1) {
+            project.objectives[o].keyResults = reorderArray(project.objectives[o].keyResults, k, k + 1);
+            renderAll();
+          }
+        });
+      });
+    }
+
+    document.getElementById('btn-add-objective').addEventListener('click', () => {
+      project.objectives.push(createObjective('Nuevo Objetivo'));
+      renderAll();
+    });
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      project = {
+        id: 'project-q1-saas',
+        title: 'Plan OKR Q1 — Tracción y Escalado Inicial',
+        period: 'Q1',
+        objectives: [
+          {
+            id: 'obj-1',
+            title: 'Alcanzar sostenibilidad financiera inicial alcanzando 25.000 € de MRR',
+            owner: 'CEO & Head of Sales',
+            deadline: '31 Marzo',
+            keyResults: [
+              {
+                id: 'kr-1-1',
+                title: 'Aumentar el MRR de 10.000 € a 25.000 €',
+                currentValue: 18500,
+                targetValue: 25000,
+                unit: '€',
+                tasks: [
+                  { id: 't1', title: 'Cerrar los 4 acuerdos piloto en pipeline', completed: true, important: true, urgent: true },
+                  { id: 't2', title: 'Aumentar ticket medio anual en nuevos clientes', completed: true, important: true, urgent: false },
+                  { id: 't3', title: 'Lanzar plan de referidos para clientes actuales', completed: false, important: true, urgent: false }
+                ]
+              },
+              {
+                id: 'kr-1-2',
+                title: 'Conseguir 40 nuevos clientes activos de pago',
+                currentValue: 28,
+                targetValue: 40,
+                unit: 'clientes',
+                tasks: [
+                  { id: 't4', title: 'Testear 2 canales de captación outbound', completed: true, important: false, urgent: true },
+                  { id: 't5', title: 'Crear webinar mensual con partners', completed: false, important: false, urgent: false },
+                  { id: 't6', title: 'Optimizar landing page para conversión', completed: true, important: true, urgent: true }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'obj-2',
+            title: 'Garantizar excelencia técnica y satisfacción de producto',
+            owner: 'CTO & Product Lead',
+            deadline: '31 Marzo',
+            keyResults: [
+              {
+                id: 'kr-2-1',
+                title: 'Reducir el tiempo de onboarding de nuevo usuario a menos de 5 minutos',
+                currentValue: 4.8,
+                targetValue: 5.0,
+                unit: 'min',
+                tasks: [
+                  { id: 't7', title: 'Implementar asistente guiado paso a paso', completed: true, important: true, urgent: true },
+                  { id: 't8', title: 'Medir eventos de fricción con analytics', completed: true, important: true, urgent: false },
+                  { id: 't9', title: 'Eliminar formulario previo obligatorio', completed: true, important: false, urgent: true }
+                ]
+              },
+              {
+                id: 'kr-2-2',
+                title: 'Mantener uptime del servicio por encima del 99.8%',
+                currentValue: 99.9,
+                targetValue: 99.8,
+                unit: '%',
+                tasks: [
+                  { id: 't10', title: 'Configurar réplicas y alertas en Datadog', completed: true, important: true, urgent: true },
+                  { id: 't11', title: 'Plan de contingencia ante caídas de servidor', completed: true, important: true, urgent: false },
+                  { id: 't12', title: 'Auditoría de seguridad y dependencias', completed: false, important: false, urgent: false }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+      renderAll();
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      project.objectives = [];
+      ensureInitialData();
+      renderAll();
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const res = saveData(STORAGE_KEY, project);
+      alert(res.success ? '✓ Tablero de OKRs guardado con éxito en tu navegador.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const saved = loadData(STORAGE_KEY, null);
+      if (!saved) {
+        alert('No se encontraron OKRs guardados previamente.');
+        return;
+      }
+      project = saved;
+      renderAll();
+      alert('✓ OKRs recuperados correctamente.');
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const jsonStr = serializeProject(project);
+      downloadFile(jsonStr, 'elevia-okrs.json', 'application/json');
+    });
+
+    // Import JSON
+    document.getElementById('file-import-json').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = parseProject(ev.target.result);
+          project = imported;
+          renderAll();
+          alert('✓ Proyecto de OKRs importado correctamente.');
+        } catch (err) {
+          alert('Error al leer el archivo JSON: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Init
+    ensureInitialData();
+    if (urlParams.get('demo') === '1') {
+      document.getElementById('btn-demo')?.click();
+    }
+    renderAll();
+  
+})();
+</script>
+
+</body>
+</html>

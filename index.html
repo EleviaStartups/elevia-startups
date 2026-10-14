@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Elevia Startups — Herramientas Gratuitas y Mentoría para Fundadores</title>
+  <meta name="description" content="Plataforma para startups y emprendedores: calculadora TAM SAM SOM, valoración de startups, unit economics, CAC/LTV, runway, investor deck y servicio de mentoría." />
+  <meta name="keywords" content="startups, herramientas para startups, calculadora TAM SAM SOM, valoración startups, dilución socios, burn rate, runway, CAC LTV, mentoría startups, investor deck, pitch deck" />
+  <meta name="author" content="Elevia Startups" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://elevia-startups.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Elevia Startups" />
+  <meta property="og:title" content="Elevia Startups — Herramientas Gratuitas y Mentoría para Fundadores" />
+  <meta property="og:description" content="Valida tu mercado, estructura tus objetivos, entiende tus finanzas y prepara tu startup para levantar capital con nuestras herramientas gratuitas y mentoría 1-a-1." />
+  <meta property="og:url" content="https://elevia-startups.com/" />
+  <meta property="og:locale" content="es_ES" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Elevia Startups — Herramientas Gratuitas y Mentoría para Fundadores" />
+  <meta name="twitter:description" content="Valida tu mercado, estructura tus objetivos, entiende tus finanzas y prepara tu startup para levantar capital con nuestras herramientas gratuitas y mentoría 1-a-1." />
+
+  <!-- Schema.org JSON-LD (WebSite, Organization & Customer Reviews) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://elevia-startups.com/#website",
+        "url": "https://elevia-startups.com/",
+        "name": "Elevia Startups",
+        "description": "Herramientas gratuitas para fundadores y emprendedores: TAM SAM SOM, valoración, finanzas y mentoría.",
+        "inLanguage": "es"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://elevia-startups.com/#organization",
+        "name": "Elevia Startups",
+        "url": "https://elevia-startups.com/",
+        "logo": "https://elevia-startups.com/favicon.svg",
+        "email": "davidpaezlancho@gmail.com",
+        "description": "Plataforma de herramientas financieras, de mercado y mentoría personalizada para startups y emprendedores."
+      },
+      {
+        "@type": "Product",
+        "name": "Elevia Startups Suite",
+        "description": "Suite de herramientas estratégicas y financieras para startups.",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "bestRating": "5",
+          "worstRating": "1",
+          "ratingCount": "3"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "author": { "@type": "Person", "name": "Camilo Gutiérrez" },
+            "datePublished": "2026-09-15",
+            "reviewBody": "Nos vino genial para preparar la ronda que estábamos buscando. Estar mentorizados nos dio el foco y la tranquilidad de llevar los números bien atados.",
+            "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+          },
+          {
+            "@type": "Review",
+            "author": { "@type": "Person", "name": "Juan David Camacho" },
+            "datePublished": "2026-09-28",
+            "reviewBody": "Estar mentorizados por David nos ayudó a ordenar la casa. Nos guio paso a paso con las finanzas y el Data Room, y la diferencia al hablar con inversores fue enorme.",
+            "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+          },
+          {
+            "@type": "Review",
+            "author": { "@type": "Organization", "name": "Offside Club" },
+            "datePublished": "2026-10-02",
+            "reviewBody": "En una tarde pusimos en orden el TAM/SAM/SOM y los unit economics. Nos ahorró semanas de darle vueltas y fuimos a la ronda con los números muy claros.",
+            "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="src/css/tokens.css" />
+  <link rel="stylesheet" href="src/css/base.css" />
+  <link rel="stylesheet" href="src/css/components.css" />
+  <link rel="stylesheet" href="src/css/home.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER — populated by nav.js initNav()
+  ============================================================ -->
+  <header id="site-header" role="banner"></header>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main id="main-content">
+
+    <!-- --------------------------------------------------------
+         a. HERO SECTION
+    -------------------------------------------------------- -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero__inner container">
+
+        <!-- Text column -->
+        <div class="hero__content">
+          <span class="hero__eyebrow" aria-hidden="true">✦ Para fundadores y emprendedores</span>
+          <h1 id="hero-heading" class="hero__title">
+            Las herramientas que necesitas para construir una
+            <span class="hero__title-accent">startup mejor</span>
+          </h1>
+          <p class="hero__lead">
+            Valida tu mercado, estructura tus objetivos, entiende tus números y prepara tu startup para crecer.
+          </p>
+          <div class="hero__actions">
+            <a href="#herramientas" class="btn btn--primary" aria-label="Explorar todas las herramientas">
+              Explorar herramientas
+              <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="pages/investor-deck.html" class="btn btn--secondary" aria-label="Preparar mi investor deck">
+              Preparar mi investor deck
+            </a>
+          </div>
+
+          <!-- Trust badges -->
+          <div class="hero__trust" aria-label="Ventajas principales">
+            <span class="trust-badge">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Gratuito
+            </span>
+            <span class="trust-badge">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Sin registro
+            </span>
+            <span class="trust-badge">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Listo en minutos
+            </span>
+          </div>
+        </div>
+
+        <!-- Decorative visual element (pure CSS) -->
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__visual-card hero__visual-card--main">
+            <div class="visual-card__header">
+              <span class="visual-card__dot visual-card__dot--sage"></span>
+              <span class="visual-card__label">TAM / SAM / SOM &middot; ejemplo ilustrativo</span>
+            </div>
+            <div class="visual-card__bars">
+              <div class="visual-bar visual-bar--tam">
+                <span class="visual-bar__label">TAM</span>
+                <div class="visual-bar__track"><div class="visual-bar__fill" style="width:100%"></div></div>
+                <span class="visual-bar__value">€2.4B</span>
+              </div>
+              <div class="visual-bar visual-bar--sam">
+                <span class="visual-bar__label">SAM</span>
+                <div class="visual-bar__track"><div class="visual-bar__fill" style="width:64%"></div></div>
+                <span class="visual-bar__value">€1.5B</span>
+              </div>
+              <div class="visual-bar visual-bar--som">
+                <span class="visual-bar__label">SOM</span>
+                <div class="visual-bar__track"><div class="visual-bar__fill" style="width:28%"></div></div>
+                <span class="visual-bar__value">€680M</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero__visual-card hero__visual-card--okr">
+            <div class="visual-card__header">
+              <span class="visual-card__dot visual-card__dot--lavender"></span>
+              <span class="visual-card__label">OKR Builder</span>
+            </div>
+            <div class="okr-preview">
+              <div class="okr-objective">Conquistar el mercado B2B nacional</div>
+              <div class="okr-kr okr-kr--done">KR1: 50 clientes activos &nbsp;✓</div>
+              <div class="okr-kr okr-kr--progress">KR2: NPS ≥ 40 &nbsp;<span class="okr-pill">72%</span></div>
+            </div>
+          </div>
+
+          <div class="hero__visual-card hero__visual-card--metric">
+            <div class="visual-card__header">
+              <span class="visual-card__dot visual-card__dot--peach"></span>
+              <span class="visual-card__label">CAC / LTV</span>
+            </div>
+            <div class="metric-preview">
+              <div class="metric-row">
+                <span class="metric-label">Ratio LTV:CAC</span>
+                <span class="metric-value metric-value--good">3.8×</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Payback period</span>
+                <span class="metric-value">8 meses</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating decorative shapes -->
+          <div class="hero__shape hero__shape--circle"></div>
+          <div class="hero__shape hero__shape--ring"></div>
+          <div class="hero__shape hero__shape--dot-grid"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------
+         b. TOOLS SECTION
+    -------------------------------------------------------- -->
+    <section id="herramientas" class="tools-section" aria-labelledby="tools-heading">
+      <div class="container">
+
+        <div class="section-header animate-on-scroll">
+          <h2 id="tools-heading" class="section-title">Herramientas</h2>
+          <p class="section-subtitle">Todo lo que necesitas para validar, estructurar y escalar tu startup.</p>
+        </div>
+
+        <!-- Category filter chips -->
+        <div class="filter-chips" role="group" aria-label="Filtrar herramientas por categoría">
+          <button class="chip chip--active" data-filter="all" aria-pressed="true">Todas</button>
+          <button class="chip" data-filter="market" aria-pressed="false">Mercado y estrategia</button>
+          <button class="chip" data-filter="planning" aria-pressed="false">Organización y planificación</button>
+          <button class="chip" data-filter="finance" aria-pressed="false">Finanzas y métricas</button>
+          <button class="chip" data-filter="fundraising" aria-pressed="false">Fundraising</button>
+        </div>
+
+        <!-- Tool cards grid -->
+        <div class="tools-grid" role="list" aria-label="Lista de herramientas disponibles">
+
+          <!-- TAM/SAM/SOM -->
+          <article class="tool-card tool-card--sage animate-on-scroll" data-category="market" role="listitem" style="--card-delay: 0">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.75" opacity="0.35"/>
+                <circle cx="14" cy="14" r="8" stroke="currentColor" stroke-width="1.75" opacity="0.65"/>
+                <circle cx="14" cy="14" r="4" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">TAM / SAM / SOM</h3>
+              <p class="tool-card__desc">Estima el tamaño de tu mercado y calcula tu oportunidad real de negocio.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--sage">Mercado y estrategia</span>
+              <a href="pages/tools/tam-sam-som.html" class="tool-card__link" aria-label="Usar herramienta TAM SAM SOM">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- OKR Builder -->
+          <article class="tool-card tool-card--lavender animate-on-scroll" data-category="planning" role="listitem" style="--card-delay: 1">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect x="4" y="6" width="14" height="3" rx="1.5" fill="currentColor" opacity="0.9"/>
+                <rect x="4" y="13" width="10" height="3" rx="1.5" fill="currentColor" opacity="0.65"/>
+                <rect x="4" y="20" width="12" height="3" rx="1.5" fill="currentColor" opacity="0.4"/>
+                <path d="M21 10l3 3-3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">OKR Builder</h3>
+              <p class="tool-card__desc">Gestiona objetivos y resultados clave para mantener tu equipo alineado.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--lavender">Organización y planificación</span>
+              <a href="pages/tools/okr-builder.html" class="tool-card__link" aria-label="Usar herramienta OKR Builder">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- ICP Creator -->
+          <article class="tool-card tool-card--peach animate-on-scroll" data-category="market" role="listitem" style="--card-delay: 2">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="10" r="5" stroke="currentColor" stroke-width="1.75"/>
+                <path d="M5 24c0-4.418 4.03-8 9-8s9 3.582 9 8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                <circle cx="22" cy="10" r="2.5" fill="currentColor" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">ICP Creator</h3>
+              <p class="tool-card__desc">Define tu cliente ideal con precisión para enfocar ventas y marketing.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--peach">Mercado y estrategia</span>
+              <a href="pages/tools/icp-creator.html" class="tool-card__link" aria-label="Usar herramienta ICP Creator">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Valoración -->
+          <article class="tool-card tool-card--lavender animate-on-scroll" data-category="finance" role="listitem" style="--card-delay: 3">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M14 4v20M8 8l6-4 6 4M6 20h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 13h8M10 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">Valoración</h3>
+              <p class="tool-card__desc">Calcula el valor de tu startup con múltiples métodos de valoración.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--lavender">Finanzas y métricas</span>
+              <a href="pages/tools/startup-valuation.html" class="tool-card__link" aria-label="Usar herramienta de Valoración">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Dilución -->
+          <article class="tool-card tool-card--sage animate-on-scroll" data-category="finance" role="listitem" style="--card-delay: 4">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.75"/>
+                <path d="M14 14l-8-4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.45"/>
+                <path d="M14 14V4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.7"/>
+                <path d="M14 14l7 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.9"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">Dilución</h3>
+              <p class="tool-card__desc">Simula el impacto de una ronda de inversión en el cap table de tu startup.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--sage">Finanzas y métricas</span>
+              <a href="pages/tools/dilution-calculator.html" class="tool-card__link" aria-label="Usar herramienta de Dilución">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- CAC/LTV -->
+          <article class="tool-card tool-card--peach animate-on-scroll" data-category="finance" role="listitem" style="--card-delay: 5">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M4 22L10 14l5 5 4-8 5 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="10" cy="14" r="2" fill="currentColor" opacity="0.5"/>
+                <circle cx="15" cy="19" r="2" fill="currentColor" opacity="0.7"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">CAC / LTV</h3>
+              <p class="tool-card__desc">Analiza la rentabilidad por cliente y el ratio de retorno de adquisición.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--peach">Finanzas y métricas</span>
+              <a href="pages/tools/cac-ltv.html" class="tool-card__link" aria-label="Usar herramienta CAC LTV">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Burn Rate -->
+          <article class="tool-card tool-card--peach animate-on-scroll" data-category="finance" role="listitem" style="--card-delay: 6">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M14 24C8.477 24 4 19.523 4 14s4.477-10 10-10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.4"/>
+                <path d="M14 4c5.523 0 10 4.477 10 10s-4.477 10-10 10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                <path d="M14 8v6l4 2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">Burn Rate</h3>
+              <p class="tool-card__desc">Proyecta tu caja, calcula tu runway y entiende tu autonomía financiera.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--peach">Finanzas y métricas</span>
+              <a href="pages/tools/burn-rate.html" class="tool-card__link" aria-label="Usar herramienta Burn Rate">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Unit Economics -->
+          <article class="tool-card tool-card--peach animate-on-scroll" data-category="finance" role="listitem" style="--card-delay: 7">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M7 10l7-6 7 6-7 14-7-14z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                <path d="M7 10h14M11 10l3 14 3-14" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">Unit Economics</h3>
+              <p class="tool-card__desc">Calcula margen bruto real, payback del CAC y proyecta tu LTV a 12 meses con retención.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--peach">Finanzas y métricas</span>
+              <a href="pages/tools/unit-economics.html" class="tool-card__link" aria-label="Usar herramienta Unit Economics">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Data Room -->
+          <article class="tool-card tool-card--lavender animate-on-scroll" data-category="fundraising" role="listitem" style="--card-delay: 8">
+            <div class="tool-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M4 6a2 2 0 012-2h5l2 2h9a2 2 0 012 2v13a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                <path d="M9 13h10M9 17h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="tool-card__body">
+              <h3 class="tool-card__name">Data Room (Due Diligence)</h3>
+              <p class="tool-card__desc">Checklist interactivo para estructurar y organizar la documentación que exigen los inversores.</p>
+            </div>
+            <div class="tool-card__footer">
+              <span class="badge badge--lavender">Fundraising</span>
+              <a href="pages/tools/data-room.html" class="tool-card__link" aria-label="Usar herramienta Data Room">
+                Usar herramienta
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
+        </div><!-- /.tools-grid -->
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------
+         c. HOW IT WORKS SECTION
+    -------------------------------------------------------- -->
+    <section class="how-section" aria-labelledby="how-heading">
+      <div class="container">
+
+        <div class="section-header animate-on-scroll">
+          <h2 id="how-heading" class="section-title">El camino de tu startup</h2>
+          <p class="section-subtitle">Desde la primera idea hasta la financiación, tenemos la herramienta que necesitas en cada etapa.</p>
+        </div>
+
+        <ol class="steps-list" aria-label="Etapas del recorrido de una startup">
+
+          <li class="step animate-on-scroll" style="--step-delay: 0">
+            <div class="step__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.75"/>
+                <path d="M14 9v5l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="step__content">
+              <span class="step__number" aria-hidden="true">01</span>
+              <h3 class="step__title">Idea</h3>
+              <p class="step__desc">Tienes una visión. Es el momento de descubrir si el mercado existe y quién es tu cliente potencial.</p>
+              <a href="pages/tools/tam-sam-som.html" class="step__link">Estimar el mercado →</a>
+            </div>
+            <div class="step__connector" aria-hidden="true"></div>
+          </li>
+
+          <li class="step animate-on-scroll" style="--step-delay: 1">
+            <div class="step__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M5 14h4l3 6 4-12 3 6h4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="step__content">
+              <span class="step__number" aria-hidden="true">02</span>
+              <h3 class="step__title">Validación</h3>
+              <p class="step__desc">Define tu cliente ideal y analiza si los números de adquisición y retención tienen sentido.</p>
+              <a href="pages/tools/icp-creator.html" class="step__link">Crear perfil ICP →</a>
+            </div>
+            <div class="step__connector" aria-hidden="true"></div>
+          </li>
+
+          <li class="step animate-on-scroll" style="--step-delay: 2">
+            <div class="step__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect x="5" y="6" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.75"/>
+                <path d="M9 12h10M9 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+                <path d="M14 6V4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="step__content">
+              <span class="step__number" aria-hidden="true">03</span>
+              <h3 class="step__title">Estructuración</h3>
+              <p class="step__desc">Establece objetivos claros con OKRs y gestiona tu flujo de caja para mantenerte en positivo.</p>
+              <a href="pages/tools/okr-builder.html" class="step__link">Construir OKRs →</a>
+            </div>
+            <div class="step__connector" aria-hidden="true"></div>
+          </li>
+
+          <li class="step animate-on-scroll" style="--step-delay: 3">
+            <div class="step__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M4 20l7-7 4 4 9-11" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="23" cy="6" r="2.5" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="step__content">
+              <span class="step__number" aria-hidden="true">04</span>
+              <h3 class="step__title">Crecimiento y financiación</h3>
+              <p class="step__desc">Prepara tu pitch, calcula la valoración y simula el impacto de una ronda de inversión.</p>
+              <a href="pages/investor-deck.html" class="step__link">Preparar el deck →</a>
+            </div>
+          </li>
+
+        </ol>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------
+         d & e. INVESTOR DECK & DECK REVIEW SECTION
+    -------------------------------------------------------- -->
+    <section class="promo-section" aria-label="Recursos para Investor Deck y Fundraising">
+      <div class="container promo-cards-wrapper">
+
+        <!-- Investor Deck Guide Card -->
+        <div class="promo-card promo-card--deck animate-on-scroll" role="complementary" aria-labelledby="deck-heading">
+          <div class="promo-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="6" width="32" height="36" rx="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 18h16M16 24h16M16 30h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.7"/>
+              <circle cx="36" cy="36" r="8" fill="currentColor" opacity="0.15"/>
+              <path d="M33 36l2.5 2.5L39 33" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="promo-card__body">
+            <span class="promo-card__eyebrow">Presentaciones</span>
+            <h2 id="deck-heading" class="promo-card__title">Crea tu Investor Deck</h2>
+            <p class="promo-card__desc">Guía paso a paso para construir una presentación que convenza a inversores. Incluye plantilla, 12 diapositivas clave, ejemplos ficticios y checklist.</p>
+            <a href="pages/investor-deck.html" class="btn btn--primary" aria-label="Ir al generador de Investor Deck">
+              Preparar mi deck
+              <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="promo-card__deco" aria-hidden="true">
+            <div class="deco-slides">
+              <div class="deco-slide deco-slide--1"></div>
+              <div class="deco-slide deco-slide--2"></div>
+              <div class="deco-slide deco-slide--3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deck Review Card -->
+        <div class="promo-card promo-card--review animate-on-scroll" role="complementary" aria-labelledby="review-heading">
+          <div class="promo-card__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="22" r="12" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 22l3 3 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 38l8-4 8 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+              <circle cx="38" cy="14" r="5" fill="currentColor" opacity="0.12"/>
+              <path d="M36 14h4M38 12v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="promo-card__body">
+            <span class="promo-card__eyebrow">Revisión de decks</span>
+            <h2 id="review-heading" class="promo-card__title">Obtén una revisión de tu deck</h2>
+            <p class="promo-card__desc">Recibe feedback estructurado sobre tu presentación. Identificamos los puntos débiles antes de que llegues a los inversores.</p>
+            <a href="pages/deck-review.html" class="btn btn--outline" aria-label="Ir a la herramienta de revisión de decks">
+              Solicitar revisión
+              <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="promo-card__deco" aria-hidden="true">
+            <div class="review-highlights" style="display:flex; flex-direction:column; gap:8px; font-size:0.85rem; color:var(--color-ink-70, #4A5568);">
+              <div style="display:flex; align-items:center; gap:8px;"><span style="color:var(--color-sage-dark, #7CB993); font-weight:bold;">✓</span> Revisión slide a slide</div>
+              <div style="display:flex; align-items:center; gap:8px;"><span style="color:var(--color-sage-dark, #7CB993); font-weight:bold;">✓</span> Coherencia de narrativa y ask</div>
+              <div style="display:flex; align-items:center; gap:8px;"><span style="color:var(--color-sage-dark, #7CB993); font-weight:bold;">✓</span> Validación de métricas y unit economics</div>
+              <div style="display:flex; align-items:center; gap:8px;"><span style="color:var(--color-sage-dark, #7CB993); font-weight:bold;">✓</span> Lista priorizada de mejoras accionables</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Startup Executive Report Card -->
+        <div class="promo-card promo-card--report animate-on-scroll" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(200, 222, 208, 0.25) 0%, rgba(226, 221, 240, 0.25) 100%); border: 1px solid var(--color-border);" role="complementary" aria-labelledby="report-heading">
+          <div class="promo-card__icon" aria-hidden="true">
+            <span style="font-size: 2.2rem;">📄</span>
+          </div>
+          <div class="promo-card__body">
+            <span class="promo-card__eyebrow" style="color: var(--color-sage-dark);">Informe Integral</span>
+            <h2 id="report-heading" class="promo-card__title">Resumen Ejecutivo de tu Startup</h2>
+            <p class="promo-card__desc">Reúne en un único documento profesional todo tu trabajo: mercado, unit economics, runway, cap table y due diligence. Descárgalo en PDF o Markdown en 1 clic sin coste alguno.</p>
+            <a href="pages/startup-report.html" class="btn btn--primary" aria-label="Ir a mi informe de startup">
+              Ver mi informe de startup
+              <svg class="btn__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+          <div class="promo-card__deco" aria-hidden="true">
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem; color:var(--color-ink-70);">
+              <div>✓ Exportación en PDF profesional</div>
+              <div>✓ Formato Notion y Markdown (.md)</div>
+              <div>✓ 100% Confidencial en tu navegador</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         e. RESEÑAS / TESTIMONIOS DE STARTUPS
+    ============================================================ -->
+    <section class="reviews-section" id="opiniones" aria-labelledby="reviews-heading">
+      <div class="container">
+        
+        <div class="section-header animate-on-scroll">
+          <span class="hero__eyebrow" style="color:var(--color-sage-dark);">✦ Casos de Éxito & Opiniones</span>
+          <h2 id="reviews-heading" class="section-title">Startups que confían en Elevia</h2>
+          <p class="section-subtitle">Fundadores que han validado su mercado, optimizado sus unit economics y levantado capital con nuestras herramientas.</p>
+        </div>
+
+        <div class="reviews-grid">
+          
+          <!-- Review 1: Offside Club -->
+          <article class="review-card animate-on-scroll">
+            <div>
+              <div class="review-card__header">
+                <div class="review-card__logo-box" style="background:#0D1117;">
+                  <img src="imagenes/logo-offside-512x512.png" alt="Logo de Offside Club" class="review-card__logo" width="58" height="58" loading="lazy">
+                </div>
+                <div class="review-card__meta">
+                  <div class="review-card__name">Offside Club</div>
+                  <span class="badge badge-sage" style="align-self:flex-start;">SportsTech & Community</span>
+                </div>
+              </div>
+
+              <div class="review-card__stars" aria-label="Calificación: 5 de 5 estrellas">
+                <span class="review-card__stars-icons" aria-hidden="true">★★★★★</span>
+                <span class="review-card__score">5.0 / 5.0</span>
+              </div>
+
+              <p class="review-card__quote">
+                “En una tarde pusimos en orden el TAM/SAM/SOM y los unit economics. Nos ahorró semanas de darle vueltas y fuimos a la ronda con los números muy claros.”
+              </p>
+            </div>
+
+            <div class="review-card__author">
+              <span class="review-card__author-name">Equipo Fundador</span>
+              <span class="review-card__author-role">Founders en Offside Club</span>
+            </div>
+          </article>
+
+          <!-- Review 2: GPS Viajes -->
+          <article class="review-card animate-on-scroll">
+            <div>
+              <div class="review-card__header">
+                <div class="review-card__logo-box" style="background:#0A2540;">
+                  <img src="imagenes/logogps.png" alt="Logo de GPS Planeación de Viajes" class="review-card__logo" width="58" height="58" loading="lazy">
+                </div>
+                <div class="review-card__meta">
+                  <div class="review-card__name">GPS Viajes</div>
+                  <span class="badge badge-lavender" style="align-self:flex-start;">TravelTech & Gestión</span>
+                </div>
+              </div>
+
+              <div class="review-card__stars" aria-label="Calificación: 5 de 5 estrellas">
+                <span class="review-card__stars-icons" aria-hidden="true">★★★★★</span>
+                <span class="review-card__score">5.0 / 5.0</span>
+              </div>
+
+              <p class="review-card__quote">
+                “Nos vino genial para preparar la ronda que estábamos buscando. Estar mentorizados nos dio el foco y la tranquilidad de llevar los números bien atados.”
+              </p>
+            </div>
+
+            <div class="review-card__author">
+              <span class="review-card__author-name">Camilo Gutiérrez</span>
+              <span class="review-card__author-role">Founder en GPS Planeación de Viajes</span>
+            </div>
+          </article>
+
+          <!-- Review 3: Viantryp -->
+          <article class="review-card animate-on-scroll">
+            <div>
+              <div class="review-card__header">
+                <div class="review-card__logo-box" style="background:#FFFFFF;">
+                  <img src="imagenes/logo viantryp.jpg" alt="Logo de Viantryp" class="review-card__logo" width="58" height="58" loading="lazy" style="object-fit:contain; padding:4px;">
+                </div>
+                <div class="review-card__meta">
+                  <div class="review-card__name">Viantryp</div>
+                  <span class="badge badge-peach" style="align-self:flex-start;">Experiencias & Booking</span>
+                </div>
+              </div>
+
+              <div class="review-card__stars" aria-label="Calificación: 5 de 5 estrellas">
+                <span class="review-card__stars-icons" aria-hidden="true">★★★★★</span>
+                <span class="review-card__score">5.0 / 5.0</span>
+              </div>
+
+              <p class="review-card__quote">
+                “Estar mentorizados por David nos ayudó a ordenar la casa. Nos guio paso a paso con las finanzas y el Data Room, y la diferencia al hablar con inversores fue enorme.”
+              </p>
+            </div>
+
+            <div class="review-card__author">
+              <span class="review-card__author-name">Juan David Camacho</span>
+              <span class="review-card__author-role">Founder en Viantryp</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Trust Stats Banner -->
+        <div class="reviews-trust-bar animate-on-scroll">
+          <div class="reviews-trust-item">
+            <span class="reviews-trust-icon">⭐</span>
+            <span><strong>5.0 / 5.0</strong> valoración de fundadores</span>
+          </div>
+          <div class="reviews-trust-item">
+            <span class="reviews-trust-icon">🔒</span>
+            <span><strong>100% Confidencial</strong> y en local</span>
+          </div>
+          <div class="reviews-trust-item">
+            <span class="reviews-trust-icon">⚡</span>
+            <span><strong>Sin registro</strong> ni tarjetas de crédito</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER — populated by nav.js initFooter()
+  ============================================================ -->
+  <footer id="site-footer" role="contentinfo"></footer>
+
+  <!-- ============================================================
+       SCRIPTS
+  ============================================================ -->
+  <script src="src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    // ── Nav & Footer components ───────────────────────────────
+    const {initNav, initFooter} = __req('nav');
+    initNav();
+    initFooter();
+
+    // ── Category filter chips ─────────────────────────────────
+    (function initCategoryFilter() {
+      const chips   = document.querySelectorAll('.chip[data-filter]');
+      const cards   = document.querySelectorAll('.tool-card[data-category]');
+
+      /**
+       * Filter tool cards by category.
+       * @param {string} filter - Category key or 'all'
+       */
+      function applyFilter(filter) {
+        cards.forEach((card) => {
+          const match = filter === 'all' || card.dataset.category === filter;
+          card.style.display = match ? '' : 'none';
+          // Trigger re-entrance animation for visible cards
+          if (match) {
+            card.classList.remove('is-visible');
+            // Force reflow so the transition restarts
+            void card.offsetWidth;
+            card.classList.add('is-visible');
+          }
+        });
+      }
+
+      chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          // Update aria-pressed state
+          chips.forEach((c) => {
+            c.classList.remove('chip--active');
+            c.setAttribute('aria-pressed', 'false');
+          });
+          chip.classList.add('chip--active');
+          chip.setAttribute('aria-pressed', 'true');
+
+          applyFilter(chip.dataset.filter);
+        });
+      });
+    })();
+
+    // ── IntersectionObserver — scroll entrance animations ─────
+    (function initScrollAnimations() {
+      const targets = document.querySelectorAll('.animate-on-scroll');
+
+      if (!('IntersectionObserver' in window)) {
+        // Fallback: show all immediately for older browsers
+        targets.forEach((el) => el.classList.add('is-visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              // Unobserve once visible to save resources
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: '0px 0px -48px 0px',
+        }
+      );
+
+      targets.forEach((el) => observer.observe(el));
+    })();
+  
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Dilución de Socios — Elevia Startups</title>
+  <meta name="description" content="Simula una ronda de inversión de capital semilla o pre-seed y calcula la dilución de los socios fundadores. Cap table transparente antes y después." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/dilution-calculator.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Dilución de socios</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header" style="padding: 16px 20px; margin-bottom: 16px;">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--sage" aria-hidden="true" style="width: 44px; height: 44px; font-size: 1.4rem;">📉</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--sage" style="font-size: 0.72rem; padding: 2px 8px;">Finanzas y métricas</span>
+          <h1 class="tool-header__title" style="font-size: 1.4rem; margin: 0 0 4px;">Calculadora de Dilución de Socios</h1>
+          <p class="tool-header__desc" style="font-size: 0.85rem; line-height: 1.45; margin: 0;">
+            Simula el impacto de nuevos inversores en tu cap table. Ajusta pre-money, inversión o % de dilución en tiempo real.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout" style="margin-top: 10px;">
+        <summary style="font-size: 0.85rem;">¿Cómo funciona la dilución en una ronda de capital directo?</summary>
+        <div class="edu-callout__content" style="font-size: 0.82rem;">
+          <p><strong>Valoración Pre-money:</strong> El valor acordado de la empresa <em>antes</em> de que el dinero del inversor entre en la cuenta bancaria.</p>
+          <p><strong>Valoración Post-money:</strong> Es exactamente <code>Pre-money + Nueva Inversión</code>.</p>
+          <p><strong>Porcentaje del Inversor:</strong> Se calcula dividiendo la <code>Inversión / Post-money</code>. Por ejemplo, captar 200.000 € a 800.000 € pre-money genera una post-money de 1.000.000 € y el inversor obtiene el 20%.</p>
+          <p><strong>Dilución de los fundadores:</strong> Todos los socios actuales ven reducida su participación proporcionalmente por el factor <code>(1 - % del nuevo inversor)</code>.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions" style="margin-bottom: 18px; padding: 10px 14px;">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo ronda seed</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-json">Exportar JSON</button>
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace-grid">
+      
+      <!-- Inputs Column -->
+      <section class="tool-panel" aria-labelledby="ronda-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="ronda-heading" class="tool-panel__title">Condiciones de la ronda</h2>
+            <div class="tool-panel__subtitle">Valoración, inversión y dilución pactada</div>
+          </div>
+          <span class="badge badge-sage">Capital directo</span>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; margin-bottom: 16px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="pre-money" class="form-label" style="font-size: 0.82rem;">Valoración Pre-money (€)</label>
+            <div class="input-addon">
+              <input type="number" id="pre-money" class="form-input" min="1000" step="10000" value="1500000" />
+              <span class="input-addon__suffix">€</span>
+            </div>
+            <div class="help-text">Valor antes de la ronda.</div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="investment" class="form-label" style="font-size: 0.82rem;">Nueva inversión (€)</label>
+            <div class="input-addon">
+              <input type="number" id="investment" class="form-input" min="1000" step="10000" value="300000" />
+              <span class="input-addon__suffix">€</span>
+            </div>
+            <div class="help-text">Monto total a captar.</div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="dilution-pct-input" class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #8C441A;">% Dilución inversor</label>
+            <div class="input-addon">
+              <input type="number" id="dilution-pct-input" class="form-input" min="0.1" max="99.9" step="0.1" value="16.67" style="border-color: var(--color-peach); font-weight: 700;" />
+              <span class="input-addon__suffix">%</span>
+            </div>
+            <div class="help-text">Modifica y recalcula pre-money.</div>
+          </div>
+        </div>
+
+        <!-- Cap Table inicial -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 20px 0 10px;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 0;">Socios actuales (Pre-ronda)</h3>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-add-founder">+ Añadir socio</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="founders-table">
+            <thead>
+              <tr>
+                <th>Socio / Titular</th>
+                <th style="width: 140px;">Participación (%)</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="founders-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px; padding: 6px 10px; background: var(--color-ivory); border-radius: var(--radius-sm);">
+          <span style="font-size: 0.82rem; font-weight: 600; color: var(--color-ink-70);">Suma de participaciones pre-ronda:</span>
+          <span id="sum-pct-badge" style="font-weight: 800; font-family: var(--font-mono); font-size: 0.9rem;">100.0%</span>
+        </div>
+
+        <!-- Formula Callout -->
+        <div class="formula-box" style="margin-top: 16px; font-size: 0.8rem; padding: 10px 14px;">
+          <strong>Fórmulas interactivas:</strong>
+          Post-money = Pre-money + Inversión<br/>
+          % Inversor = Inversión / Post-money <em>(o Pre-money = Inversión × (1 - Dilución) / Dilución)</em><br/>
+          % Socio (post) = % Socio (pre) × (1 - % Inversor)
+        </div>
+      </section>
+
+      <!-- Results Column -->
+      <section class="tool-panel" aria-labelledby="cap-table-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="cap-table-heading" class="tool-panel__title">Cap Table resultante</h2>
+            <div class="tool-panel__subtitle">Reparto de capital posterior a la operación</div>
+          </div>
+          <span class="badge badge-sage" id="dilution-status-badge">Calculado</span>
+        </div>
+
+        <!-- Donut Chart & Compact Metrics Side by Side directly next to inputs -->
+        <div class="chart-card" style="margin-bottom: 16px; padding: 12px 14px;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 14px; align-items: center;">
+            <div class="chart-canvas-wrap" style="max-width: 260px; margin: 0 auto; width: 100%;">
+              <canvas id="chart-dilution" width="260" height="225" aria-label="Gráfico circular de propiedad post-ronda"></canvas>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="metric-box metric-box--lavender" style="padding: 8px 12px;">
+                <div class="metric-box__label" style="font-size: 0.72rem;">Post-money</div>
+                <div class="metric-box__value" id="res-post-money" style="font-size: 1.15rem;">0 €</div>
+                <div class="metric-box__sub" style="font-size: 0.7rem;">Valor tras inversión</div>
+              </div>
+              <div class="metric-box metric-box--peach" style="padding: 8px 12px;">
+                <div class="metric-box__label" style="font-size: 0.72rem;">Nuevos Inversores</div>
+                <div class="metric-box__value" id="res-investor-pct" style="font-size: 1.15rem;">0%</div>
+                <div class="metric-box__sub" id="res-investor-eur" style="font-size: 0.7rem;">0 € invertidos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cap Table Comparativa -->
+        <h3 style="font-size: 0.92rem; font-weight: 700; color: var(--color-ink); margin: 0 0 10px;">Comparativa Antes vs Después</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="padding: 6px 10px; font-size: 0.8rem;">Titular</th>
+                <th style="padding: 6px 10px; font-size: 0.8rem;">Antes</th>
+                <th style="padding: 6px 10px; font-size: 0.8rem;">Después</th>
+                <th style="padding: 6px 10px; font-size: 0.8rem;">Dilución</th>
+                <th style="padding: 6px 10px; font-size: 0.8rem;">Valor est.</th>
+              </tr>
+            </thead>
+            <tbody id="post-cap-table-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Alerts & Insights -->
+        <div id="dilution-alerts" style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"></div>
+
+      </section>
+
+    </div>
+
+    <!-- Storage Notice -->
+    <div class="storage-notice">
+      <div class="storage-notice-icon">🔒</div>
+      <div class="storage-notice-text">
+        <strong>Confidencialidad absoluta:</strong> Los datos de tus socios y valoraciones solo residen en la memoria local de tu navegador. No se almacenan en servidores externos ni se comparten con terceros.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {calcDilution} = __req('dilution.calc');
+    const {saveData, loadData} = __req('storage');
+    const {formatCurrency, formatPercent, downloadFile} = __req('format');
+    const {renderDonut} = __req('charts');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_dilution';
+
+    // State
+    let founders = [
+      { id: 1, name: 'Fundador A (CEO)', percent: 60 },
+      { id: 2, name: 'Fundador B (CTO)', percent: 40 },
+    ];
+
+    const preMoneyInput = document.getElementById('pre-money');
+    const investmentInput = document.getElementById('investment');
+    const dilutionPctInput = document.getElementById('dilution-pct-input');
+    const foundersTbody = document.getElementById('founders-tbody');
+    const sumPctBadge = document.getElementById('sum-pct-badge');
+    const resPostMoney = document.getElementById('res-post-money');
+    const resInvestorPct = document.getElementById('res-investor-pct');
+    const resInvestorEur = document.getElementById('res-investor-eur');
+    const postCapTableTbody = document.getElementById('post-cap-table-tbody');
+    const dilutionAlerts = document.getElementById('dilution-alerts');
+    const canvas = document.getElementById('chart-dilution');
+    const dilutionStatusBadge = document.getElementById('dilution-status-badge');
+
+    let isSyncing = false;
+
+    // Paleta de colores para gráficos
+    const PALETTE = ['#B9D8C2', '#D8C9F0', '#F0C6A8', '#A48DD4', '#7CB993', '#F7DFCA', '#202A36'];
+
+    function renderFoundersInputs() {
+      foundersTbody.innerHTML = '';
+      founders.forEach((f, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <input type="text" class="form-input f-name" value="${f.name}" data-idx="${idx}" />
+          </td>
+          <td>
+            <div class="input-addon">
+              <input type="number" class="form-input f-pct" value="${f.percent}" min="0" max="100" step="0.1" data-idx="${idx}" />
+              <span class="input-addon__suffix">%</span>
+            </div>
+          </td>
+          <td style="text-align: right;">
+            ${founders.length > 1 ? `<button type="button" class="btn btn-ghost btn-sm f-delete" data-idx="${idx}" title="Eliminar socio" style="color:var(--color-error); padding:4px 8px;">✕</button>` : ''}
+          </td>
+        `;
+        foundersTbody.appendChild(tr);
+      });
+
+      // Attach event listeners
+      document.querySelectorAll('.f-name').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          const i = parseInt(e.target.dataset.idx, 10);
+          founders[i].name = e.target.value;
+          recalculate();
+        });
+      });
+
+      document.querySelectorAll('.f-pct').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          const i = parseInt(e.target.dataset.idx, 10);
+          founders[i].percent = parseFloat(e.target.value) || 0;
+          recalculate();
+        });
+      });
+
+      document.querySelectorAll('.f-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const i = parseInt(e.currentTarget.dataset.idx, 10);
+          founders.splice(i, 1);
+          renderFoundersInputs();
+          recalculate();
+        });
+      });
+    }
+
+    document.getElementById('btn-add-founder').addEventListener('click', () => {
+      founders.push({
+        id: Date.now(),
+        name: `Socio ${founders.length + 1}`,
+        percent: 0,
+      });
+      renderFoundersInputs();
+      recalculate();
+    });
+
+    function onPreOrInvInput() {
+      if (isSyncing) return;
+      const pre = parseFloat(preMoneyInput.value) || 0;
+      const inv = parseFloat(investmentInput.value) || 0;
+      if (pre + inv > 0 && dilutionPctInput) {
+        isSyncing = true;
+        const dil = (inv / (pre + inv)) * 100;
+        dilutionPctInput.value = dil.toFixed(2);
+        isSyncing = false;
+      }
+      recalculate();
+    }
+
+    function onDilutionInput() {
+      if (isSyncing) return;
+      const dil = parseFloat(dilutionPctInput.value);
+      const inv = parseFloat(investmentInput.value) || 0;
+      if (!isNaN(dil) && dil > 0 && dil < 100 && inv > 0) {
+        isSyncing = true;
+        const newPre = Math.round(inv * (100 - dil) / dil);
+        preMoneyInput.value = newPre;
+        isSyncing = false;
+      }
+      recalculate();
+    }
+
+    preMoneyInput.addEventListener('input', onPreOrInvInput);
+    investmentInput.addEventListener('input', onPreOrInvInput);
+    if (dilutionPctInput) dilutionPctInput.addEventListener('input', onDilutionInput);
+
+    function recalculate() {
+      const pre = parseFloat(preMoneyInput.value) || 0;
+      const inv = parseFloat(investmentInput.value) || 0;
+
+      // Validate sum of founders
+      const sumPre = founders.reduce((acc, f) => acc + (f.percent || 0), 0);
+      sumPctBadge.textContent = `${sumPre.toFixed(1)}%`;
+      if (Math.abs(sumPre - 100) > 0.05) {
+        sumPctBadge.style.color = 'var(--color-error)';
+      } else {
+        sumPctBadge.style.color = 'var(--color-success)';
+      }
+
+      const results = calcDilution({
+        preMoney: pre,
+        investment: inv,
+        founders: founders.map(f => ({ name: f.name, percent: f.percent })),
+      });
+
+      // Update badge
+      if (results.errors.length > 0) {
+        dilutionStatusBadge.textContent = 'Revisar datos';
+        dilutionStatusBadge.className = 'badge badge-peach';
+      } else {
+        dilutionStatusBadge.textContent = 'Válido';
+        dilutionStatusBadge.className = 'badge badge-sage';
+      }
+
+      resPostMoney.textContent = formatCurrency(results.postMoney || (pre + inv), 'EUR');
+      resInvestorPct.textContent = results.investorPercent ? formatPercent(results.investorPercent, 2) : '0%';
+      resInvestorEur.textContent = `${formatCurrency(inv, 'EUR')} invertidos`;
+      if (!isSyncing && dilutionPctInput && results.investorPercent) {
+        dilutionPctInput.value = results.investorPercent.toFixed(2);
+      }
+
+      // Render comparative table
+      postCapTableTbody.innerHTML = '';
+      const chartData = [];
+
+      if (results.founders && results.founders.length > 0) {
+        results.founders.forEach((f, idx) => {
+          const postVal = results.postMoney ? (results.postMoney * (f.postPercent / 100)) : 0;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${f.name}</strong></td>
+            <td>${formatPercent(f.prePercent, 2)}</td>
+            <td><strong style="color:var(--color-ink);">${formatPercent(f.postPercent, 2)}</strong></td>
+            <td style="color:var(--color-ink-50); font-family:var(--font-mono); font-size:0.85rem;">-${formatPercent(f.dilution, 2)}</td>
+            <td style="font-family:var(--font-mono); font-size:0.85rem;">${formatCurrency(postVal, 'EUR')}</td>
+          `;
+          postCapTableTbody.appendChild(tr);
+
+          chartData.push({
+            label: f.name,
+            value: f.postPercent,
+            color: PALETTE[idx % (PALETTE.length - 1)]
+          });
+        });
+      }
+
+      // Add investor row
+      if (results.investorPercent && results.investorPercent > 0) {
+        const invTr = document.createElement('tr');
+        invTr.style.background = 'rgba(240, 198, 168, 0.15)';
+        invTr.innerHTML = `
+          <td><strong>🌱 Nuevos Inversores</strong></td>
+          <td>0.00%</td>
+          <td><strong style="color:#8C441A;">${formatPercent(results.investorPercent, 2)}</strong></td>
+          <td style="color:var(--color-success); font-family:var(--font-mono); font-size:0.85rem;">+${formatPercent(results.investorPercent, 2)}</td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem;">${formatCurrency(inv, 'EUR')}</td>
+        `;
+        postCapTableTbody.appendChild(invTr);
+
+        chartData.push({
+          label: 'Nuevos Inversores',
+          value: results.investorPercent,
+          color: '#202A36'
+        });
+      }
+
+      // Render Donut Chart
+      if (chartData.length > 0) {
+        renderDonut(canvas, chartData, {
+          showLegend: true,
+          centerLabel: 'Cap Table',
+          formatValue: () => '100%'
+        });
+      }
+
+      // Alerts & Warnings
+      dilutionAlerts.innerHTML = '';
+      results.errors.forEach(err => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-error';
+        el.textContent = '⚠️ ' + err;
+        dilutionAlerts.appendChild(el);
+      });
+      results.warnings.forEach(warn => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = '💡 ' + warn;
+        dilutionAlerts.appendChild(el);
+      });
+
+      // Contextual founder advice
+      if (results.investorPercent > 25) {
+        const warnEl = document.createElement('div');
+        warnEl.className = 'alert alert-warning';
+        warnEl.textContent = '⚠️ Ceder más del 25% en una ronda inicial puede comprometer el cap table en rondas futuras (Series A). Valora negociar una valoración pre-money mayor o reducir el ticket.';
+        dilutionAlerts.appendChild(warnEl);
+      }
+    }
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      preMoneyInput.value = '2000000';
+      investmentInput.value = '400000';
+      founders = [
+        { id: 1, name: 'Fundador A (CEO)', percent: 50 },
+        { id: 2, name: 'Fundador B (CTO)', percent: 35 },
+        { id: 3, name: 'Empleado clave (ESOP)', percent: 15 },
+      ];
+      renderFoundersInputs();
+      recalculate();
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      preMoneyInput.value = '1500000';
+      investmentInput.value = '300000';
+      founders = [
+        { id: 1, name: 'Fundador A', percent: 60 },
+        { id: 2, name: 'Fundador B', percent: 40 },
+      ];
+      renderFoundersInputs();
+      recalculate();
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        preMoney: preMoneyInput.value,
+        investment: investmentInput.value,
+        founders
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Simulación de dilución guardada localmente.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state) {
+        alert('No hay simulaciones previas guardadas en este navegador.');
+        return;
+      }
+      preMoneyInput.value = state.preMoney || '1500000';
+      investmentInput.value = state.investment || '300000';
+      if (state.founders && state.founders.length > 0) {
+        founders = state.founders;
+      }
+      renderFoundersInputs();
+      recalculate();
+      alert('✓ Datos cargados correctamente.');
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const state = {
+        preMoney: preMoneyInput.value,
+        investment: investmentInput.value,
+        founders,
+        exportedAt: new Date().toISOString()
+      };
+      downloadFile(JSON.stringify(state, null, 2), 'elevia-dilucion.json', 'application/json');
+    });
+
+    // Init
+    renderFoundersInputs();
+    recalculate();
+  
+})();
+</script>
+
+</body>
+</html>

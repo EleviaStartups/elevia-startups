@@ -1,0 +1,17 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp test files
+*.log
+measure_*.txt
+debug_*.html
+
+# IDE & Editor settings
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local

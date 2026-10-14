@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía Visual del Investor Pitch Deck — Elevia Startups</title>
+  <meta name="description" content="Guía interactiva slide a slide para preparar tu presentación para inversores. Preguntas clave, errores frecuentes, ejemplos ficticios y preguntas de inversores para las 12 diapositivas esenciales." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/investor-deck.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../src/css/tokens.css" />
+  <link rel="stylesheet" href="../src/css/base.css" />
+  <link rel="stylesheet" href="../src/css/components.css" />
+  <link rel="stylesheet" href="../src/css/tools.css" />
+  <style>
+    .deck-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .deck-nav-item {
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-ink-70);
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background var(--transition-fast);
+    }
+    .deck-nav-item:hover {
+      background: var(--color-ivory);
+      color: var(--color-ink);
+    }
+    .deck-nav-item.is-active {
+      background: var(--color-ink);
+      color: var(--color-white);
+    }
+    .deck-index-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .deck-index-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    @media (min-width: 640px) {
+      .deck-index-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .deck-index-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .deck-index-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--color-ivory);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--color-ink);
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+    .deck-index-pill:hover {
+      background: var(--color-lavender-light);
+      border-color: var(--color-lavender-dark);
+      transform: translateY(-1px);
+    }
+    .deck-index-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--color-ink-70);
+      background: var(--color-white);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .slide-article {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-xs);
+    }
+    .slide-article h2 {
+      font-size: 1.25rem !important;
+      font-weight: 800;
+      color: var(--color-ink);
+      margin: 0 0 6px !important;
+    }
+    .slide-article > p {
+      font-size: 0.88rem !important;
+      color: var(--color-ink-70);
+      line-height: 1.55;
+      margin: 0 0 12px !important;
+    }
+    .slide-num-pill {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--color-lavender);
+      color: #32195E;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .grid-slide-details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (min-width: 768px) {
+      .grid-slide-details {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .box-slide-info {
+      background: var(--color-ivory);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .box-slide-info h4 {
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--color-ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sticky-deck-sidebar {
+      position: sticky;
+      top: 84px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 32px 80px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Guía Investor Deck</span>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--lavender" aria-hidden="true">📑</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--lavender">Fundraising y Narrativa</span>
+          <h1 class="tool-header__title">Guía Visual para Preparar tu Investor Deck</h1>
+          <p class="tool-header__desc">
+            Una presentación para inversores no es un catálogo de producto ni un plan de negocio de 50 páginas. Es un instrumento narrativo para conseguir una segunda reunión. Descubre cómo estructurar cada una de las 12 diapositivas clave, qué preguntas críticas debes responder y qué errores comunes hacen que un inversor descarte un proyecto en los primeros 40 segundos.
+          </p>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top: 14px; font-size: 0.82rem;">
+        💡 <strong>Flexibilidad narrativa:</strong> No todos los decks necesitan exactamente 12 diapositivas ni el mismo orden. Si tu mayor fortaleza es la tracción o el equipo, puedes darle más importancia que al producto. Adapta el orden a la historia única de tu startup.
+      </div>
+    </section>
+
+    <!-- Índice Visual de las 12 Diapositivas -->
+    <div class="deck-index-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h2 style="font-size: 1.05rem; font-weight: 800; color: var(--color-ink); margin: 0;">Índice del Deck: Las 12 Diapositivas Clave</h2>
+          <p style="font-size: 0.8rem; color: var(--color-ink-70); margin: 2px 0 0;">Haz clic en cualquier diapositiva para saltar directamente a sus preguntas clave y recomendaciones.</p>
+        </div>
+        <span class="badge badge-lavender">12 Diapositivas</span>
+      </div>
+      <div class="deck-index-grid">
+        <a href="#slide-1" class="deck-index-pill"><span class="deck-index-num">01</span><span>El Problema</span></a>
+        <a href="#slide-2" class="deck-index-pill"><span class="deck-index-num">02</span><span>La Solución</span></a>
+        <a href="#slide-3" class="deck-index-pill"><span class="deck-index-num">03</span><span>Producto & UX</span></a>
+        <a href="#slide-4" class="deck-index-pill"><span class="deck-index-num">04</span><span>Mercado & TAM</span></a>
+        <a href="#slide-5" class="deck-index-pill"><span class="deck-index-num">05</span><span>Modelo de Negocio</span></a>
+        <a href="#slide-6" class="deck-index-pill"><span class="deck-index-num">06</span><span>Tracción</span></a>
+        <a href="#slide-7" class="deck-index-pill"><span class="deck-index-num">07</span><span>Go-To-Market</span></a>
+        <a href="#slide-8" class="deck-index-pill"><span class="deck-index-num">08</span><span>Competencia</span></a>
+        <a href="#slide-9" class="deck-index-pill"><span class="deck-index-num">09</span><span>Métricas & Finanzas</span></a>
+        <a href="#slide-10" class="deck-index-pill"><span class="deck-index-num">10</span><span>Ronda & Ask</span></a>
+        <a href="#slide-11" class="deck-index-pill"><span class="deck-index-num">11</span><span>Equipo Fundador</span></a>
+        <a href="#slide-12" class="deck-index-pill"><span class="deck-index-num">12</span><span>Cierre & Contacto</span></a>
+      </div>
+    </div>
+
+    <!-- Main Content Layout (Sidebar + Slide Articles) -->
+    <div style="display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start;" class="deck-layout-grid">
+      
+      <!-- Slide Articles Container -->
+      <div id="slides-container">
+        
+        <!-- 1. Problema -->
+        <article class="slide-article" id="slide-1">
+          <span class="slide-num-pill">Diapositiva 01</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">1. El Problema</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Demuestra que existe un dolor real, urgente y costoso para un segmento específico. El inversor debe entender por qué resolverlo genera un negocio rentable.
+          </p>
+
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Preguntas que debe responder</h4>
+              <ul style="margin: 0; padding-left: 18px;">
+                <li>¿Qué dolor o ineficiencia grave existe hoy?</li>
+                <li>¿A quién le ocurre exactamente (consecuencia cuantificable)?</li>
+                <li>¿Por qué las soluciones actuales no lo resuelven adecuadamente?</li>
+              </ul>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Errores frecuentes</h4>
+              <ul style="margin: 0; padding-left: 18px;">
+                <li>Describir una molestia leve en vez de un problema urgente.</li>
+                <li>Afirmar que el problema afecta "a todo el mundo".</li>
+                <li>Confundir el problema con la falta de tu producto.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="box-slide-info" style="margin-top: 16px; background: rgba(185, 216, 194, 0.15); border-color: var(--color-sage);">
+            <h4>💡 Ejemplo demostrativo ficticio</h4>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--color-ink);">
+              <em>"Los despachos de abogados medianos pierden más de 14 horas semanales por letrado en redactar contratos estándar y buscar jurisprudencia previa, lo que reduce su margen neto un 22% al año."</em>
+            </p>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--color-ink-70);">
+            <span><strong>Pregunta del inversor:</strong> "¿Cómo sabes que están dispuestos a pagar por resolver esto hoy?"</span>
+            <span class="tag" style="background: var(--color-peach-light);">Recomendación visual: Máximo 3 viñetas concisas con datos de dolor</span>
+          </div>
+        </article>
+
+        <!-- 2. Solución -->
+        <article class="slide-article" id="slide-2">
+          <span class="slide-num-pill">Diapositiva 02</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">2. La Solución</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Presenta tu propuesta de valor clara y concisa. Cómo transforma el estado actual del cliente en un estado deseado con menor coste o mayor beneficio.
+          </p>
+
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Preguntas que debe responder</h4>
+              <ul style="margin: 0; padding-left: 18px;">
+                <li>¿Cuál es tu propuesta de valor en una sola frase?</li>
+                <li>¿Qué beneficio directo cuantificable obtiene el usuario (10x más rápido, 50% más barato)?</li>
+                <li>¿Por qué ahora es el momento ideal (tecnología, regulación, hábitos)?</li>
+              </ul>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Errores frecuentes</h4>
+              <ul style="margin: 0; padding-left: 18px;">
+                <li>Describir características técnicas en vez de beneficios.</li>
+                <li>Utilizar jerga técnica incomprensible sin contexto.</li>
+                <li>No dejar claro qué hace la empresa de forma práctica.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="box-slide-info" style="margin-top: 16px; background: rgba(185, 216, 194, 0.15); border-color: var(--color-sage);">
+            <h4>💡 Ejemplo demostrativo ficticio</h4>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--color-ink);">
+              <em>"Plataforma inteligente de generación y auditoría de contratos legales que reduce el tiempo de redacción de 4 horas a 15 minutos con verificación de jurisprudencia automática."</em>
+            </p>
+          </div>
+        </article>
+
+        <!-- 3. Producto -->
+        <article class="slide-article" id="slide-3">
+          <span class="slide-num-pill">Diapositiva 03</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">3. El Producto y Experiencia de Usuario</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Muestra el producto en acción. Capturas reales, flujo de trabajo intuitivo y demostración de que la experiencia es limpia y accesible.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Qué incluir</h4>
+              <p style="margin:0;">Capturas limpias de pantalla de la interfaz con anotaciones que expliquen el flujo en 3 pasos clave: Entrada de datos → Procesamiento → Resultado tangible.</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Errores frecuentes</h4>
+              <p style="margin:0;">Pegar maquetas borrosas, diagramas de arquitectura ilegibles o enlaces a demos en vivo que pueden fallar durante la reunión.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Mercado e ICP -->
+        <article class="slide-article" id="slide-4">
+          <span class="slide-num-pill">Diapositiva 04</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">4. Mercado Objetivo (TAM / SAM / SOM) e ICP</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Demuestra que la oportunidad es lo suficientemente grande como para generar un retorno significativo para el fondo, pero lo suficientemente enfocada para empezar.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Estructura de mercado</h4>
+              <ul style="margin: 0; padding-left: 18px;">
+                <li><strong>TAM:</strong> Volumen total del sector.</li>
+                <li><strong>SAM:</strong> Tu segmento alcanzable hoy.</li>
+                <li><strong>SOM:</strong> Tu objetivo a 1-3 años (1%-5% del SAM).</li>
+              </ul>
+            </div>
+            <div class="box-slide-info">
+              <h4>🛠️ Herramientas de Elevia vinculadas</h4>
+              <p style="margin: 0 0 8px;">Calcula estas cifras con rigor en nuestras herramientas:</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="tools/tam-sam-som.html" class="btn btn-secondary btn-sm">Calculadora TAM/SAM/SOM</a>
+                <a href="tools/icp-creator.html" class="btn btn-secondary btn-sm">Creador de ICP</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Modelo de Negocio -->
+        <article class="slide-article" id="slide-5">
+          <span class="slide-num-pill">Diapositiva 05</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">5. Modelo de Negocio y Precios</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Quién paga, por qué paga, con qué frecuencia y cómo escala el ingreso a medida que el cliente crece.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Aspectos clave</h4>
+              <p style="margin:0;">Planes de precios transparentes (ej. suscripción mensual por usuario o por volumen), margen bruto estimado (&gt; 70% en SaaS) y potencial de expansión (upselling).</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Errores frecuentes</h4>
+              <p style="margin:0;">Proponer múltiples fuentes de ingresos dispersas (publicidad + afiliados + licencias) en lugar de una monetización clara y probada.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Tracción y Validación -->
+        <article class="slide-article" id="slide-6">
+          <span class="slide-num-pill">Diapositiva 06</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">6. Tracción y Validación</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            La diapositiva reina. La prueba empírica de que el mercado quiere lo que estás construyendo.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Si tienes ventas</h4>
+              <p style="margin:0;">Evolución mensual de facturación (MRR), número de clientes activos, retención de cohortes y crecimiento porcentual mes a mes (MoM).</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>🎯 Si estás pre-revenue</h4>
+              <p style="margin:0;">Cartas de intenciones (LOIs), lista de espera con intención verificada, acuerdos piloto activos o resultados cuantitativos de pruebas alfa.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 7. Go-to-Market -->
+        <article class="slide-article" id="slide-7">
+          <span class="slide-num-pill">Diapositiva 07</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">7. Go-to-Market y Distribución</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Cómo vas a adquirir a tus primeros 100 y a tus siguientes 1.000 clientes de forma predecible y escalable.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Canales y eficiencia</h4>
+              <p style="margin:0;">Canales validados: Outbound especializado, alianzas con despachos o distribuidores, contenidos técnicos o paid media con CAC controlado.</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>🛠️ Herramienta vinculada</h4>
+              <p style="margin:0 0 8px;">Modela tu coste de captación y relación con LTV:</p>
+              <a href="tools/cac-ltv.html" class="btn btn-secondary btn-sm">Calculadora CAC / LTV</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 8. Competencia -->
+        <article class="slide-article" id="slide-8">
+          <span class="slide-num-pill">Diapositiva 08</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">8. Competencia y Ventaja Competitiva</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Nunca digas "no tenemos competencia". Si no hay competencia, probablemente no hay mercado. Muestra tu posicionamiento diferencial.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Formatos recomendados</h4>
+              <p style="margin:0;">Matriz de posicionamiento 2x2 con dos ejes relevantes para el cliente (ej. sencillez de implantación vs profundidad funcional) o tabla comparativa de atributos.</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Error crítico</h4>
+              <p style="margin:0;">Poner a tu startup con todos los tics verdes y a los competidores con todas las cruces rojas de forma poco creíble.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 9. Métricas y Finanzas -->
+        <article class="slide-article" id="slide-9">
+          <span class="slide-num-pill">Diapositiva 09</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">9. Métricas Financieras y Runway</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Proyección financiera a 3 años prudente, burn rate mensual y economía unitaria actual.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Datos indispensables</h4>
+              <p style="margin:0;">Burn rate neto mensual, runway actual restante y supuestos lógicos de conversión de clientes para los próximos 24 meses.</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>🛠️ Herramientas vinculadas</h4>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="tools/burn-rate.html" class="btn btn-secondary btn-sm">Calculadora de Runway</a>
+                <a href="tools/startup-valuation.html" class="btn btn-secondary btn-sm">Valoración de Startups</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 10. La Ronda y el Ask -->
+        <article class="slide-article" id="slide-10">
+          <span class="slide-num-pill">Diapositiva 10</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">10. La Ronda de Inversión y el Ask</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            Cuánto capital buscas, en qué formato, para qué lo usarás exactamente y qué hitos te permitirá desbloquear en los próximos 18 meses.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Desglose del Ask</h4>
+              <ul style="margin:0; padding-left:18px;">
+                <li>Importe: ej. 300.000 € en equity directo o convertible.</li>
+                <li>Uso de fondos: ej. 60% Desarrollo de producto, 30% Captación comercial, 10% Operaciones.</li>
+                <li>Autonomía conseguida: 18 meses de runway hasta alcanzar 50.000 € MRR.</li>
+              </ul>
+            </div>
+            <div class="box-slide-info">
+              <h4>🛠️ Herramienta vinculada</h4>
+              <p style="margin:0 0 8px;">Comprueba el impacto de dilución en tu cap table:</p>
+              <a href="tools/dilution-calculator.html" class="btn btn-secondary btn-sm">Calculadora de Dilución</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 11. Equipo -->
+        <article class="slide-article" id="slide-11">
+          <span class="slide-num-pill">Diapositiva 11</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">11. El Equipo Fundador</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            En fases tempranas, los inversores invierten en personas. Por qué este equipo tiene una ventaja injusta para ganar en este mercado (Founder-Market Fit).
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Qué incluir</h4>
+              <p style="margin:0;">Roles ejecutivos claros (CEO, CTO, CPO), logos de empresas previas o experiencia sectorial relevante, y complementariedad técnica y de negocio.</p>
+            </div>
+            <div class="box-slide-info">
+              <h4>⚠️ Errores frecuentes</h4>
+              <p style="margin:0;">Poner a 15 consejeros y asesores externos como si fueran fundadores a tiempo completo. El inversor quiere ver compromiso real.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 12. Cierre y Contacto -->
+        <article class="slide-article" id="slide-12">
+          <span class="slide-num-pill">Diapositiva 12</span>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--color-ink); margin: 0 0 8px;">12. Visión, Cierre y Contacto</h2>
+          <p style="font-size: 1rem; color: var(--color-ink-70); line-height: 1.6; margin: 0 0 16px;">
+            El cierre memorable de tu presentación. Proyecta la ambición a largo plazo de la compañía y facilita el siguiente paso para el inversor.
+          </p>
+          <div class="grid-slide-details">
+            <div class="box-slide-info">
+              <h4>🎯 Qué incluir</h4>
+              <ul style="margin:0; padding-left:18px;">
+                <li>Visión de futuro a 5 años: la huella transformadora del negocio en la industria.</li>
+                <li>Llamada a la acción clara: invitación a reunión de profundización o Due Diligence.</li>
+                <li>Datos directos: email del founder, teléfono y enlace al Data Room seguro.</li>
+              </ul>
+            </div>
+            <div class="box-slide-info">
+              <h4>🛠️ Herramientas vinculadas</h4>
+              <p style="margin:0 0 8px;">Organiza la documentación y materiales de apoyo:</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="tools/data-room.html" class="btn btn-secondary btn-sm">Estructurador de Data Room</a>
+                <a href="deck-review.html" class="btn btn-secondary btn-sm">Revisión de Deck</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+
+    <!-- Banner to Deck Review Service -->
+    <section style="margin-top: 48px; background: var(--color-ink); color: white; border-radius: var(--radius-xl); padding: 40px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;">
+      <div style="max-width: 650px;">
+        <span class="badge" style="background: var(--color-sage); color: #183C28; margin-bottom: 8px;">Servicio Especializado</span>
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: white; margin: 0 0 10px;">¿Quieres que revisemos tu presentación antes de enviarla?</h2>
+        <p style="color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0;">
+          Prepara tu briefing para una auditoría slide a slide: narrativa, coherencia en las métricas de mercado y detección de objeciones de inversores.
+        </p>
+      </div>
+      <div>
+        <a href="deck-review.html" class="btn btn-primary btn-lg" style="background: var(--color-sage); color: #183C28;">
+          Preparar briefing de revisión →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    initNav({ activePage: 'investor-deck' });
+    initFooter();
+  
+})();
+</script>
+
+</body>
+</html>

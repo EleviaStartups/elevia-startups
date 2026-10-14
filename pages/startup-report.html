@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen Ejecutivo e Informe de tu Startup — Elevia Startups</title>
+  <link rel="canonical" href="https://elevia-startups.com/pages/startup-report.html">
+  <meta name="keywords" content="resumen ejecutivo startup, informe ejecutivo startup, executive summary startup pdf, resumen de proyecto startup, reporte para inversores">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Elevia Startups">
+  <meta property="og:title" content="Resumen Ejecutivo e Informe de tu Startup — Elevia Startups">
+  <meta property="og:description" content="Genera y descarga un informe integral y resumen ejecutivo con todos los datos estratégicos, de mercado y financieros de tu startup.">
+  <meta property="og:url" content="https://elevia-startups.com/pages/startup-report.html">
+  <meta property="og:locale" content="es_ES">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Resumen Ejecutivo e Informe de tu Startup — Elevia Startups">
+  <meta name="twitter:description" content="Genera y descarga un informe integral y resumen ejecutivo con todos los datos estratégicos y financieros de tu startup.">
+
+  <link rel="stylesheet" href="../src/css/base.css">
+  <link rel="stylesheet" href="../src/css/components.css">
+  <link rel="stylesheet" href="../src/css/tools.css">
+  <style>
+    /* Estilos específicos del Informe Ejecutivo */
+    .report-toolbar {
+      background: white;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .report-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .readiness-banner {
+      background: linear-gradient(135deg, rgba(200, 222, 208, 0.35) 0%, rgba(226, 221, 240, 0.35) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .readiness-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .readiness-pill {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .readiness-pill--done {
+      background: #E8F5E9;
+      color: #1B5E20;
+      border: 1px solid #C8E6C9;
+    }
+    .readiness-pill--pending {
+      background: #FFF3E0;
+      color: #E65100;
+      border: 1px solid #FFE0B2;
+    }
+    .readiness-pill:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Document Sheet (Aspecto de Documento Ejecutivo) */
+    .report-document {
+      background: white;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-2xl);
+      padding: 48px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    /* Brand Header Bar (Elevia Startups) */
+    .doc-brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .doc-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .doc-brand-symbol {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .doc-brand-title {
+      font-family: var(--font-sans);
+      line-height: 1;
+    }
+    .doc-brand-elevia {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--color-ink);
+      letter-spacing: -0.5px;
+    }
+    .doc-brand-sub {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--color-sage-dark);
+      letter-spacing: -0.5px;
+      margin-left: 4px;
+    }
+    .doc-brand-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .doc-brand-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid var(--color-border);
+      background: #FDFCF9;
+      color: var(--color-ink-70);
+    }
+    .doc-brand-badge--confidential {
+      background: #FFF8E7;
+      border-color: #FFE0B2;
+      color: #B76E00;
+    }
+
+    .doc-header {
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 28px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .doc-title-input {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--color-ink);
+      border: 1px dashed transparent;
+      border-radius: var(--radius-md);
+      padding: 2px 8px;
+      margin-left: -8px;
+      width: 100%;
+      max-width: 600px;
+      transition: all 0.2s ease;
+      background: transparent;
+      font-family: inherit;
+    }
+    .doc-title-input:hover, .doc-title-input:focus {
+      background: #F7F5F0;
+      border-color: var(--color-border);
+      outline: none;
+    }
+    .doc-tagline-input {
+      font-size: 1.1rem;
+      color: var(--color-ink-70);
+      border: 1px dashed transparent;
+      border-radius: var(--radius-md);
+      padding: 4px 8px;
+      margin-left: -8px;
+      width: 100%;
+      max-width: 650px;
+      transition: all 0.2s ease;
+      background: transparent;
+      font-family: inherit;
+      margin-top: 4px;
+    }
+    .doc-tagline-input:hover, .doc-tagline-input:focus {
+      background: #F7F5F0;
+      border-color: var(--color-border);
+      outline: none;
+    }
+    .doc-meta-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    /* Narrative Company & Team Overview */
+    .doc-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .doc-narrative-card {
+      background: #FDFCF9;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      transition: all 0.2s ease;
+    }
+    .doc-narrative-card:focus-within {
+      border-color: var(--color-ink-50);
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .doc-narrative-card--full {
+      grid-column: 1 / -1;
+    }
+    .doc-narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .doc-narrative-icon {
+      font-size: 1.1rem;
+    }
+    .doc-narrative-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--color-ink);
+      text-transform: none;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+    .doc-text-area {
+      width: 100%;
+      border: 1px dashed transparent;
+      border-radius: var(--radius-md);
+      padding: 6px 8px;
+      margin-left: -8px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--color-ink-90);
+      background: transparent;
+      resize: vertical;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      min-height: 68px;
+    }
+    .doc-text-area:hover, .doc-text-area:focus {
+      background: #F7F5F0;
+      border-color: var(--color-border);
+      outline: none;
+    }
+
+    /* Highlights KPI Grid */
+    .doc-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .doc-kpi-card {
+      background: #FDFCF9;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: left;
+    }
+    .doc-kpi-card .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-ink-70);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .doc-kpi-card .kpi-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--color-ink);
+      line-height: 1.2;
+    }
+    .doc-kpi-card .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--color-ink-50);
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    .doc-section {
+      margin-bottom: 36px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .doc-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .doc-section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+    .doc-empty-hint {
+      background: #FBF9F4;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-align: center;
+      color: var(--color-ink-70);
+      font-size: 0.9rem;
+    }
+
+    /* Tables */
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 12px;
+    }
+    .doc-table th, .doc-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .doc-table th {
+      background: #F7F5F0;
+      font-weight: 700;
+      color: var(--color-ink);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .doc-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Data blocks */
+    .doc-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .doc-info-box {
+      background: #FAFAF7;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .doc-info-box h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--color-ink);
+      margin: 0 0 8px;
+    }
+    .doc-info-box p {
+      font-size: 0.85rem;
+      color: var(--color-ink-70);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* OKR progress list */
+    .doc-okr-item {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      background: #FAF9F5;
+    }
+    .doc-okr-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    /* Estilos de Impresión Profesional (PDF de alta calidad con identidad Elevia) */
+    @page {
+      size: A4 portrait;
+      margin: 0 !important; /* Suprime la cabecera del navegador (fecha/título) y el pie (URL/página) */
+    }
+    @page :first {
+      margin: 0 !important;
+    }
+
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .doc-narrative-print {
+      display: none;
+    }
+
+    @media print {
+      html, body {
+        background-color: #F7F5F0 !important;
+        background: #F7F5F0 !important;
+        color: #202A36 !important;
+        font-size: 9.5pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      a[href]::after {
+        content: "" !important;
+      }
+
+      .no-print,
+      .site-header,
+      .site-footer,
+      .report-toolbar,
+      .readiness-banner,
+      .btn,
+      .doc-empty-hint a,
+      #site-header,
+      #site-footer {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .report-document {
+        background-color: #F7F5F0 !important;
+        background: #F7F5F0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 14mm 16mm !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+      }
+
+      .doc-brand-bar {
+        display: flex !important;
+        border-bottom: 1.5pt solid #E2DDD4 !important;
+        padding-bottom: 10pt !important;
+        margin-bottom: 14pt !important;
+      }
+
+      .doc-header {
+        border-bottom: 1.5pt solid #E2DDD4 !important;
+        padding-bottom: 14pt !important;
+        margin-bottom: 16pt !important;
+      }
+
+      .doc-title-input,
+      .doc-tagline-input {
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+        color: #202A36 !important;
+      }
+
+      .doc-section {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 18pt !important;
+      }
+
+      .doc-section-header {
+        border-bottom: 1pt solid #E2DDD4 !important;
+        padding-bottom: 6pt !important;
+        margin-bottom: 10pt !important;
+      }
+
+      .doc-kpi-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8pt !important;
+        margin-bottom: 20pt !important;
+      }
+
+      /* KPI Cards con tonos pastel suaves que armonizan con el fondo marfil */
+      .doc-kpi-card {
+        border-radius: 8pt !important;
+        padding: 9pt 11pt !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .doc-kpi-card:nth-child(1) {
+        background: #EFF6F1 !important; /* Sage tint */
+        border: 1pt solid #C6E0CE !important;
+      }
+      .doc-kpi-card:nth-child(2) {
+        background: #F4F0FA !important; /* Lavender tint */
+        border: 1pt solid #DCCFF0 !important;
+      }
+      .doc-kpi-card:nth-child(3) {
+        background: #FAF3EE !important; /* Peach tint */
+        border: 1pt solid #F3DDD0 !important;
+      }
+      .doc-kpi-card:nth-child(4) {
+        background: #EFF2F6 !important; /* Slate tint */
+        border: 1pt solid #D2DCE6 !important;
+      }
+
+      /* Cajas narrativas, bloques informativos y OKRs integrados suavemente con el fondo */
+      .doc-info-box,
+      .doc-narrative-card,
+      .doc-okr-item {
+        background: #FAF8F4 !important;
+        border: 1pt solid #E2DDD4 !important;
+        border-radius: 8pt !important;
+        padding: 10pt 12pt !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .doc-okr-item {
+        border-left: 3.5pt solid #A48DD4 !important;
+      }
+
+      /* Tablas integradas en el documento */
+      .doc-table {
+        border: 1pt solid #E2DDD4 !important;
+        background: #FAF8F4 !important;
+        border-radius: 6pt !important;
+        overflow: hidden !important;
+      }
+
+      .doc-table th {
+        background: #EDE8DF !important;
+        color: #202A36 !important;
+        border-bottom: 1.5pt solid #DDD7CC !important;
+        font-size: 8pt !important;
+        font-weight: 700 !important;
+        padding: 6pt 8pt !important;
+      }
+
+      .doc-table td {
+        background: #FAF8F4 !important;
+        border-bottom: 1pt solid #ECE7DD !important;
+        font-size: 8.5pt !important;
+        padding: 6pt 8pt !important;
+      }
+
+      .doc-table tr:nth-child(even) td {
+        background: #F4F0E8 !important;
+      }
+
+      .doc-text-area {
+        display: none !important;
+      }
+
+      .doc-narrative-print {
+        display: block !important;
+        font-size: 9pt !important;
+        line-height: 1.48 !important;
+        color: #202A36 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        white-space: pre-wrap !important;
+      }
+
+      /* Badges con sus colores de diseño en print */
+      .badge {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        border-radius: 9999px !important;
+        padding: 2pt 7pt !important;
+        font-size: 7.5pt !important;
+        font-weight: 700 !important;
+      }
+
+      .badge-sage {
+        background: #D9EDE0 !important;
+        color: #265538 !important;
+        border: 1px solid #B9D8C2 !important;
+      }
+      .badge-lavender {
+        background: #EDE6F7 !important;
+        color: #4B337D !important;
+        border: 1px solid #D8C9F0 !important;
+      }
+      .badge-peach {
+        background: #F7DFCA !important;
+        color: #7E3E17 !important;
+        border: 1px solid #F0C6A8 !important;
+      }
+
+      /* Progress bar fill en print */
+      .progress-bar {
+        background: #E8E4DC !important;
+        border: 1px solid #DDD7CC !important;
+        border-radius: 9999px !important;
+        overflow: hidden !important;
+      }
+      .progress-bar__fill,
+      .doc-okr-item .progress-bar__fill {
+        background: #7CB993 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .print-watermark {
+        display: block !important;
+        font-size: 7.5pt !important;
+        color: #8C827A !important;
+        text-align: center !important;
+        margin-top: 22pt !important;
+        border-top: 1pt solid #E2DDD4 !important;
+        padding-top: 8pt !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 32px 80px;">
+
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb no-print" aria-label="Ruta de navegación">
+      <a href="../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Mi Informe de Startup</span>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="tool-header no-print">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--lavender" aria-hidden="true">📄</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--lavender">Resumen Integral</span>
+          <h1 class="tool-header__title">Resumen Ejecutivo de tu Startup</h1>
+          <p class="tool-header__desc">
+            Reúne en un único documento profesional toda la estrategia de tu proyecto: mercado (TAM/SAM/SOM), economía unitaria (CAC/LTV/Payback), salud financiera (Runway/Burn Rate), cap table, objetivos (OKRs) y preparación para Due Diligence. Descárgalo en PDF, cópialo a Notion o guárdalo como copia de seguridad sin coste alguno.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Toolbar (No-print) -->
+    <div class="report-toolbar no-print">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-weight:700; font-size:0.9rem; color:var(--color-ink);">Acciones del informe:</span>
+        <button id="btn-print-pdf" class="btn btn-primary btn-sm" style="background:#202A36; color:white;">
+          🖨️ Descargar Informe (PDF)
+        </button>
+        <button id="btn-export-markdown" class="btn btn-secondary btn-sm">
+          📝 Exportar Markdown (.md)
+        </button>
+      </div>
+
+      <div class="report-actions">
+        <button id="btn-export-json" class="btn btn-ghost btn-sm" title="Descargar todos los datos en formato JSON">
+          💾 Copia de Seguridad (.json)
+        </button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer; margin:0;" title="Restaurar datos desde un archivo JSON">
+          📂 Cargar Datos
+          <input type="file" id="file-import-json" accept=".json" style="display:none;">
+        </label>
+        <button id="btn-load-demo" class="btn btn-ghost btn-sm" style="color:var(--color-sage-dark);" title="Cargar datos de ejemplo para probar el informe completo">
+          ⚡ Cargar Ejemplo
+        </button>
+        <button id="btn-clear-data" class="btn btn-ghost btn-sm" style="color:#C62828;" title="Borrar datos guardados">
+          🗑️ Limpiar
+        </button>
+      </div>
+    </div>
+
+    <!-- Readiness / Progress Overview Banner (No-print) -->
+    <div class="readiness-banner no-print">
+      <div style="max-width: 650px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--color-ink); margin: 0;">Diagnóstico de Definición de tu Startup</h3>
+          <span id="readiness-badge" class="badge badge-sage">Calculando...</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--color-ink-70); margin: 4px 0 0;">
+          Haz clic en cualquier área pendiente para completar sus datos en la herramienta correspondiente.
+        </p>
+        <div class="readiness-pills" id="readiness-pills-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.8rem; color:var(--color-ink-70); text-align:right;">
+          🔒 <strong>100% Confidencial y Gratuito</strong><br>
+          Todos tus datos permanecen en tu propio navegador.
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTO EJECUTIVO (Imprimible a PDF) -->
+    <article class="report-document" id="report-printable-area">
+      
+      <!-- Cabecera de Marca Elevia (Visible en Pantalla y en PDF) -->
+      <div class="doc-brand-bar">
+        <div class="doc-brand-logo">
+          <div class="doc-brand-symbol">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="24" height="24" rx="6" fill="#202A36"/>
+              <path d="M6 16L12 7L18 16H6Z" fill="#B9D8C2"/>
+              <circle cx="12" cy="14" r="2.5" fill="#F7F5F0"/>
+            </svg>
+          </div>
+          <div class="doc-brand-title">
+            <span class="doc-brand-elevia">Elevia</span>
+            <span class="doc-brand-sub">Startups</span>
+          </div>
+        </div>
+        <div class="doc-brand-badges">
+          <span class="doc-brand-badge">Resumen Ejecutivo</span>
+          <span class="doc-brand-badge doc-brand-badge--confidential">Confidencial</span>
+        </div>
+      </div>
+
+      <!-- Document Header -->
+      <div class="doc-header">
+        <div style="flex: 1;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="badge badge-lavender" style="text-transform:uppercase; letter-spacing:0.5px; font-size:0.7rem;">Executive Summary Memo</span>
+            <span style="font-size:0.75rem; color:var(--color-ink-50);" id="doc-date-display">Fecha: Octubre 2026</span>
+          </div>
+          <input type="text" id="meta-startup-name" class="doc-title-input" value="Mi Startup Tecnológica" placeholder="Nombre de tu Startup" aria-label="Nombre de la startup">
+          <input type="text" id="meta-startup-tagline" class="doc-tagline-input" value="De la idea a una startup preparada para escalar y captar inversión" placeholder="Propuesta de valor en una frase corta" aria-label="Tagline de la startup">
+          
+          <div class="doc-meta-tags">
+            <span class="badge badge-sage" id="meta-sector-badge">Sector: B2B SaaS</span>
+            <span class="badge badge-peach" id="meta-stage-badge">Fase: Seed / Tracción Inicial</span>
+            <span class="badge" style="background:#F0F0EA; color:var(--color-ink-70);">Elevia Startups Intelligence</span>
+          </div>
+        </div>
+
+        <div style="text-align: right; min-width: 140px;" class="no-print">
+          <span style="font-size:0.75rem; color:var(--color-ink-50); display:block;">Edición directa:</span>
+          <span style="font-size:0.78rem; color:var(--color-ink-70);">Haz clic en cualquier campo para editarlo. Se guarda automáticamente.</span>
+        </div>
+      </div>
+
+      <!-- KPI Top Highlights Cards -->
+      <div class="doc-kpi-grid">
+        <div class="doc-kpi-card">
+          <div class="kpi-label">🎯 Mercado TAM</div>
+          <div class="kpi-val" id="kpi-tam">--</div>
+          <div class="kpi-sub" id="kpi-tam-sub">Mercado Total Estimado</div>
+        </div>
+        <div class="doc-kpi-card">
+          <div class="kpi-label">💎 Payback Unitario</div>
+          <div class="kpi-val" id="kpi-payback">--</div>
+          <div class="kpi-sub" id="kpi-payback-sub">Meses de recuperación CAC</div>
+        </div>
+        <div class="doc-kpi-card">
+          <div class="kpi-label">📈 Ratio LTV / CAC</div>
+          <div class="kpi-val" id="kpi-ltvcac">--</div>
+          <div class="kpi-sub" id="kpi-ltvcac-sub">Eficiencia de captación</div>
+        </div>
+        <div class="doc-kpi-card">
+          <div class="kpi-label">🔥 Runway Restante</div>
+          <div class="kpi-val" id="kpi-runway">--</div>
+          <div class="kpi-sub" id="kpi-runway-sub">Autonomía de caja</div>
+        </div>
+      </div>
+
+      <!-- Bloque 1: Resumen de la Compañía & Equipo Fundador -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">1. Resumen de la Compañía & Equipo Fundador</h2>
+          <span class="badge badge-sage">Compañía & Equipo</span>
+        </div>
+        <div class="doc-overview-grid">
+          <div class="doc-narrative-card">
+            <div class="doc-narrative-header">
+              <span class="doc-narrative-icon">🚀</span>
+              <label for="meta-startup-what" class="doc-narrative-label">¿Qué hace la startup? (Producto y Modelo)</label>
+            </div>
+            <textarea id="meta-startup-what" class="doc-text-area" rows="3" placeholder="Describe claramente qué producto o servicio ofreces, tu tecnología principal y cómo monetizas..."></textarea>
+            <div id="print-startup-what" class="doc-narrative-print"></div>
+          </div>
+
+          <div class="doc-narrative-card">
+            <div class="doc-narrative-header">
+              <span class="doc-narrative-icon">🎯</span>
+              <label for="meta-startup-solves" class="doc-narrative-label">¿Qué problema soluciona? (Propuesta de Valor)</label>
+            </div>
+            <textarea id="meta-startup-solves" class="doc-text-area" rows="3" placeholder="Qué dolor del mercado resuelves, qué ineficiencia eliminas y por qué tu solución es 10x mejor que las alternativas..."></textarea>
+            <div id="print-startup-solves" class="doc-narrative-print"></div>
+          </div>
+
+          <div class="doc-narrative-card doc-narrative-card--full">
+            <div class="doc-narrative-header">
+              <span class="doc-narrative-icon">👥</span>
+              <label for="meta-startup-team" class="doc-narrative-label">Equipo Fundador & Experiencia Relevante</label>
+            </div>
+            <textarea id="meta-startup-team" class="doc-text-area" rows="3" placeholder="Nombres, cargos, experiencia previa relevante en la industria, complementariedad y antecedentes de éxito del equipo fundador..."></textarea>
+            <div id="print-startup-team" class="doc-narrative-print"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bloque 2: Perfil de Negocio y Cliente Ideal (ICP) -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">2. Perfil de Negocio y Cliente Ideal (ICP)</h2>
+          <span class="badge badge-peach" id="sec-icp-badge">ICP</span>
+        </div>
+        <div id="content-icp">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 3: Tamaño de Mercado (TAM / SAM / SOM) -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">3. Dimensionamiento de Mercado (TAM / SAM / SOM)</h2>
+          <span class="badge badge-sage">Mercado</span>
+        </div>
+        <div id="content-tam">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 4: Unit Economics y Retención -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">4. Unit Economics y Retención de Clientes</h2>
+          <span class="badge badge-lavender">Unit Economics</span>
+        </div>
+        <div id="content-unitecon">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 5: Salud Financiera, Burn Rate y Runway -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">5. Salud Financiera, Burn Rate y Runway</h2>
+          <span class="badge badge-peach">Finanzas</span>
+        </div>
+        <div id="content-finance">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 6: Valoración de la Startup y Cap Table -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">6. Valoración y Simulación de Dilución</h2>
+          <span class="badge badge-sage">Equity</span>
+        </div>
+        <div id="content-equity">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 7: Plan Estratégico y OKRs -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">7. Ejecución Estratégica y Objetivos (OKRs)</h2>
+          <span class="badge badge-lavender">OKRs</span>
+        </div>
+        <div id="content-okr">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Bloque 8: Due Diligence Readiness (Data Room) -->
+      <section class="doc-section">
+        <div class="doc-section-header">
+          <h2 class="doc-section-title">8. Due Diligence Readiness (Data Room)</h2>
+          <span class="badge badge-peach">Due Diligence</span>
+        </div>
+        <div id="content-dataroom">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Pie de Informe para Impresión -->
+      <div class="print-watermark" style="display:none;">
+        Documento confidencial generado mediante Elevia Startups Suite — Todos los derechos reservados.
+      </div>
+
+    </article>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {loadData, saveData, exportAllData, importAllData, listEleviaKeys} = __req('storage');
+    const {formatCurrency, formatPercent, formatCompact, formatNumber, downloadFile} = __req('format');
+
+    initNav({ activePage: 'startup-report' });
+    initFooter();
+
+    // Storage Keys
+    const KEYS = {
+      tam: 'elevia_v1_tam_sam_som',
+      icp: 'elevia_v1_icp_profiles',
+      unitEcon: 'elevia_unit_economics',
+      cacLtv: 'elevia_v1_cac_ltv',
+      burn: 'elevia_v1_burn_rate',
+      valuation: 'elevia_v1_valuation',
+      dilution: 'elevia_v1_dilution',
+      okr: 'elevia_v1_okr_projects',
+      dataRoom: 'elevia_data_room',
+      meta: 'elevia_startup_metadata'
+    };
+
+    // DOM Elements
+    const inputStartupName = document.getElementById('meta-startup-name');
+    const inputStartupTagline = document.getElementById('meta-startup-tagline');
+    const inputStartupWhat = document.getElementById('meta-startup-what');
+    const inputStartupSolves = document.getElementById('meta-startup-solves');
+    const inputStartupTeam = document.getElementById('meta-startup-team');
+    const docDateDisplay = document.getElementById('doc-date-display');
+    const readinessBadge = document.getElementById('readiness-badge');
+    const readinessPillsContainer = document.getElementById('readiness-pills-container');
+
+    // KPI Elements
+    const kpiTam = document.getElementById('kpi-tam');
+    const kpiPayback = document.getElementById('kpi-payback');
+    const kpiLtvCac = document.getElementById('kpi-ltvcac');
+    const kpiRunway = document.getElementById('kpi-runway');
+
+    // Content Blocks
+    const contentIcp = document.getElementById('content-icp');
+    const contentTam = document.getElementById('content-tam');
+    const contentUnitEcon = document.getElementById('content-unitecon');
+    const contentFinance = document.getElementById('content-finance');
+    const contentEquity = document.getElementById('content-equity');
+    const contentOkr = document.getElementById('content-okr');
+    const contentDataRoom = document.getElementById('content-dataroom');
+
+    // Date
+    const now = new Date();
+    docDateDisplay.textContent = `Fecha de emisión: ${now.toLocaleDateString('es-ES', { month: 'long', year: 'numeric', day: 'numeric' })}`;
+
+    // Textarea Auto-resizing for perfect screen & print display
+    function autoResizeTextarea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = Math.max(el.scrollHeight, 68) + 'px';
+    }
+
+    function syncPrintText() {
+      const elWhat = document.getElementById('print-startup-what');
+      const elSolves = document.getElementById('print-startup-solves');
+      const elTeam = document.getElementById('print-startup-team');
+      if (elWhat) elWhat.textContent = inputStartupWhat.value.trim() || inputStartupWhat.placeholder;
+      if (elSolves) elSolves.textContent = inputStartupSolves.value.trim() || inputStartupSolves.placeholder;
+      if (elTeam) elTeam.textContent = inputStartupTeam.value.trim() || inputStartupTeam.placeholder;
+    }
+
+    // Metadata Handlers
+    function loadMetadata() {
+      const meta = loadData(KEYS.meta, {
+        name: 'Mi Startup Tecnológica',
+        tagline: 'De la idea a una startup preparada para escalar y captar inversión',
+        sector: 'B2B SaaS',
+        stage: 'Seed / Tracción Inicial',
+        what: '',
+        solves: '',
+        team: ''
+      });
+      if (meta.name) inputStartupName.value = meta.name;
+      if (meta.tagline) inputStartupTagline.value = meta.tagline;
+      if (meta.sector) document.getElementById('meta-sector-badge').textContent = `Sector: ${meta.sector}`;
+      if (meta.stage) document.getElementById('meta-stage-badge').textContent = `Fase: ${meta.stage}`;
+      if (meta.what !== undefined) inputStartupWhat.value = meta.what;
+      if (meta.solves !== undefined) inputStartupSolves.value = meta.solves;
+      if (meta.team !== undefined) inputStartupTeam.value = meta.team;
+
+      [inputStartupWhat, inputStartupSolves, inputStartupTeam].forEach(autoResizeTextarea);
+      syncPrintText();
+    }
+
+    function saveMetadata() {
+      const current = loadData(KEYS.meta, {});
+      saveData(KEYS.meta, {
+        ...current,
+        name: inputStartupName.value.trim() || 'Mi Startup',
+        tagline: inputStartupTagline.value.trim() || 'Resumen de Proyecto',
+        what: inputStartupWhat.value.trim(),
+        solves: inputStartupSolves.value.trim(),
+        team: inputStartupTeam.value.trim(),
+        updatedAt: new Date().toISOString()
+      });
+      syncPrintText();
+    }
+
+    inputStartupName.addEventListener('input', saveMetadata);
+    inputStartupTagline.addEventListener('input', saveMetadata);
+    [inputStartupWhat, inputStartupSolves, inputStartupTeam].forEach(el => {
+      if (el) {
+        el.addEventListener('input', () => {
+          autoResizeTextarea(el);
+          saveMetadata();
+        });
+      }
+    });
+    window.addEventListener('beforeprint', () => {
+      [inputStartupWhat, inputStartupSolves, inputStartupTeam].forEach(autoResizeTextarea);
+      syncPrintText();
+    });
+
+    // Render Full Report
+    function renderReport() {
+      loadMetadata();
+
+      const dataTam = loadData(KEYS.tam, null);
+      const dataIcp = loadData(KEYS.icp, null);
+      const dataUnit = loadData(KEYS.unitEcon, null);
+      const dataCacLtv = loadData(KEYS.cacLtv, null);
+      const dataBurn = loadData(KEYS.burn, null);
+      const dataVal = loadData(KEYS.valuation, null);
+      const dataDilution = loadData(KEYS.dilution, null);
+      const dataOkr = loadData(KEYS.okr, null);
+      const dataRoom = loadData(KEYS.dataRoom, null);
+
+      // Status pills
+      const modules = [
+        { label: 'Mercado TAM', hasData: !!dataTam, href: 'tools/tam-sam-som.html' },
+        { label: 'ICP', hasData: !!dataIcp, href: 'tools/icp-creator.html' },
+        { label: 'Unit Economics', hasData: !!dataUnit, href: 'tools/unit-economics.html' },
+        { label: 'Finanzas & Runway', hasData: !!dataBurn, href: 'tools/burn-rate.html' },
+        { label: 'Dilución & Cap Table', hasData: !!dataDilution, href: 'tools/dilution-calculator.html' },
+        { label: 'OKRs', hasData: !!dataOkr, href: 'tools/okr-builder.html' },
+        { label: 'Data Room', hasData: !!dataRoom, href: 'tools/data-room.html' }
+      ];
+
+      const completedCount = modules.filter(m => m.hasData).length;
+      readinessBadge.textContent = `${completedCount} de ${modules.length} completados`;
+      readinessBadge.className = completedCount >= 5 ? 'badge badge-sage' : (completedCount >= 3 ? 'badge badge-lavender' : 'badge badge-peach');
+
+      readinessPillsContainer.innerHTML = modules.map(m => `
+        <a href="${m.href}" class="readiness-pill ${m.hasData ? 'readiness-pill--done' : 'readiness-pill--pending'}">
+          ${m.hasData ? '✓' : '⚠️'} ${m.label}
+        </a>
+      `).join('');
+
+      // Top KPIs
+      let tamVal = '--';
+      if (dataTam) {
+        if (dataTam.activeMethod === 'bottom-up' && dataTam.bottomUp) {
+          const tot = (parseFloat(dataTam.bottomUp.totalCustomers) || 0) * (parseFloat(dataTam.bottomUp.arpu) || 0);
+          tamVal = formatCompact(tot);
+        } else if (dataTam.topDown) {
+          const mode = dataTam.tdInputMode || 'currency';
+          const ref = mode === 'users' ? (parseFloat(dataTam.topDown.usersCount) || 0) * (parseFloat(dataTam.topDown.ticketUsers) || 0) : (parseFloat(dataTam.topDown.refMarket) || 0);
+          tamVal = formatCompact(ref);
+        }
+      }
+      kpiTam.textContent = tamVal;
+
+      let paybackVal = '--';
+      if (dataUnit && dataUnit.cac && dataUnit.arpu) {
+        const cac = parseFloat(dataUnit.cac) || 0;
+        const gross = (parseFloat(dataUnit.arpu) || 0) - (parseFloat(dataUnit.cogs) || 0);
+        if (gross > 0) {
+          paybackVal = `${(cac / gross).toFixed(1)} meses`;
+        }
+      }
+      kpiPayback.textContent = paybackVal;
+
+      let ltvCacVal = '--';
+      if (dataCacLtv && dataCacLtv.subArpu && dataCacLtv.spend) {
+        const cac = (parseFloat(dataCacLtv.spend) || 0) / (parseFloat(dataCacLtv.customers) || 1);
+        const ltv = ((parseFloat(dataCacLtv.subArpu) || 0) * ((parseFloat(dataCacLtv.subMargin) || 80) / 100)) / ((parseFloat(dataCacLtv.subChurn) || 5) / 100);
+        if (cac > 0) {
+          ltvCacVal = `${(ltv / cac).toFixed(1)}x`;
+        }
+      } else if (dataUnit && dataUnit.cac && dataUnit.arpu) {
+        const cac = parseFloat(dataUnit.cac) || 0;
+        const gross = (parseFloat(dataUnit.arpu) || 0) - (parseFloat(dataUnit.cogs) || 0);
+        const ltv12 = (gross * (parseFloat(dataUnit.retM1) || 100) / 100) +
+                      (gross * (parseFloat(dataUnit.retM3) || 75) / 100) * 2 +
+                      (gross * (parseFloat(dataUnit.retM6) || 60) / 100) * 3 +
+                      (gross * (parseFloat(dataUnit.retM12) || 45) / 100) * 6;
+        if (cac > 0) {
+          ltvCacVal = `${(ltv12 / cac).toFixed(1)}x`;
+        }
+      }
+      kpiLtvCac.textContent = ltvCacVal;
+
+      let runwayVal = '--';
+      if (dataBurn && dataBurn.initialCash) {
+        const cash = parseFloat(dataBurn.initialCash) || 0;
+        const rev = parseFloat(dataBurn.monthlyRevenue) || 0;
+        const expTot = (dataBurn.expenses || []).reduce((acc, curr) => acc + (parseFloat(curr.amount) || 0), 0);
+        const netBurn = expTot - rev;
+        if (netBurn <= 0) {
+          runwayVal = 'Rentable';
+        } else {
+          runwayVal = `${(cash / netBurn).toFixed(1)} meses`;
+        }
+      }
+      kpiRunway.textContent = runwayVal;
+
+      // 1. Render ICP
+      if (dataIcp) {
+        const model = (dataIcp.model || 'B2C').toUpperCase();
+        const b2b = dataIcp.b2b || {};
+        const b2c = dataIcp.b2c || {};
+        contentIcp.innerHTML = `
+          <div class="doc-info-grid">
+            <div class="doc-info-box">
+              <h4>Perfil Principal (${model})</h4>
+              <p><strong>Identificador:</strong> ${b2b.company || b2c.name || 'Empresa mediana / Decisor directo'}</p>
+              <p><strong>Sector / Segmento:</strong> ${b2b.sector || b2c.role || 'Servicios especializados y software'}</p>
+              <p><strong>Decisor Clave:</strong> ${b2b.buyer || b2c.living || 'Director de Operaciones / CEO'}</p>
+            </div>
+            <div class="doc-info-box">
+              <h4>Puntos de Dolor & Fricciones</h4>
+              <p>${b2b.pains || b2c.pains || 'Procesos manuales fragmentados, coste de gestión elevado y falta de trazabilidad en tiempo real.'}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        contentIcp.innerHTML = renderEmptyState('ICP (Perfil de Cliente Ideal)', 'Define quién es tu comprador, su rol y sus problemas.', 'tools/icp-creator.html');
+      }
+
+      // 2. Render TAM/SAM/SOM
+      if (dataTam) {
+        const isBU = dataTam.activeMethod === 'bottom-up';
+        let tam = 0, sam = 0, som = 0;
+        if (isBU && dataTam.bottomUp) {
+          const totCust = parseFloat(dataTam.bottomUp.totalCustomers) || 0;
+          const arpu = parseFloat(dataTam.bottomUp.arpu) || 0;
+          const addPct = parseFloat(dataTam.bottomUp.addressablePct) || 0;
+          const capPct = parseFloat(dataTam.bottomUp.capturePct) || 0;
+          tam = totCust * arpu;
+          sam = tam * (addPct / 100);
+          som = sam * (capPct / 100);
+        } else if (dataTam.topDown) {
+          const mode = dataTam.tdInputMode || 'currency';
+          const ref = mode === 'users' ? (parseFloat(dataTam.topDown.usersCount) || 0) * (parseFloat(dataTam.topDown.ticketUsers) || 0) : (parseFloat(dataTam.topDown.refMarket) || 0);
+          const samP = parseFloat(dataTam.topDown.samPct) || 0;
+          const somP = parseFloat(dataTam.topDown.somPct) || 0;
+          tam = ref;
+          sam = tam * (samP / 100);
+          som = sam * (somP / 100);
+        }
+        contentTam.innerHTML = `
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Nivel de Mercado</th>
+                <th>Importe Anual</th>
+                <th>Cuota</th>
+                <th>Racional / Alcance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>TAM (Total Addressable Market)</strong></td>
+                <td><strong>${formatCurrency(tam)}</strong></td>
+                <td>100%</td>
+                <td>Volumen global del sector al que se dirige la solución.</td>
+              </tr>
+              <tr>
+                <td><strong>SAM (Serviceable Addressable Market)</strong></td>
+                <td><strong>${formatCurrency(sam)}</strong></td>
+                <td>${tam > 0 ? formatPercent((sam / tam) * 100) : '--'}</td>
+                <td>Segmento accesible con el modelo actual y geografía primaria.</td>
+              </tr>
+              <tr>
+                <td><strong>SOM (Serviceable Obtainable Market)</strong></td>
+                <td><strong>${formatCurrency(som)}</strong></td>
+                <td>${sam > 0 ? formatPercent((som / sam) * 100) : '--'}</td>
+                <td>Objetivo de cuota realista a captar en los próximos 12-24 meses.</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        contentTam.innerHTML = renderEmptyState('TAM / SAM / SOM', 'Calcula tu mercado potencial con métodos top-down o bottom-up.', 'tools/tam-sam-som.html');
+      }
+
+      // 3. Render Unit Economics
+      if (dataUnit && (dataUnit.cac || dataUnit.arpu)) {
+        const cac = parseFloat(dataUnit.cac) || 0;
+        const arpu = parseFloat(dataUnit.arpu) || 0;
+        const cogs = parseFloat(dataUnit.cogs) || 0;
+        const grossMargin = arpu - cogs;
+        const marginPct = arpu > 0 ? (grossMargin / arpu) * 100 : 0;
+        const payback = grossMargin > 0 ? cac / grossMargin : null;
+        contentUnitEcon.innerHTML = `
+          <div class="doc-info-grid" style="margin-bottom:14px;">
+            <div class="doc-info-box">
+              <h4>Métricas Unitarias Mensuales</h4>
+              <p><strong>CAC (Coste Adquisición):</strong> ${formatCurrency(cac)}</p>
+              <p><strong>ARPU (Ingreso Medio):</strong> ${formatCurrency(arpu)} / mes</p>
+              <p><strong>COGS (Coste Variable):</strong> ${formatCurrency(cogs)} / mes</p>
+              <p><strong>Margen Bruto Unitario:</strong> ${formatCurrency(grossMargin)} (${formatPercent(marginPct)})</p>
+            </div>
+            <div class="doc-info-box">
+              <h4>Recuperación y Retención</h4>
+              <p><strong>Payback Period:</strong> ${payback ? `${payback.toFixed(1)} meses` : 'Negativo o no recuperable'}</p>
+              <p><strong>Retención Mes 1 / Mes 3:</strong> ${dataUnit.retM1 || 100}% / ${dataUnit.retM3 || 75}%</p>
+              <p><strong>Retención Mes 6 / Mes 12:</strong> ${dataUnit.retM6 || 60}% / ${dataUnit.retM12 || 45}%</p>
+            </div>
+          </div>
+        `;
+      } else {
+        contentUnitEcon.innerHTML = renderEmptyState('Unit Economics y Retención', 'Estructura el CAC, ARPU, margen y LTV real.', 'tools/unit-economics.html');
+      }
+
+      // 4. Render Finanzas & Runway
+      if (dataBurn && dataBurn.initialCash) {
+        const cash = parseFloat(dataBurn.initialCash) || 0;
+        const rev = parseFloat(dataBurn.monthlyRevenue) || 0;
+        const expTot = (dataBurn.expenses || []).reduce((acc, curr) => acc + (parseFloat(curr.amount) || 0), 0);
+        const netBurn = expTot - rev;
+        const runway = netBurn > 0 ? (cash / netBurn).toFixed(1) : 'Generando caja';
+        contentFinance.innerHTML = `
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Métrica Financiera</th>
+                <th>Importe</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Saldo de Caja Disponible</strong></td>
+                <td><strong>${formatCurrency(cash)}</strong></td>
+                <td>Tesorería líquida actual.</td>
+              </tr>
+              <tr>
+                <td><strong>Ingresos Mensuales Recurrentes</strong></td>
+                <td>${formatCurrency(rev)}</td>
+                <td>Facturación mensualizada actual.</td>
+              </tr>
+              <tr>
+                <td><strong>Gastos Operativos (Gross Burn)</strong></td>
+                <td>${formatCurrency(expTot)}</td>
+                <td>Estructura mensual de costes fijos y variables.</td>
+              </tr>
+              <tr>
+                <td><strong>Quema Neta Mensual (Net Burn)</strong></td>
+                <td style="color:${netBurn > 0 ? '#C62828' : '#2E7D32'}; font-weight:700;">
+                  ${formatCurrency(netBurn)}
+                </td>
+                <td>Salida neta de caja cada 30 días.</td>
+              </tr>
+              <tr>
+                <td><strong>Autonomía Financiera (Runway)</strong></td>
+                <td><strong>${runway} ${netBurn > 0 ? 'meses' : ''}</strong></td>
+                <td>Horizonte temporal hasta requerir nueva inyección de capital.</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        contentFinance.innerHTML = renderEmptyState('Burn Rate y Runway', 'Calcula la quema de caja y los meses de autonomía.', 'tools/burn-rate.html');
+      }
+
+      // 5. Render Equity & Cap Table
+      if (dataDilution && dataDilution.preMoney) {
+        const pre = parseFloat(dataDilution.preMoney) || 0;
+        const inv = parseFloat(dataDilution.investment) || 0;
+        const post = pre + inv;
+        const invPct = post > 0 ? (inv / post) * 100 : 0;
+        const founders = dataDilution.founders || [];
+
+        contentEquity.innerHTML = `
+          <div style="margin-bottom:12px; font-size:0.88rem; color:var(--color-ink-70);">
+            Ronda objetivo: <strong>${formatCurrency(inv)}</strong> sobre valoración pre-money de <strong>${formatCurrency(pre)}</strong> (Post-money: <strong>${formatCurrency(post)}</strong>). Entrada de inversor: <strong>${formatPercent(invPct)}</strong>.
+          </div>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Socio / Inversor</th>
+                <th>Pre-Ronda (%)</th>
+                <th>Post-Ronda (%)</th>
+                <th>Dilución neta</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${founders.map(f => {
+                const preP = parseFloat(f.percent) || 0;
+                const postP = preP * (1 - invPct / 100);
+                return `
+                  <tr>
+                    <td><strong>${f.name}</strong></td>
+                    <td>${formatPercent(preP)}</td>
+                    <td>${formatPercent(postP)}</td>
+                    <td style="color:#C62828;">-${formatPercent(preP - postP)}</td>
+                  </tr>
+                `;
+              }).join('')}
+              <tr style="background:#FAF8F2;">
+                <td><strong>Nuevo Inversor</strong></td>
+                <td>0,0%</td>
+                <td><strong>${formatPercent(invPct)}</strong></td>
+                <td style="color:#2E7D32;">+${formatPercent(invPct)}</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        contentEquity.innerHTML = renderEmptyState('Dilución y Cap Table', 'Simula la ronda de inversión y el reparto de accionariado.', 'tools/dilution-calculator.html');
+      }
+
+      // 6. Render OKRs
+      if (dataOkr && dataOkr.objectives && dataOkr.objectives.length > 0) {
+        contentOkr.innerHTML = `
+          <div style="margin-bottom:12px; font-size:0.85rem; color:var(--color-ink-70);">
+            Plan en curso: <strong>${dataOkr.title || 'Plan Estratégico'}</strong> (${dataOkr.period || 'Trimestre actual'}).
+          </div>
+          ${dataOkr.objectives.map((obj, i) => {
+            const krs = obj.keyResults || [];
+            return `
+              <div class="doc-okr-item">
+                <div class="doc-okr-header">
+                  <span style="font-weight:700; color:var(--color-ink); font-size:0.9rem;">
+                    O${i+1}: ${obj.title}
+                  </span>
+                  <span class="badge badge-lavender">${obj.deadline || 'Q1'}</span>
+                </div>
+                <div style="font-size:0.8rem; color:var(--color-ink-70);">
+                  ${krs.map(kr => `• <strong>${kr.title}</strong>: ${kr.currentValue || 0} / ${kr.targetValue || 100} ${kr.unit || ''}`).join('<br>')}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        `;
+      } else {
+        contentOkr.innerHTML = renderEmptyState('Constructor de OKR', 'Estructura tus objetivos estratégicos y resultados clave.', 'tools/okr-builder.html');
+      }
+
+      // 7. Render Data Room
+      if (dataRoom && dataRoom.items) {
+        const itemIds = Object.keys(dataRoom.items);
+        const completed = itemIds.filter(id => dataRoom.items[id].status === 'completed').length;
+        const inProgress = itemIds.filter(id => dataRoom.items[id].status === 'in_progress').length;
+        const total = 14;
+        const pct = Math.round(((completed + inProgress * 0.5) / total) * 100);
+
+        contentDataRoom.innerHTML = `
+          <div class="doc-info-grid">
+            <div class="doc-info-box">
+              <h4>Estado de Auditoría (Due Diligence)</h4>
+              <p><strong>Progreso Global:</strong> ${pct}% completado (${completed} de ${total} documentos auditados).</p>
+              <p><strong>En Proceso:</strong> ${inProgress} documentos en preparación.</p>
+              <p><strong>Estructura:</strong> 5 carpetas (Legal, Financiero, Equipo, IP, Comercial).</p>
+            </div>
+            <div class="doc-info-box">
+              <h4>Documentación Crítica Lista</h4>
+              <ul style="margin:0; padding-left:18px; font-size:0.82rem; color:var(--color-ink-70);">
+                ${itemIds.filter(id => dataRoom.items[id].status === 'completed').slice(0, 4).map(id => `<li>${id.replace('-', ' ')}</li>`).join('') || '<li>Pendiente de marcar ítems completados</li>'}
+              </ul>
+            </div>
+          </div>
+        `;
+      } else {
+        contentDataRoom.innerHTML = renderEmptyState('Data Room (Due Diligence)', 'Organiza la documentación societaria y legal para inversores.', 'tools/data-room.html');
+      }
+    }
+
+    function renderEmptyState(title, desc, href) {
+      return `
+        <div class="doc-empty-hint">
+          <p style="margin:0 0 8px; font-weight:600;">Sin datos registrados para ${title}</p>
+          <p style="margin:0 0 12px; font-size:0.82rem; color:var(--color-ink-50);">${desc}</p>
+          <a href="${href}" class="btn btn-secondary btn-sm" style="display:inline-block;">
+            Completar en ${title} →
+          </a>
+        </div>
+      `;
+    }
+
+    // PDF Download
+    document.getElementById('btn-print-pdf').addEventListener('click', () => {
+      window.print();
+    });
+
+    // Export Markdown
+    document.getElementById('btn-export-markdown').addEventListener('click', () => {
+      const name = inputStartupName.value.trim() || 'Mi Startup';
+      const tagline = inputStartupTagline.value.trim() || '';
+      const what = inputStartupWhat.value.trim();
+      const solves = inputStartupSolves.value.trim();
+      const team = inputStartupTeam.value.trim();
+      const date = new Date().toLocaleDateString('es-ES');
+
+      const md = `# Resumen Ejecutivo: ${name}
+*${tagline}*
+**Fecha de generación:** ${date}
+**Elaborado con:** Elevia Startups Suite
+
+---
+
+## 1. Resumen de la Compañía & Equipo Fundador
+### ¿Qué hace la startup?
+${what || 'Pendiente de completar en el informe.'}
+
+### ¿Qué problema soluciona?
+${solves || 'Pendiente de completar en el informe.'}
+
+### Equipo Fundador & Experiencia Relevante
+${team || 'Pendiente de completar en el informe.'}
+
+---
+
+## 2. Métricas Clave (Highlights)
+- **Mercado Total (TAM):** ${kpiTam.textContent}
+- **Payback Unitario:** ${kpiPayback.textContent}
+- **Ratio LTV / CAC:** ${kpiLtvCac.textContent}
+- **Runway Estimado:** ${kpiRunway.textContent}
+
+---
+
+## 3. Perfil de Cliente Ideal (ICP)
+${extractPlainText(contentIcp)}
+
+---
+
+## 4. Dimensionamiento de Mercado (TAM / SAM / SOM)
+${extractPlainText(contentTam)}
+
+---
+
+## 5. Unit Economics y Retención
+${extractPlainText(contentUnitEcon)}
+
+---
+
+## 6. Salud Financiera y Runway
+${extractPlainText(contentFinance)}
+
+---
+
+## 7. Equity, Valoración y Cap Table
+${extractPlainText(contentEquity)}
+
+---
+
+## 8. Plan Estratégico y OKRs
+${extractPlainText(contentOkr)}
+
+---
+
+## 9. Due Diligence Readiness (Data Room)
+${extractPlainText(contentDataRoom)}
+
+---
+*Documento generado confidencialmente mediante Elevia Startups Suite. Sin intermediación de servidores de terceros.*
+`;
+      downloadFile(md, `${name.toLowerCase().replace(/\s+/g, '-')}-resumen-ejecutivo.md`, 'text/markdown');
+    });
+
+    function extractPlainText(container) {
+      return container.innerText.trim() || 'Sin datos completados.';
+    }
+
+    // Export Backup JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const json = exportAllData();
+      const filename = `elevia-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      downloadFile(json, filename, 'application/json');
+    });
+
+    // Import Backup JSON
+    document.getElementById('file-import-json').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const res = importAllData(event.target.result);
+        if (res.success) {
+          alert(`✓ Se han importado correctamente ${res.imported} registros.`);
+          renderReport();
+        } else {
+          alert('Error al importar datos: ' + res.error);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Clear Data
+    document.getElementById('btn-clear-data').addEventListener('click', () => {
+      if (confirm('¿Estás seguro de que deseas limpiar los datos guardados en este navegador? Esta acción no se puede deshacer.')) {
+        const keys = listEleviaKeys();
+        keys.forEach(k => localStorage.removeItem(k));
+        renderReport();
+        alert('Datos eliminados del almacenamiento local.');
+      }
+    });
+
+    // Load Demo Data
+    function populateDemoData(silent = false) {
+      // 1. TAM SAM SOM
+      saveData(KEYS.tam, {
+        activeMethod: 'top-down',
+        currency: 'EUR',
+        topDown: { refMarket: 500000000, samPct: 10, somPct: 5 }
+      });
+
+      // 2. ICP
+      saveData(KEYS.icp, {
+        model: 'b2b',
+        b2b: {
+          company: 'Despachos de abogados y asesorías medianas (20-100 empleados)',
+          sector: 'LegalTech / Servicios Profesionales',
+          buyer: 'Socio Director o Responsable de Operaciones',
+          pains: 'Pérdida de 15 horas semanales por letrado en redacción repetitiva de cláusulas y auditoría manual de documentos.',
+        }
+      });
+
+      // 3. Unit Economics
+      saveData(KEYS.unitEcon, {
+        cac: 350,
+        arpu: 75,
+        cogs: 15,
+        retM1: 100,
+        retM3: 82,
+        retM6: 70,
+        retM12: 58
+      });
+
+      // 4. Burn Rate
+      saveData(KEYS.burn, {
+        initialCash: 120000,
+        monthlyRevenue: 8500,
+        expenses: [
+          { category: 'Nóminas y Equipo', amount: 14000 },
+          { category: 'Servidores & Cloud', amount: 1800 },
+          { category: 'Marketing & Captación', amount: 3500 },
+          { category: 'Herramientas SaaS', amount: 1200 },
+          { category: 'Gestoría y Asesoría', amount: 600 }
+        ]
+      });
+
+      // 5. Dilution
+      saveData(KEYS.dilution, {
+        preMoney: 1500000,
+        investment: 300000,
+        founders: [
+          { name: 'Ana García (CEO)', percent: 60 },
+          { name: 'Carlos Ruiz (CTO)', percent: 40 }
+        ]
+      });
+
+      // 6. OKR
+      saveData(KEYS.okr, {
+        title: 'Plan Estratégico Q1 — Validación y Tracción',
+        period: 'Q1',
+        objectives: [
+          {
+            title: 'Alcanzar Product-Market Fit con 30 clientes B2B activos',
+            deadline: 'Fin de Q1',
+            keyResults: [
+              { title: 'Clientes de pago recurrentes', currentValue: 18, targetValue: 30, unit: 'clientes' },
+              { title: 'NPS de satisfacción de usuario', currentValue: 68, targetValue: 70, unit: 'puntos' }
+            ]
+          },
+          {
+            title: 'Optimizar el motor de captación y economía unitaria',
+            deadline: 'Fin de Q1',
+            keyResults: [
+              { title: 'Reducir Payback por debajo de 6 meses', currentValue: 5.8, targetValue: 6.0, unit: 'meses' }
+            ]
+          }
+        ]
+      });
+
+      // 7. Data Room
+      saveData(KEYS.dataRoom, {
+        items: {
+          'pacto-socios': { status: 'completed' },
+          'escrituras': { status: 'completed' },
+          'cap-table': { status: 'completed' },
+          'cuentas-anuales': { status: 'completed' },
+          'proyecciones': { status: 'completed' },
+          'deudas': { status: 'in_progress' },
+          'contratos-founders': { status: 'completed' },
+          'vesting': { status: 'completed' },
+          'contratos-clave': { status: 'in_progress' },
+          'registro-marca': { status: 'completed' },
+          'codigo-fuente': { status: 'in_progress' },
+          'patentes': { status: 'pending' },
+          'top-contratos': { status: 'in_progress' },
+          'metricas': { status: 'completed' }
+        }
+      });
+
+      // 8. Metadata
+      saveData(KEYS.meta, {
+        name: 'LexFlow Technologies',
+        tagline: 'Plataforma de automatización y auditoría documental para despachos jurídicos',
+        sector: 'B2B SaaS / LegalTech',
+        stage: 'Seed / Tracción',
+        what: 'Plataforma B2B en la nube especializada en la automatización, redacción inteligente y auditoría de contratos mercantiles y acuerdos societarios para firmas legales y asesorías medianas.',
+        solves: 'Elimina más de 15 horas semanales de trabajo manual rutinario por abogado, previene errores críticos de redacción contractual y acelera los tiempos de cierre de operaciones mercantiles en un 60%.',
+        team: 'Ana García (CEO — 8 años de experiencia en M&A en Uría Menéndez, ex-Directora de Operaciones en LegalDesk) y Carlos Ruiz (CTO — Ex-Senior Software Engineer en Amazon AWS, máster en Procesamiento de Lenguaje Natural e Inteligencia Artificial).'
+      });
+
+      renderReport();
+      if (!silent) {
+        alert('✓ Datos de startup de ejemplo cargados con éxito. Puedes descargar el PDF o inspeccionar todas las secciones.');
+      }
+    }
+
+    document.getElementById('btn-load-demo').addEventListener('click', () => populateDemoData(false));
+
+    // Check if demo query param is present
+    if (window.location.search.includes('demo=1') || window.location.hash === '#demo') {
+      populateDemoData(true);
+    } else {
+      renderReport();
+    }
+  
+})();
+</script>
+
+</body>
+</html>

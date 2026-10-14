@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidad — Elevia Startups</title>
+  <meta name="description" content="Política de privacidad de Elevia Startups. Información sobre el almacenamiento local de datos, ausencia de rastreo invasivo y tratamiento prudente." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/privacy.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../src/css/tokens.css" />
+  <link rel="stylesheet" href="../src/css/base.css" />
+  <link rel="stylesheet" href="../src/css/components.css" />
+  <link rel="stylesheet" href="../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="max-width: 860px; margin: 0 auto; padding: 40px 16px 80px;">
+    
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <span aria-current="page">Privacidad</span>
+    </nav>
+
+    <article class="card" style="padding: 40px;">
+      <span class="badge badge-sage" style="margin-bottom: 8px;">Privacidad y Datos</span>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--color-ink); margin: 0 0 16px;">
+        Política de Privacidad
+      </h1>
+      <p style="font-size: 0.85rem; color: var(--color-ink-50); margin-bottom: 24px;">
+        Última actualización: Octubre 2026 · Documento orientativo sujeto a revisión jurídica definitiva antes de publicación comercial.
+      </p>
+
+      <div style="font-size: 0.95rem; line-height: 1.7; color: var(--color-ink-70); display: flex; flex-direction: column; gap: 20px;">
+        
+        <section>
+          <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin-bottom: 8px;">1. Compromiso de Privacidad por Defecto</h2>
+          <p>
+            En <strong>Elevia Startups</strong> aplicamos el principio de mínima recopilación de datos. En esta primera versión funcional de la plataforma, la aplicación opera como un software estático en el lado del cliente (front-end exclusivo). No solicitamos registro de usuario, no requerimos contraseñas y no almacenamos tu información financiera en bases de datos externas.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin-bottom: 8px;">2. Almacenamiento Local (localStorage)</h2>
+          <p>
+            Cuando utilizas el botón "Guardar local" en cualquiera de nuestras herramientas (Calculadora TAM/SAM/SOM, OKRs, Dilución, CAC/LTV, Burn Rate, etc.), los datos se escriben exclusivamente en el espacio de almacenamiento local (<em>localStorage</em>) de tu navegador web.
+          </p>
+          <div class="alert alert-warning" style="margin: 12px 0;">
+            ⚠️ <strong>Importante sobre la persistencia:</strong> El almacenamiento local no constituye una copia de seguridad en la nube ni se sincroniza entre tus dispositivos. Si borras el historial, la memoria caché o navegas en modo incógnito, los datos almacenados en el navegador se perderán. Te recomendamos exportar tus proyectos en archivo JSON cuando desees conservarlos de forma permanente.
+          </div>
+        </section>
+
+        <section>
+          <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin-bottom: 8px;">3. Tratamiento de Fotografías e Imágenes</h2>
+          <p>
+            En herramientas como el <em>Creador de ICP</em>, puedes seleccionar voluntariamente una imagen desde tu dispositivo para visualizar el perfil arquetípico. Esta fotografía se procesa exclusivamente en la memoria RAM del navegador mediante la API web estándar FileReader. La imagen nunca se envía a ningún servidor web ni se comparte con terceros.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin-bottom: 8px;">4. Cookies y Analítica</h2>
+          <p>
+            La versión actual no utiliza cookies de rastreo publicitario ni sistemas de seguimiento cruzado entre dominios. Únicamente se conservan las preferencias operativas del usuario que este decide guardar activamente en su navegador.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-ink); margin-bottom: 8px;">5. Contacto</h2>
+          <p>
+            Para cualquier consulta sobre el tratamiento técnico de datos en Elevia Startups, puedes remitir tus comunicaciones a través de los canales institucionales habilitados en la plataforma.
+          </p>
+        </section>
+
+      </div>
+    </article>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    initNav();
+    initFooter();
+  
+})();
+</script>
+
+</body>
+</html>

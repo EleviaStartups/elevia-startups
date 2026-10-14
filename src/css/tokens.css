@@ -1,0 +1,170 @@
+/* ============================================================
+   ELEVIA STARTUPS — Design Tokens
+   Sistema de diseño: "Calma tecnológica"
+   Centraliza colores, tipografía, espaciados y motion.
+   ============================================================ */
+
+:root {
+  /* --- Paleta principal --- */
+  --color-ivory:       #F7F5F0;   /* Fondo principal */
+  --color-ink:         #202A36;   /* Texto principal y contraste */
+  --color-sage:        #B9D8C2;   /* Progreso y acciones positivas */
+  --color-lavender:    #D8C9F0;   /* Planificación y elementos secundarios */
+  --color-peach:       #F0C6A8;   /* Avisos y detalles */
+  --color-white:       #FFFFFF;   /* Superficies y tarjetas */
+
+  /* --- Tonos neutros derivados --- */
+  --color-ink-90:      #2D3A4A;
+  --color-ink-70:      #4A5568;
+  --color-ink-50:      #718096;
+  --color-ink-30:      #A0AEC0;
+  --color-ink-10:      #E2E8F0;
+  --color-border:      #E8E4DC;
+  --color-border-soft: #F0EDE6;
+
+  /* --- Tonos pastel derivados --- */
+  --color-sage-light:     #D9EDE0;
+  --color-sage-dark:      #7CB993;
+  --color-lavender-light: #EDE6F7;
+  --color-lavender-dark:  #A48DD4;
+  --color-peach-light:    #F7DFCa;
+  --color-peach-dark:     #D4885A;
+
+  /* --- Semánticos --- */
+  --color-success:     #4CAF79;
+  --color-success-bg:  #E8F5EE;
+  --color-warning:     #E8A838;
+  --color-warning-bg:  #FEF4E0;
+  --color-error:       #E05252;
+  --color-error-bg:    #FDECEC;
+  --color-info:        #6B55A8;
+  --color-info-bg:     #EDE6F7;
+
+  /* --- Tipografía --- */
+  --font-sans:   'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:   'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --text-xs:    0.75rem;    /* 12px */
+  --text-sm:    0.875rem;   /* 14px */
+  --text-base:  1rem;       /* 16px */
+  --text-lg:    1.125rem;   /* 18px */
+  --text-xl:    1.25rem;    /* 20px */
+  --text-2xl:   1.5rem;     /* 24px */
+  --text-3xl:   1.875rem;   /* 30px */
+  --text-4xl:   2.25rem;    /* 36px */
+  --text-5xl:   3rem;       /* 48px */
+
+  --leading-tight:  1.25;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+  --leading-loose:  2;
+
+  --font-regular: 400;
+  --font-medium:  500;
+  --font-semibold:600;
+  --font-bold:    700;
+  --font-extrabold:800;
+
+  /* --- Espaciado (escala 4px) --- */
+  --space-1:   0.25rem;   /* 4px  */
+  --space-2:   0.5rem;    /* 8px  */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-16:  4rem;      /* 64px */
+  --space-20:  5rem;      /* 80px */
+  --space-24:  6rem;      /* 96px */
+  --space-32:  8rem;      /* 128px */
+
+  /* --- Radios --- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;
+
+  /* --- Sombras --- */
+  --shadow-xs:  0 1px 2px rgba(32,42,54,0.04);
+  --shadow-sm:  0 2px 6px rgba(32,42,54,0.06);
+  --shadow-md:  0 4px 16px rgba(32,42,54,0.08);
+  --shadow-lg:  0 8px 32px rgba(32,42,54,0.10);
+  --shadow-xl:  0 16px 48px rgba(32,42,54,0.12);
+
+  /* --- Motion (sistema centralizado) --- */
+  --duration-instant: 80ms;
+  --duration-fast:    150ms;
+  --duration-normal:  220ms;
+  --duration-slow:    350ms;
+  --duration-slower:  500ms;
+
+  --ease-default:   cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-gentle:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --transition-base:    var(--duration-normal) var(--ease-out);
+  --transition-fast:    var(--duration-fast) var(--ease-out);
+  --transition-slow:    var(--duration-slow) var(--ease-gentle);
+
+  /* --- Layout --- */
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1180px;
+  --container-2xl:  1360px;
+
+  --header-height:  64px;
+  --sidebar-width:  280px;
+}
+
+/* Reducción de movimiento — equivalente sin animación */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast:    0ms;
+    --duration-normal:  0ms;
+    --duration-slow:    0ms;
+    --duration-slower:  0ms;
+    --transition-base:  none;
+    --transition-fast:  none;
+    --transition-slow:  none;
+  }
+}
+
+/* ============================================================
+   ALIAS DE COMPATIBILIDAD
+   Los estilos de pagina usan estos nombres; todos resuelven a la
+   paleta oficial de Elevia (marfil, azul tinta, salvia, lavanda,
+   melocoton, blanco). No introducir colores nuevos fuera de aqui.
+   ============================================================ */
+:root {
+  --color-surface:          var(--color-white);
+  --color-bg-base:          var(--color-ivory);
+  --color-bg-muted:         var(--color-border-soft);
+  --color-bg-lavender:      var(--color-lavender-light);
+  --color-bg-sage:          var(--color-sage-light);
+  --color-bg-peach:         var(--color-peach-light);
+  --color-text-primary:     var(--color-ink);
+  --color-text-secondary:   var(--color-ink-70);
+  --color-text-tertiary:    var(--color-ink-50);
+  --color-ink-muted:        var(--color-ink-50);
+  --color-primary:          var(--color-ink);
+  --color-primary-dark:     var(--color-ink-90);
+  --color-accent:           var(--color-sage-dark);
+  --color-accent-sage:      var(--color-sage-dark);
+  --color-accent-lavender:  var(--color-lavender-dark);
+  --color-accent-peach:     var(--color-peach-dark);
+  --space-7:                1.75rem;
+  --tracking-tighter:       -0.04em;
+  --tracking-tight:         -0.02em;
+  --tracking-normal:        0;
+  --z-overlay:              200;
+}

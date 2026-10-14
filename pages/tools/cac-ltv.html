@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora CAC y LTV — Elevia Startups</title>
+  <meta name="description" content="Calcula el Coste de Adquisición de Clientes (CAC) y el Lifetime Value (LTV). Analiza unit economics, ratio LTV/CAC y período de recuperación por canal." />
+  <link rel="canonical" href="https://elevia-startups.com/pages/tools/cac-ltv.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../src/css/tokens.css" />
+  <link rel="stylesheet" href="../../src/css/base.css" />
+  <link rel="stylesheet" href="../../src/css/components.css" />
+  <link rel="stylesheet" href="../../src/css/tools.css" />
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main class="container" style="padding-block: 24px 64px;">
+    
+    <!-- Breadcrumb -->
+    <nav class="tool-breadcrumb" aria-label="Ruta de navegación">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="../tools.html">Herramientas</a>
+      <span class="sep">/</span>
+      <span aria-current="page">CAC / LTV</span>
+    </nav>
+
+    <!-- Tool Header -->
+    <section class="tool-header">
+      <div class="tool-header__top">
+        <div class="tool-header__icon tool-header__icon--peach" aria-hidden="true">📈</div>
+        <div class="tool-header__meta">
+          <span class="tool-header__category tool-header__category--peach">Finanzas y métricas</span>
+          <h1 class="tool-header__title">Calculadora CAC / LTV y Unit Economics</h1>
+          <p class="tool-header__desc">
+            Calcula cuánto te cuesta captar a un cliente (CAC) y cuánto valor económico neto te aporta a lo largo de su relación comercial (LTV). Evalúa la salud de tu modelo de negocio antes de acelerar la inversión en marketing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Educational details -->
+      <details class="edu-callout">
+        <summary>¿Cómo interpretar el ratio LTV/CAC y el Payback Period?</summary>
+        <div class="edu-callout__content">
+          <p><strong>CAC (Customer Acquisition Cost):</strong> Todo el gasto invertido en ventas y marketing dividido entre el número de clientes conseguidos en ese período.</p>
+          <p><strong>LTV (Lifetime Value):</strong> Margen bruto total generado por un cliente a lo largo de su vida útil. En modelos SaaS se aproxima como <code>(Ingreso mensual × Margen bruto) / Churn mensual</code>.</p>
+          <p><strong>Ratio LTV / CAC:</strong> Mide el retorno de la inversión en captación. Una regla orientativa común en SaaS es:</p>
+          <ul>
+            <li><strong>&lt; 1.0x:</strong> Destrucción de valor (captar clientes cuesta más de lo que aportan).</li>
+            <li><strong>1.0x – 3.0x:</strong> Sostenible pero ajustado; optimiza el onboarding o reduce el CAC.</li>
+            <li><strong>3.0x – 5.0x:</strong> Rango saludable estándar para startups en crecimiento.</li>
+            <li><strong>&gt; 5.0x:</strong> Oportunidad de invertir más agresivamente en captación.</li>
+          </ul>
+          <p><strong>Payback (Tiempo de recuperación):</strong> Meses necesarios para recuperar el CAC con el margen de ese cliente. Lo ideal en fases tempranas suele ser &lt; 12 meses.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="tool-actions">
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-demo">Cargar ejemplo SaaS</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Restablecer</button>
+      </div>
+      <div class="tool-actions__group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-save">Guardar local</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load">Recuperar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-export-json">Exportar JSON</button>
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace-grid">
+      
+      <!-- Inputs Column -->
+      <section class="tool-panel" aria-labelledby="cac-inputs-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="cac-inputs-heading" class="tool-panel__title">Hipótesis de captación y valor</h2>
+            <div class="tool-panel__subtitle">Configura tus variables operativas</div>
+          </div>
+          <div class="tab-list" role="tablist">
+            <button type="button" role="tab" aria-selected="true" class="tab-item is-active" id="tab-simple">Global</button>
+            <button type="button" role="tab" aria-selected="false" class="tab-item" id="tab-channels">Por canal</button>
+          </div>
+        </div>
+
+        <!-- Business Model Selector -->
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="model-type" class="form-label">Modelo de monetización</label>
+          <select id="model-type" class="form-select">
+            <option value="subscription">Suscripción recurrente (SaaS / Membresía)</option>
+            <option value="transactional">Transaccional / Compra única / E-commerce</option>
+          </select>
+        </div>
+
+        <!-- Global Acquisition Form -->
+        <div id="simple-acquisition-form">
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label for="total-spend" class="form-label">Gasto total en ventas y marketing (€)</label>
+              <div class="input-addon">
+                <input type="number" id="total-spend" class="form-input" min="0" step="100" value="12000" />
+                <span class="input-addon__suffix">€</span>
+              </div>
+              <div class="help-text">Publicidad, sueldos comerciales, herramientas de captación.</div>
+            </div>
+            <div class="form-group">
+              <label for="customers-acquired" class="form-label">Clientes nuevos adquiridos</label>
+              <input type="number" id="customers-acquired" class="form-input" min="1" step="1" value="48" />
+              <div class="help-text">Clientes reales de pago captados en el período.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channels Form -->
+        <div id="channels-form" style="display: none; margin-bottom: 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+            <span style="font-size: 0.9rem; font-weight: 700; color: var(--color-ink);">Canales de captación</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-add-channel">+ Añadir canal</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="channels-table">
+              <thead>
+                <tr>
+                  <th>Canal</th>
+                  <th style="width: 130px;">Gasto (€)</th>
+                  <th style="width: 100px;">Clientes</th>
+                  <th style="width: 100px;">CAC</th>
+                  <th style="width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="channels-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LTV inputs: Subscription mode -->
+        <div id="ltv-subscription-form">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 20px 0 12px; border-top: 1px solid var(--color-border-soft); padding-top: 16px;">Métricas de retención y valor de cliente</h3>
+          
+          <div class="form-row form-row--2" style="align-items: start;">
+            <div class="form-group">
+              <label for="sub-arpu" class="form-label" style="min-height: 2.5rem; display: flex; align-items: flex-end;">Ingreso mensual medio por cliente (ARPU)</label>
+              <div class="input-addon">
+                <input type="number" id="sub-arpu" class="form-input" min="1" step="5" value="120" />
+                <span class="input-addon__suffix">€/mes</span>
+              </div>
+              <div class="help-text">Cuota mensual media facturada por cliente.</div>
+            </div>
+            <div class="form-group">
+              <label for="sub-margin" class="form-label" style="min-height: 2.5rem; display: flex; align-items: flex-end;">Margen bruto (%)</label>
+              <div class="input-addon">
+                <input type="number" id="sub-margin" class="form-input" min="1" max="100" step="1" value="80" />
+                <span class="input-addon__suffix">%</span>
+              </div>
+              <div class="help-text">Descontando servidores, soporte y pasarelas.</div>
+            </div>
+          </div>
+
+          <div class="range-group">
+            <div class="range-group__header">
+              <label for="sub-churn" class="form-label" style="margin:0;">Churn rate mensual (% de bajas al mes)</label>
+              <span class="range-group__val" id="sub-churn-val">4.5%</span>
+            </div>
+            <input type="range" id="sub-churn" class="form-range" min="0.5" max="25" step="0.5" value="4.5" />
+            <div class="help-text" id="sub-lifetime-hint">Vida media estimada: 22.2 meses (1 / Churn)</div>
+          </div>
+        </div>
+
+        <!-- LTV inputs: Transactional mode -->
+        <div id="ltv-transactional-form" style="display: none;">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-ink); margin: 20px 0 12px; border-top: 1px solid var(--color-border-soft); padding-top: 16px;">Métricas transaccionales</h3>
+
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label for="tx-aov" class="form-label">Valor medio por pedido (AOV)</label>
+              <div class="input-addon">
+                <input type="number" id="tx-aov" class="form-input" min="1" step="5" value="65" />
+                <span class="input-addon__suffix">€</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="tx-freq" class="form-label">Pedidos por cliente al año</label>
+              <input type="number" id="tx-freq" class="form-input" min="0.5" step="0.5" value="3.2" />
+            </div>
+          </div>
+
+          <div class="form-row form-row--2">
+            <div class="form-group">
+              <label for="tx-margin" class="form-label">Margen bruto (%)</label>
+              <div class="input-addon">
+                <input type="number" id="tx-margin" class="form-input" min="1" max="100" step="1" value="45" />
+                <span class="input-addon__suffix">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="tx-lifetime-years" class="form-label">Vida útil estimada (años)</label>
+              <input type="number" id="tx-lifetime-years" class="form-input" min="0.5" step="0.5" value="2.5" />
+            </div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <strong>Fórmula de Unit Economics:</strong>
+          CAC = Gasto Total / Clientes Nuevos<br/>
+          LTV = (Ingreso × Margen) / Churn (o Ingreso Anual × Margen × Años)<br/>
+          Payback = CAC / (Ingreso Mensual × Margen Bruto)
+        </div>
+      </section>
+
+      <!-- Results Column -->
+      <section class="tool-panel" aria-labelledby="unit-economics-heading">
+        <div class="tool-panel__header">
+          <div>
+            <h2 id="unit-economics-heading" class="tool-panel__title">Unit Economics</h2>
+            <div class="tool-panel__subtitle">Rentabilidad y eficiencia de adquisición</div>
+          </div>
+          <span class="badge badge-sage" id="ratio-badge">Saludable</span>
+        </div>
+
+        <!-- 4 Metrics Banner -->
+        <div class="metrics-banner">
+          <div class="metric-box metric-box--peach">
+            <div class="metric-box__label">CAC Global</div>
+            <div class="metric-box__value" id="res-cac">0 €</div>
+            <div class="metric-box__sub">Coste por cliente</div>
+          </div>
+          <div class="metric-box metric-box--sage">
+            <div class="metric-box__label">LTV Estimado</div>
+            <div class="metric-box__value" id="res-ltv">0 €</div>
+            <div class="metric-box__sub">Margen bruto vida cliente</div>
+          </div>
+          <div class="metric-box metric-box--lavender">
+            <div class="metric-box__label">Ratio LTV / CAC</div>
+            <div class="metric-box__value" id="res-ratio">0.0x</div>
+            <div class="metric-box__sub" id="res-ratio-desc">Retorno de inversión</div>
+          </div>
+          <div class="metric-box metric-box--ink">
+            <div class="metric-box__label">Payback Period</div>
+            <div class="metric-box__value" id="res-payback">0 m</div>
+            <div class="metric-box__sub">Meses para recuperar CAC</div>
+          </div>
+        </div>
+
+        <!-- Channel Chart (when in channels mode or comparison) -->
+        <div class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Comparativa de CAC vs LTV</h3>
+            <span style="font-size: 0.75rem; color: var(--color-ink-50);">Unit economics por cliente</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="chart-cac-ltv" width="480" height="220" aria-label="Gráfico de CAC frente a LTV"></canvas>
+          </div>
+        </div>
+
+        <!-- Diagnostic Alert Cards -->
+        <div id="cac-alerts" style="display: flex; flex-direction: column; gap: 8px;"></div>
+
+      </section>
+
+    </div>
+
+    <!-- Storage notice -->
+    <div class="storage-notice">
+      <div class="storage-notice-icon">🔒</div>
+      <div class="storage-notice-text">
+        <strong>Datos privados:</strong> Tus métricas de facturación y costes de marketing no salen de tu navegador. Úsalas con tranquilidad para tus previsiones internas.
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../../src/js/elevia.bundle.js"></script>
+<script>
+(function () {
+
+    const {initNav, initFooter} = __req('nav');
+    const {calcCAC, calcCACByChannel, calcLTVSubscription, calcLTVSimple, calcRatios} = __req('cac-ltv.calc');
+    const {saveData, loadData} = __req('storage');
+    const {formatCurrency, formatNumber, downloadFile} = __req('format');
+    const {renderBarChart} = __req('charts');
+
+    initNav({ activePage: 'tools' });
+    initFooter();
+
+    const STORAGE_KEY = 'elevia_v1_cac_ltv';
+
+    let activeTab = 'simple'; // 'simple' | 'channels'
+    let currentModel = 'subscription';
+
+    // Channel list state
+    let channels = [
+      { id: 1, name: 'Google Ads (SEM)', spend: 5000, customers: 20 },
+      { id: 2, name: 'Meta Ads', spend: 3500, customers: 14 },
+      { id: 3, name: 'Outbound / Ventas', spend: 3500, customers: 14 },
+    ];
+
+    // DOM Elements
+    const tabSimple = document.getElementById('tab-simple');
+    const tabChannels = document.getElementById('tab-channels');
+    const simpleForm = document.getElementById('simple-acquisition-form');
+    const channelsForm = document.getElementById('channels-form');
+    const modelSelect = document.getElementById('model-type');
+    const ltvSubForm = document.getElementById('ltv-subscription-form');
+    const ltvTxForm = document.getElementById('ltv-transactional-form');
+
+    const totalSpendInput = document.getElementById('total-spend');
+    const customersAcquiredInput = document.getElementById('customers-acquired');
+    const channelsTbody = document.getElementById('channels-tbody');
+
+    const subArpu = document.getElementById('sub-arpu');
+    const subMargin = document.getElementById('sub-margin');
+    const subChurn = document.getElementById('sub-churn');
+    const subChurnVal = document.getElementById('sub-churn-val');
+    const subLifetimeHint = document.getElementById('sub-lifetime-hint');
+
+    const txAov = document.getElementById('tx-aov');
+    const txFreq = document.getElementById('tx-freq');
+    const txMargin = document.getElementById('tx-margin');
+    const txLifetimeYears = document.getElementById('tx-lifetime-years');
+
+    const resCac = document.getElementById('res-cac');
+    const resLtv = document.getElementById('res-ltv');
+    const resRatio = document.getElementById('res-ratio');
+    const resRatioDesc = document.getElementById('res-ratio-desc');
+    const resPayback = document.getElementById('res-payback');
+    const ratioBadge = document.getElementById('ratio-badge');
+    const cacAlerts = document.getElementById('cac-alerts');
+    const canvas = document.getElementById('chart-cac-ltv');
+
+    // Churn range handler
+    subChurn.addEventListener('input', () => {
+      const c = parseFloat(subChurn.value) || 1;
+      subChurnVal.textContent = c.toFixed(1) + '%';
+      const months = (100 / c).toFixed(1);
+      subLifetimeHint.textContent = `Vida media estimada: ${months} meses (1 / Churn)`;
+      recalculate();
+    });
+
+    // Tab switcher
+    tabSimple.addEventListener('click', () => {
+      activeTab = 'simple';
+      tabSimple.classList.add('is-active');
+      tabSimple.setAttribute('aria-selected', 'true');
+      tabChannels.classList.remove('is-active');
+      tabChannels.setAttribute('aria-selected', 'false');
+      simpleForm.style.display = 'block';
+      channelsForm.style.display = 'none';
+      recalculate();
+    });
+
+    tabChannels.addEventListener('click', () => {
+      activeTab = 'channels';
+      tabChannels.classList.add('is-active');
+      tabChannels.setAttribute('aria-selected', 'true');
+      tabSimple.classList.remove('is-active');
+      tabSimple.setAttribute('aria-selected', 'false');
+      channelsForm.style.display = 'block';
+      simpleForm.style.display = 'none';
+      renderChannelsInputs();
+      recalculate();
+    });
+
+    // Model switcher
+    modelSelect.addEventListener('change', () => {
+      currentModel = modelSelect.value;
+      if (currentModel === 'subscription') {
+        ltvSubForm.style.display = 'block';
+        ltvTxForm.style.display = 'none';
+      } else {
+        ltvSubForm.style.display = 'none';
+        ltvTxForm.style.display = 'block';
+      }
+      recalculate();
+    });
+
+    [totalSpendInput, customersAcquiredInput, subArpu, subMargin, txAov, txFreq, txMargin, txLifetimeYears].forEach(el => {
+      el.addEventListener('input', recalculate);
+    });
+
+    function renderChannelsInputs() {
+      channelsTbody.innerHTML = '';
+      channels.forEach((ch, idx) => {
+        const cac = ch.customers > 0 ? (ch.spend / ch.customers) : 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" class="form-input ch-name" value="${ch.name}" data-idx="${idx}" /></td>
+          <td><input type="number" class="form-input ch-spend" value="${ch.spend}" min="0" data-idx="${idx}" /></td>
+          <td><input type="number" class="form-input ch-cust" value="${ch.customers}" min="1" data-idx="${idx}" /></td>
+          <td style="font-family:var(--font-mono); font-size:0.85rem; font-weight:700;">${formatCurrency(cac, 'EUR')}</td>
+          <td>
+            ${channels.length > 1 ? `<button type="button" class="btn btn-ghost btn-sm ch-del" data-idx="${idx}" style="color:var(--color-error); padding:4px 8px;">✕</button>` : ''}
+          </td>
+        `;
+        channelsTbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.ch-name').forEach(inp => {
+        inp.addEventListener('input', e => {
+          channels[parseInt(e.target.dataset.idx, 10)].name = e.target.value;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.ch-spend').forEach(inp => {
+        inp.addEventListener('input', e => {
+          channels[parseInt(e.target.dataset.idx, 10)].spend = parseFloat(e.target.value) || 0;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.ch-cust').forEach(inp => {
+        inp.addEventListener('input', e => {
+          channels[parseInt(e.target.dataset.idx, 10)].customers = parseFloat(e.target.value) || 0;
+          recalculate();
+        });
+      });
+      document.querySelectorAll('.ch-del').forEach(btn => {
+        btn.addEventListener('click', e => {
+          channels.splice(parseInt(e.currentTarget.dataset.idx, 10), 1);
+          renderChannelsInputs();
+          recalculate();
+        });
+      });
+    }
+
+    document.getElementById('btn-add-channel').addEventListener('click', () => {
+      channels.push({ id: Date.now(), name: `Canal ${channels.length + 1}`, spend: 1000, customers: 5 });
+      renderChannelsInputs();
+      recalculate();
+    });
+
+    function recalculate() {
+      // 1. Calculate CAC
+      let cac = 0;
+      let cacErrors = [];
+      let cacWarnings = [];
+
+      if (activeTab === 'simple') {
+        const spend = parseFloat(totalSpendInput.value) || 0;
+        const cust = parseFloat(customersAcquiredInput.value) || 0;
+        const res = calcCAC({ totalSpend: spend, customersAcquired: cust });
+        cac = res.cac || 0;
+        cacErrors = res.errors;
+        cacWarnings = res.warnings;
+      } else {
+        const totalSpend = channels.reduce((acc, c) => acc + (c.spend || 0), 0);
+        const totalCust = channels.reduce((acc, c) => acc + (c.customers || 0), 0);
+        if (totalCust > 0) {
+          cac = totalSpend / totalCust;
+        }
+      }
+
+      // 2. Calculate LTV
+      let ltv = 0;
+      let monthlyMarginPerCustomer = 0;
+
+      if (currentModel === 'subscription') {
+        const arpu = parseFloat(subArpu.value) || 0;
+        const margin = parseFloat(subMargin.value) || 0;
+        const churn = parseFloat(subChurn.value) || 1;
+
+        const resL = calcLTVSubscription({ avgMonthlyRevenue: arpu, grossMargin: margin, monthlyChurn: churn });
+        ltv = resL.ltv || 0;
+        monthlyMarginPerCustomer = arpu * (margin / 100);
+      } else {
+        const aov = parseFloat(txAov.value) || 0;
+        const freq = parseFloat(txFreq.value) || 1;
+        const margin = parseFloat(txMargin.value) || 0;
+        const lifeY = parseFloat(txLifetimeYears.value) || 1;
+
+        const resL = calcLTVSimple({
+          avgOrderValue: aov,
+          purchaseFrequency: freq,
+          grossMargin: margin,
+          customerLifetimeYears: lifeY,
+        });
+        ltv = resL.ltv || 0;
+        monthlyMarginPerCustomer = (aov * freq * (margin / 100)) / 12;
+      }
+
+      // 3. Calculate Ratios
+      const ratios = calcRatios({
+        ltv,
+        cac,
+        avgMonthlyRevenue: parseFloat(subArpu.value) || 0,
+        grossMargin: parseFloat(subMargin.value) || 0,
+      });
+
+      // Display metrics
+      resCac.textContent = formatCurrency(cac, 'EUR');
+      resLtv.textContent = formatCurrency(ltv, 'EUR');
+
+      const ratioVal = cac > 0 ? (ltv / cac) : 0;
+      resRatio.textContent = ratioVal > 0 ? `${ratioVal.toFixed(1)}x` : '0.0x';
+
+      const payback = monthlyMarginPerCustomer > 0 ? (cac / monthlyMarginPerCustomer) : null;
+      resPayback.textContent = payback !== null ? `${payback.toFixed(1)} meses` : '—';
+
+      // Ratio badge & color
+      if (ratioVal >= 3.0) {
+        ratioBadge.className = 'badge badge-sage';
+        ratioBadge.textContent = 'Excelente (≥3x)';
+        resRatioDesc.textContent = 'Unit economics saludables';
+      } else if (ratioVal >= 1.5) {
+        ratioBadge.className = 'badge badge-lavender';
+        ratioBadge.textContent = 'Aceptable (1.5x–3x)';
+        resRatioDesc.textContent = 'Espacio de optimización';
+      } else {
+        ratioBadge.className = 'badge badge-peach';
+        ratioBadge.textContent = 'En riesgo (<1.5x)';
+        resRatioDesc.textContent = 'CAC elevado frente a LTV';
+      }
+
+      // Alerts & Insights
+      cacAlerts.innerHTML = '';
+      cacErrors.forEach(err => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-error';
+        el.textContent = '⚠️ ' + err;
+        cacAlerts.appendChild(el);
+      });
+      cacWarnings.forEach(w => {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = '💡 ' + w;
+        cacAlerts.appendChild(el);
+      });
+
+      if (ratioVal < 1.0 && cac > 0) {
+        const errEl = document.createElement('div');
+        errEl.className = 'alert alert-error';
+        errEl.textContent = '🚨 Alerta: Tu CAC supera el LTV. Por cada cliente adquirido pierdes dinero neto. Revisa con urgencia tu canal de captación o tu estrategia de precios.';
+        cacAlerts.appendChild(errEl);
+      } else if (payback && payback > 18) {
+        const warnEl = document.createElement('div');
+        warnEl.className = 'alert alert-warning';
+        warnEl.textContent = `⚠️ Payback elevado (${payback.toFixed(1)} meses). Tardar más de 18 meses en recuperar el CAC generará una fuerte presión de caja si intentas escalar.`;
+        cacAlerts.appendChild(warnEl);
+      }
+
+      // Update Chart
+      const chartData = [
+        { label: 'CAC (Coste)', value: cac, max: Math.max(cac, ltv), color: '#F0C6A8' },
+        { label: 'LTV (Valor)', value: ltv, max: Math.max(cac, ltv), color: '#B9D8C2' },
+      ];
+      renderBarChart(canvas, chartData, {
+        format: val => formatCurrency(val, 'EUR'),
+      });
+    }
+
+    // Demo Data
+    document.getElementById('btn-demo').addEventListener('click', () => {
+      activeTab = 'simple';
+      tabSimple.click();
+      modelSelect.value = 'subscription';
+      currentModel = 'subscription';
+      ltvSubForm.style.display = 'block';
+      ltvTxForm.style.display = 'none';
+
+      totalSpendInput.value = '15000';
+      customersAcquiredInput.value = '50';
+      subArpu.value = '150';
+      subMargin.value = '82';
+      subChurn.value = '3.5';
+      subChurnVal.textContent = '3.5%';
+      subLifetimeHint.textContent = 'Vida media estimada: 28.6 meses';
+
+      recalculate();
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      totalSpendInput.value = '12000';
+      customersAcquiredInput.value = '48';
+      subArpu.value = '120';
+      subMargin.value = '80';
+      subChurn.value = '4.5';
+      subChurnVal.textContent = '4.5%';
+      recalculate();
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const state = {
+        activeTab,
+        currentModel,
+        totalSpend: totalSpendInput.value,
+        customersAcquired: customersAcquiredInput.value,
+        channels,
+        sub: { arpu: subArpu.value, margin: subMargin.value, churn: subChurn.value },
+        tx: { aov: txAov.value, freq: txFreq.value, margin: txMargin.value, life: txLifetimeYears.value }
+      };
+      const res = saveData(STORAGE_KEY, state);
+      alert(res.success ? '✓ Unit economics guardados localmente.' : 'Error al guardar: ' + res.error);
+    });
+
+    // Load
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = loadData(STORAGE_KEY, null);
+      if (!state) {
+        alert('No hay datos guardados para esta herramienta.');
+        return;
+      }
+      if (state.totalSpend) totalSpendInput.value = state.totalSpend;
+      if (state.customersAcquired) customersAcquiredInput.value = state.customersAcquired;
+      if (state.channels) channels = state.channels;
+      if (state.sub) {
+        subArpu.value = state.sub.arpu || 120;
+        subMargin.value = state.sub.margin || 80;
+        subChurn.value = state.sub.churn || 4.5;
+        subChurnVal.textContent = subChurn.value + '%';
+      }
+      recalculate();
+      alert('✓ Datos cargados correctamente.');
+    });
+
+    // Export JSON
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+      const state = {
+        activeTab,
+        currentModel,
+        totalSpend: totalSpendInput.value,
+        customersAcquired: customersAcquiredInput.value,
+        channels,
+        exportedAt: new Date().toISOString()
+      };
+      downloadFile(JSON.stringify(state, null, 2), 'elevia-cac-ltv.json', 'application/json');
+    });
+
+    // Init
+    recalculate();
+  
+})();
+</script>
+
+</body>
+</html>
