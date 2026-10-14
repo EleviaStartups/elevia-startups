@@ -932,7 +932,7 @@
         </p>
         <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
           <a id="btn-fallback-mailto" href="#" class="btn btn-primary" style="background: #991B1B !important; border-color: #991B1B !important;">
-            ✉️ Enviar a davidpaezlancho@gmail.com
+            ✉️ Enviar correo al equipo de Elevia
           </a>
           <a id="btn-fallback-whatsapp" href="#" target="_blank" rel="noopener" class="btn btn-secondary">
             💬 Enviar por WhatsApp
@@ -1237,7 +1237,7 @@ Servicio de acompañamiento 1-a-1 de pago.
             if (isFileProtocol || (err.message && err.message.includes('web server'))) {
               errorMsgEl.innerHTML = `<strong>Aviso de prueba local:</strong> Estás abriendo la web directamente como archivo local (<code>file:///</code>). Por seguridad anti-spam, el servicio de envío automático requiere ejecutarse bajo un servidor web (como en GitHub Pages, tu hosting en internet o <code>http://localhost</code>).<br><br>💡 <strong>Para probar el envío en tu ordenador:</strong> haz doble clic en <code>iniciar-servidor.bat</code> dentro de la carpeta de Elevia, o envía la solicitud por WhatsApp o correo con los botones inferiores:`;
             } else if (err.message && err.message.includes('Activation')) {
-              errorMsgEl.innerHTML = `<strong>Activación pendiente:</strong> FormSubmit te ha enviado un correo con el botón de confirmación a <strong>davidpaezlancho@gmail.com</strong>. Pulsa 'Activate Form' en ese correo para habilitar la recepción directa.`;
+              errorMsgEl.innerHTML = `<strong>Activación pendiente:</strong> Se ha enviado un correo de confirmación a la bandeja del administrador. Pulsa 'Activate Form' en ese mensaje para habilitar la recepción directa.`;
             } else {
               errorMsgEl.textContent = `No se pudo completar el envío automático (${err.message || 'error de conexión'}). Tus datos se han guardado en este navegador. Puedes enviarnos la solicitud directamente por email o WhatsApp:`;
             }
@@ -1270,7 +1270,7 @@ Servicio de acompañamiento 1-a-1 de pago.
       const text = buildRequestText();
       try {
         await navigator.clipboard.writeText(text);
-        alert('✓ Texto de la solicitud copiado al portapapeles. Puedes pegarlo en tu gestor de correo o enviarlo directamente a davidpaezlancho@gmail.com.');
+        alert('✓ Texto de la solicitud copiado al portapapeles. Puedes pegarlo en tu gestor de correo o enviarlo directamente al equipo de Elevia.');
       } catch (e) {
         alert('Por favor selecciona y copia el texto manualmente.');
       }
