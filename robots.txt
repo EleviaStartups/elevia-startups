@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /tests/
 
-Sitemap: https://elevia-startups.com/sitemap.xml
+Sitemap: https://eleviastartups.github.io/elevia-startups/sitemap.xml
