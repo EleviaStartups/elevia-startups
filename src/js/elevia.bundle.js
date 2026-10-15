@@ -705,6 +705,16 @@ function resolve(href) {
 }
 
 /**
+ * Resolve an asset located at the site root (e.g. favicon.svg).
+ * @param {string} relativePath
+ * @returns {string}
+ */
+function resolveRoot(relativePath) {
+  const root = getRootPrefix();
+  return root + relativePath.replace(/^\.?\//, '');
+}
+
+/**
  * Returns true if the given href matches the current page URL.
  * @param {string} href
  * @returns {boolean}
@@ -781,6 +791,9 @@ const NAV_CSS = `
 
 /* --- Logo --- */
 .nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: 'Manrope', sans-serif;
   font-weight: 800;
   font-size: 1.2rem;
@@ -788,11 +801,29 @@ const NAV_CSS = `
   text-decoration: none;
   letter-spacing: -0.3px;
   flex-shrink: 0;
-  margin-right: 40px;
+  margin-right: 36px;
   transition: opacity var(--nav-transition);
 }
-.nav-logo:hover { opacity: .78; }
-.nav-logo span {
+.nav-logo:hover { opacity: .82; }
+.nav-logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.nav-logo-mark img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: block;
+  box-shadow: 0 2px 8px rgba(32,42,54,.15);
+}
+.nav-logo-text {
+  display: inline-block;
+  line-height: 1.2;
+}
+.nav-logo-text span {
   color: var(--nav-active-color);
 }
 
@@ -808,7 +839,8 @@ const NAV_CSS = `
 }
 
 @media (max-width: 1160px) {
-  .nav-logo { margin-right: 18px; font-size: 1.1rem; }
+  .nav-logo { margin-right: 16px; font-size: 1.08rem; gap: 8px; }
+  .nav-logo-mark img { width: 26px; height: 26px; border-radius: 7px; }
   .nav-links { gap: 2px; }
 }
 
@@ -1063,13 +1095,22 @@ const NAV_CSS = `
 }
 
 .nav-mobile-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: 'Manrope', sans-serif;
   font-weight: 800;
   font-size: 1.1rem;
   color: var(--color-ink, #202A36);
   text-decoration: none;
 }
-.nav-mobile-logo span { color: var(--nav-active-color); }
+.nav-mobile-logo .nav-logo-mark img {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: block;
+}
+.nav-mobile-logo .nav-logo-text span { color: var(--nav-active-color); }
 
 .nav-mobile-close {
   display: flex;
@@ -1305,8 +1346,11 @@ function buildMobileMenuHTML() {
     <!-- Mobile panel -->
     <nav class="nav-mobile-panel" id="nav-mobile-panel" aria-label="Menú de navegación móvil">
       <div class="nav-mobile-header">
-        <a class="nav-mobile-logo" href="${resolve('index.html') || '/index.html'}">
-          Elevia <span>Startups</span>
+        <a class="nav-mobile-logo" href="${resolve('index.html') || '/index.html'}" aria-label="Elevia Startups — Inicio">
+          <span class="nav-logo-mark">
+            <img src="${resolveRoot('favicon.svg')}" alt="" width="28" height="28" />
+          </span>
+          <span class="nav-logo-text">Elevia <span>Startups</span></span>
         </a>
         <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Cerrar menú">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -1381,7 +1425,10 @@ function buildHeaderHTML(activePage) {
       <div class="nav-inner">
         <!-- Logo -->
         <a class="nav-logo" href="${resolve('index.html') || '/index.html'}" aria-label="Elevia Startups — Inicio">
-          Elevia <span>Startups</span>
+          <span class="nav-logo-mark">
+            <img src="${resolveRoot('favicon.svg')}" alt="" width="30" height="30" />
+          </span>
+          <span class="nav-logo-text">Elevia <span>Startups</span></span>
         </a>
 
         <!-- Desktop navigation -->
@@ -1529,6 +1576,43 @@ function setupInteractivity() {
   });
 }
 
+/**
+ * Automatically inject standard compliant favicons into <head> if not already present.
+ */
+function ensureFavicons() {
+  if (typeof document === 'undefined' || !document.head) return;
+  if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+    const link = document.createElement('link');
+    link.rel = 'apple-touch-icon';
+    link.sizes = '180x180';
+    link.href = resolveRoot('apple-touch-icon.png');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('link[rel="icon"][type="image/svg+xml"]')) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/svg+xml';
+    link.href = resolveRoot('favicon.svg');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('link[rel="icon"][sizes="48x48"]')) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.sizes = '48x48';
+    link.href = resolveRoot('favicon-48x48.png');
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('link[rel="icon"][sizes="96x96"]')) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.sizes = '96x96';
+    link.href = resolveRoot('favicon-96x96.png');
+    document.head.appendChild(link);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Public: initNav
 // ---------------------------------------------------------------------------
@@ -1544,6 +1628,7 @@ function initNav(options = {}) {
   const { activePage = '' } = options;
 
   injectCSS();
+  ensureFavicons();
 
   const container = document.createElement('div');
   container.innerHTML = buildHeaderHTML(activePage);
@@ -1588,8 +1673,9 @@ function buildFooterHTML() {
 
           <!-- Brand column -->
           <div class="footer-brand">
-            <a class="footer-logo" href="${resolve('index.html') || '/index.html'}">
-              Elevia <span>Startups</span>
+            <a class="footer-logo" href="${resolve('index.html') || '/index.html'}" style="display:inline-flex; align-items:center; gap:9px;">
+              <span class="nav-logo-mark"><img src="${resolveRoot('favicon.svg')}" alt="" width="26" height="26" style="border-radius:6px; display:block;" /></span>
+              <span>Elevia <span>Startups</span></span>
             </a>
             <p>
               Herramientas gratuitas para founders que quieren tomar mejores
