@@ -125,6 +125,18 @@
   --sidebar-width:  280px;
 }
 
+@media (min-width: 1440px) {
+  :root {
+    --container-xl: 1240px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --container-xl: 1320px;
+  }
+}
+
 /* Reducción de movimiento — equivalente sin animación */
 @media (prefers-reduced-motion: reduce) {
   :root {

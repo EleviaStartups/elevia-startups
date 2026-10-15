@@ -30,6 +30,7 @@ html {
   text-size-adjust: 100%;
   scroll-behavior: smooth;
   tab-size: 4;
+  overflow-x: hidden;
 }
 
 /* Remove list styles on ul/ol that have a role attribute (nav lists, etc.) */
