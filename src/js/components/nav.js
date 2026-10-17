@@ -1090,7 +1090,7 @@ function buildFooterHTML() {
               <li><a href="${resolve('startup-report.html')}">Mi Informe de Startup</a></li>
               <li><a href="${resolve('investor-deck.html')}">Guía Investor Deck</a></li>
               <li><a href="${resolve('deck-review.html')}">Revisión de Decks</a></li>
-              <li><a href="${resolve('mentoria.html')}">Mentoría para Startups <span style="font-size:0.75rem; color:var(--color-accent-peach); font-weight:700;">(De pago)</span></a></li>
+              <li><a href="${resolve('mentoria.html')}">Mentoría para Startups</a></li>
               <li><a href="${resolve('tools.html')}">Todas las herramientas</a></li>
             </ul>
           </div>
