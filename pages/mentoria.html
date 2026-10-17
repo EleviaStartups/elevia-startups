@@ -117,15 +117,32 @@
     }
     .mentoria-grid-areas {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin-bottom: 64px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 56px;
+    }
+    @media (max-width: 1040px) {
+      .mentoria-grid-areas {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+    }
+    @media (max-width: 640px) {
+      .mentoria-grid-areas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+    }
+    @media (max-width: 360px) {
+      .mentoria-grid-areas {
+        grid-template-columns: 1fr;
+      }
     }
     .area-card {
       background: var(--color-white);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 28px;
+      border-radius: var(--radius-xl, 16px);
+      padding: 18px 14px;
       display: flex;
       flex-direction: column;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -133,59 +150,61 @@
     }
     .area-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(32, 42, 54, 0.07);
+      box-shadow: 0 10px 24px rgba(32, 42, 54, 0.08);
       border-color: #D8C9F0;
     }
-    .area-card__icon {
-      font-size: 2rem;
-      margin-bottom: 14px;
-      display: inline-block;
-    }
-    .area-card__title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--color-ink);
-      margin: 0 0 10px;
-    }
-    .area-card__desc {
-      font-size: 0.92rem;
-      color: var(--color-ink-70);
-      line-height: 1.6;
-      margin-bottom: 16px;
-      flex-grow: 1;
-    }
-    .area-card__items {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 16px;
+    .area-card__icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--color-ivory, #F8F7F4);
+      border: 1px solid var(--color-border, #E8E4DC);
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .area-card__items li {
-      font-size: 0.85rem;
-      color: var(--color-ink-90);
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.45;
-    }
-    .area-card__items li::before {
-      content: "✓";
-      color: var(--color-accent-sage);
-      font-weight: 800;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
       flex-shrink: 0;
     }
-    .area-card__outcome {
-      background: var(--color-ivory);
-      border-radius: var(--radius-md);
-      padding: 10px 14px;
-      font-size: 0.82rem;
-      color: var(--color-ink-70);
-      border-left: 3px solid var(--color-accent-lavender);
-    }
-    .area-card__outcome strong {
+    .area-card__title {
+      font-size: 0.92rem;
+      font-weight: 800;
       color: var(--color-ink);
+      margin: 0 0 6px;
+      line-height: 1.25;
+      min-height: 2.3em;
+      display: flex;
+      align-items: flex-end;
+    }
+    .area-card__desc {
+      font-size: 0.78rem;
+      color: var(--color-ink-70);
+      line-height: 1.45;
+      margin: 0 0 12px;
+      flex-grow: 1;
+    }
+    .area-card__tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      width: fit-content;
+      margin-top: auto;
+      letter-spacing: 0.01em;
+    }
+    .tag-sage {
+      background: #E8F3EB;
+      color: #235436;
+    }
+    .tag-lavender {
+      background: #EDE6F7;
+      color: #4C3780;
+    }
+    .tag-peach {
+      background: #FEF0E6;
+      color: #8C4010;
     }
 
     /* Steps methodology */
@@ -477,112 +496,64 @@
 
       <div class="mentoria-grid-areas">
 
-        <!-- Area 1: Unit Economics & Finanzas -->
+        <!-- Area 1: Unit Economics -->
         <div class="area-card">
-          <span class="area-card__icon">📊</span>
-          <h3 class="area-card__title">Unit Economics y Proyecciones de Caja</h3>
+          <div class="area-card__icon-box">📊</div>
+          <h3 class="area-card__title">Unit Economics</h3>
           <p class="area-card__desc">
-            Modelamos a fondo la rentabilidad real de cada cliente para que sepas exactamente cuánto puedes gastar en captación y cuándo te quedas sin dinero.
+            Modelo financiero real, métricas clave de captación (CAC/LTV) y meses de runway.
           </p>
-          <ul class="area-card__items">
-            <li>Cálculo riguroso de CAC, LTV y Payback Period por canal</li>
-            <li>Curvas de retención y análisis de churn por cohortes</li>
-            <li>Proyección de Burn Rate mensual y Runway a 12-24 meses</li>
-            <li>Construcción del modelo financiero en hoja de cálculo</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Eliminar la ceguera financiera y saber con precisión quirúrgica el ritmo de gasto de la startup.
-          </div>
+          <span class="area-card__tag tag-sage">Métricas de caja</span>
         </div>
 
-        <!-- Area 2: Preparación de Ronda & Fundraising -->
+        <!-- Area 2: Rondas de Inversión -->
         <div class="area-card">
-          <span class="area-card__icon">💰</span>
-          <h3 class="area-card__title">Preparación para Rondas de Inversión</h3>
+          <div class="area-card__icon-box">💰</div>
+          <h3 class="area-card__title">Rondas de Inversión</h3>
           <p class="area-card__desc">
-            Te guiamos en todo el proceso de captación de capital privado para que llegues a las reuniones con inversores con la postura correcta y sin regalar tu empresa.
+            Valoración pre-money con 7 métodos, simulación de dilución y revisión de pactos.
           </p>
-          <ul class="area-card__items">
-            <li>Cálculo de valoración pre-money defendible con 7 métodos</li>
-            <li>Simulación de dilución en Cap Table y notas convertibles (SAFEs)</li>
-            <li>Estrategia de prospección: Business Angels vs. Fondos de VC</li>
-            <li>Revisión de Term Sheets y cláusulas societarias clave</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Negociar de tú a tú con inversores conociendo el valor real de tu equity.
-          </div>
+          <span class="area-card__tag tag-lavender">Defiende tu equity</span>
         </div>
 
-        <!-- Area 3: Investor Deck & Pitch Training -->
+        <!-- Area 3: Investor Deck -->
         <div class="area-card">
-          <span class="area-card__icon">🎯</span>
-          <h3 class="area-card__title">Investor Deck y Storytelling para Inversores</h3>
+          <div class="area-card__icon-box">🎯</div>
+          <h3 class="area-card__title">Investor Deck</h3>
           <p class="area-card__desc">
-            Convertimos una presentación aburrida o llena de texto en un pitch deck persuasivo, estructurado y enfocado en lo que un inversor necesita ver en 3 minutos.
+            Narrativa persuasiva y estructura visual para captar la atención de VCs en 3 minutos.
           </p>
-          <ul class="area-card__items">
-            <li>Revisión slide a slide del deck (narrativa, estructura y números)</li>
-            <li>Claridad en la diapositiva de tracción y el "Ask" de financiación</li>
-            <li>Simulacro de pitch con batería de preguntas difíciles de VCs</li>
-            <li>Adaptación del deck para envío por email vs. presentación en directo</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Multiplicar tu tasa de respuesta y conseguir reuniones de calidad.
-          </div>
+          <span class="area-card__tag tag-peach">Pitch persuasivo</span>
         </div>
 
-        <!-- Area 4: Validación de Mercado & Pricing -->
+        <!-- Area 4: Mercado y Pricing -->
         <div class="area-card">
-          <span class="area-card__icon">💡</span>
-          <h3 class="area-card__title">Modelo de Negocio, TAM/SAM/SOM y Pricing</h3>
+          <div class="area-card__icon-box">💡</div>
+          <h3 class="area-card__title">Mercado y Pricing</h3>
           <p class="area-card__desc">
-            Evita el error más común: construir un producto que nadie quiere pagar. Afinamos la propuesta de valor y la estrategia de monetización.
+            Tamaño de mercado (TAM/SAM/SOM), cliente ideal (ICP) y modelo de cobro.
           </p>
-          <ul class="area-card__items">
-            <li>Estimación argumentada de tamaño de mercado (TAM/SAM/SOM)</li>
-            <li>Estrategia de pricing, empaquetado de planes y monetización</li>
-            <li>Definición del ICP (Perfil de Cliente Ideal) B2B o B2C</li>
-            <li>Diseño de experimentos rápidos para validar disposición a pagar</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Asegurar Product-Market Fit antes de gastar recursos valiosos en desarrollo innecesario.
-          </div>
+          <span class="area-card__tag tag-sage">Estrategia y pricing</span>
         </div>
 
-        <!-- Area 5: Due Diligence & Data Room -->
+        <!-- Area 5: Data Room -->
         <div class="area-card">
-          <span class="area-card__icon">📁</span>
-          <h3 class="area-card__title">Data Room y Auditoría Operativa</h3>
+          <div class="area-card__icon-box">📁</div>
+          <h3 class="area-card__title">Data Room</h3>
           <p class="area-card__desc">
-            Organizamos toda la documentación legal, contable y tecnológica para que el proceso de Due Diligence no dilate ni ponga en riesgo el cierre de tu ronda.
+            Documentación legal, contable y societaria ordenada para superar la Due Diligence.
           </p>
-          <ul class="area-card__items">
-            <li>Estructuración de carpetas societarias, financieras y de producto</li>
-            <li>Detección anticipada de "red flags" (pactos de socios, IP, vesting)</li>
-            <li>Checklist exhaustivo listo para compartir en Drive o Notion</li>
-            <li>Coherencia entre las métricas del deck y los libros contables</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Transmitir profesionalidad y cerrar la Due Diligence en tiempo récord.
-          </div>
+          <span class="area-card__tag tag-lavender">Cierre ágil</span>
         </div>
 
-        <!-- Area 6: OKRs y Foco en Ejecución -->
+        <!-- Area 6: OKRs y Foco -->
         <div class="area-card">
-          <span class="area-card__icon">🧭</span>
-          <h3 class="area-card__title">OKRs, Prioridades y Sparring Partner</h3>
+          <div class="area-card__icon-box">🧭</div>
+          <h3 class="area-card__title">OKRs y Foco</h3>
           <p class="area-card__desc">
-            El mayor enemigo del founder en etapas tempranas es la dispersión. Actuamos como tu sparring partner para mantener el foco en lo que realmente importa.
+            3 objetivos trimestrales y seguimiento semanal directo para evitar la dispersión.
           </p>
-          <ul class="area-card__items">
-            <li>Definición de 3 objetivos clave trimestrales y resultados medibles</li>
-            <li>Matriz de priorización para el equipo fundador</li>
-            <li>Sesiones periódicas de seguimiento y rendición de cuentas</li>
-            <li>Resolución de bloqueos de liderazgo y toma de decisiones críticas</li>
-          </ul>
-          <div class="area-card__outcome">
-            <strong>Impacto:</strong> Foco implacable en tracción semanal, eliminando el ruido y la parálisis por análisis.
-          </div>
+          <span class="area-card__tag tag-peach">Ejecución semanal</span>
         </div>
 
       </div>
