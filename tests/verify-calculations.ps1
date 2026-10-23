@@ -199,6 +199,9 @@ $krs = @(40, 84, 100)
 $objAvg = ($krs | Measure-Object -Average).Average
 Assert-Check -Name "Objetivo progreso promedio = 74.67%" -Condition ([Math]::Abs($objAvg - 74.66667) -lt 0.01)
 
+$taskDefault = @{ id = "t1"; title = "Tarea"; deadline = $null; completed = $false }
+Assert-Check -Name "Tarea creada permite deadline nulo opcional" -Condition ($taskDefault.deadline -eq $null)
+
 # ------------------------------------------------------------------------------
 # 7. UNIT ECONOMICS Y RETENCION
 # ------------------------------------------------------------------------------

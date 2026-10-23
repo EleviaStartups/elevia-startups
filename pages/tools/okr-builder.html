@@ -60,10 +60,41 @@
       border: 1px solid var(--color-border-soft);
       border-radius: var(--radius-sm);
       margin-bottom: 4px;
+      flex-wrap: wrap;
     }
     .task-item--done {
       opacity: 0.65;
       text-decoration: line-through;
+    }
+    .task-deadline-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .task-deadline-input {
+      font-family: inherit;
+      font-size: 0.72rem;
+      padding: 2px 4px;
+      height: 24px;
+      border: 1px solid var(--color-border-soft);
+      border-radius: var(--radius-sm, 4px);
+      color: var(--color-ink-70);
+      background: var(--color-surface, #F8FAFC);
+      width: 118px;
+      cursor: pointer;
+      -webkit-appearance: auto;
+      appearance: auto;
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    }
+    .task-deadline-input:hover {
+      border-color: var(--color-ink-30);
+      background: var(--color-white);
+    }
+    .task-deadline-input:focus {
+      border-color: var(--color-lavender-dark, #A48DD4);
+      background: var(--color-white);
+      outline: none;
     }
     .reorder-btn {
       background: none;
@@ -240,6 +271,28 @@
       cursor: pointer !important;
       border-color: var(--color-border) !important;
       background-color: #FFFFFF !important;
+    }
+    .flow-task-deadline {
+      font-family: inherit;
+      font-size: 0.70rem !important;
+      height: 22px !important;
+      padding: 1px 4px !important;
+      border-radius: var(--radius-sm, 4px) !important;
+      border: 1px solid var(--color-border-soft) !important;
+      background-color: #FFFFFF !important;
+      color: var(--color-ink-70) !important;
+      width: 114px !important;
+      cursor: pointer !important;
+      -webkit-appearance: auto !important;
+      appearance: auto !important;
+      transition: border-color var(--transition-fast) !important;
+    }
+    .flow-task-deadline:hover {
+      border-color: var(--color-ink-30) !important;
+    }
+    .flow-task-deadline:focus {
+      border-color: var(--color-lavender-dark, #A48DD4) !important;
+      outline: none !important;
     }
     .flow-port {
       position: absolute;
@@ -659,9 +712,9 @@
         obj.keyResults[0].targetValue = 30;
         obj.keyResults[0].unit = 'clientes';
         obj.keyResults[0].tasks = [
-          { id: 't1', title: 'Lanzar prospección directa a 100 cuentas cualificadas', completed: true, important: true, urgent: true },
-          { id: 't2', title: 'Realizar 20 demos de producto con fundadores', completed: true, important: true, urgent: true },
-          { id: 't3', title: 'Implementar onboarding guiado con activación en 24h', completed: false, important: true, urgent: false }
+          { id: 't1', title: 'Lanzar prospección directa a 100 cuentas cualificadas', completed: true, important: true, urgent: true, deadline: '2025-02-15' },
+          { id: 't2', title: 'Realizar 20 demos de producto con fundadores', completed: true, important: true, urgent: true, deadline: '2025-02-28' },
+          { id: 't3', title: 'Implementar onboarding guiado con activación en 24h', completed: false, important: true, urgent: false, deadline: null }
         ];
 
         obj.keyResults[1].title = 'Alcanzar un NPS (Net Promoter Score) superior a 50';
@@ -669,9 +722,9 @@
         obj.keyResults[1].targetValue = 50;
         obj.keyResults[1].unit = 'puntos';
         obj.keyResults[1].tasks = [
-          { id: 't4', title: 'Configurar microencuesta tras 14 días de uso activo', completed: true, important: false, urgent: true },
-          { id: 't5', title: 'Entrevistar a los 5 usuarios que reportaron fricción', completed: false, important: true, urgent: false },
-          { id: 't6', title: 'Resolver los 3 errores más comunes del panel principal', completed: false, important: true, urgent: true }
+          { id: 't4', title: 'Configurar microencuesta tras 14 días de uso activo', completed: true, important: false, urgent: true, deadline: '2025-03-10' },
+          { id: 't5', title: 'Entrevistar a los 5 usuarios que reportaron fricción', completed: false, important: true, urgent: false, deadline: null },
+          { id: 't6', title: 'Resolver los 3 errores más comunes del panel principal', completed: false, important: true, urgent: true, deadline: '2025-03-20' }
         ];
 
         obj.keyResults[2].title = 'Reducir la tasa de churn mensual al 3%';
@@ -679,13 +732,30 @@
         obj.keyResults[2].targetValue = 3.0;
         obj.keyResults[2].unit = '%';
         obj.keyResults[2].tasks = [
-          { id: 't7', title: 'Activar secuencia de reactivación por email a inactivos', completed: true, important: false, urgent: true },
-          { id: 't8', title: 'Publicar centro de ayuda con 5 guías rápidas', completed: true, important: true, urgent: false },
-          { id: 't9', title: 'Definir alerta preventiva para cuentas con uso descendente', completed: false, important: false, urgent: false }
+          { id: 't7', title: 'Activar secuencia de reactivación por email a inactivos', completed: true, important: false, urgent: true, deadline: '2025-03-05' },
+          { id: 't8', title: 'Publicar centro de ayuda con 5 guías rápidas', completed: true, important: true, urgent: false, deadline: null },
+          { id: 't9', title: 'Definir alerta preventiva para cuentas con uso descendente', completed: false, important: false, urgent: false, deadline: null }
         ];
 
         project.objectives.push(obj);
       }
+    }
+
+    function formatDeadlineDisplay(deadlineStr) {
+      if (!deadlineStr) return '';
+      try {
+        const parts = String(deadlineStr).split('-');
+        if (parts.length === 3) {
+          const year = parseInt(parts[0], 10);
+          const month = parseInt(parts[1], 10) - 1;
+          const day = parseInt(parts[2], 10);
+          const d = new Date(year, month, day);
+          if (!isNaN(d.getTime())) {
+            return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+          }
+        }
+      } catch (err) {}
+      return String(deadlineStr);
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -840,8 +910,12 @@
             taskItem.className = `task-item ${task.completed ? 'task-item--done' : ''}`;
             taskItem.innerHTML = `
               <input type="checkbox" class="task-check" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" ${task.completed ? 'checked':''} />
-              <input type="text" class="form-input task-title-input" value="${task.title || ''}" placeholder="Definir iniciativa o tarea..." data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="flex:1; border:none; background:transparent; font-size:0.82rem;" />
-              <button type="button" class="btn btn-ghost btn-sm btn-del-task" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="color:var(--color-error); padding:0 4px;">✕</button>
+              <input type="text" class="form-input task-title-input" value="${task.title || ''}" placeholder="Definir iniciativa o tarea..." data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="flex:1; min-width:140px; border:none; background:transparent; font-size:0.82rem;" />
+              <div class="task-deadline-wrap" title="Fecha límite (opcional)">
+                <span style="font-size:0.75rem; color:var(--color-ink-50);" aria-hidden="true">📅</span>
+                <input type="date" class="task-deadline-input" value="${task.deadline || ''}" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" title="Fecha límite (opcional)" aria-label="Fecha límite (opcional)" />
+              </div>
+              <button type="button" class="btn btn-ghost btn-sm btn-del-task" data-obj-idx="${objIdx}" data-kr-idx="${krIdx}" data-task-idx="${taskIdx}" style="color:var(--color-error); padding:0 4px;" title="Eliminar tarea">✕</button>
             `;
             tasksContainer.appendChild(taskItem);
           });
@@ -1056,6 +1130,7 @@
                 <div style="display: flex; gap: 5px; align-items: center; margin-top: 3px; flex-wrap: wrap;">
                   <span class="badge badge-lavender" style="font-size: 0.66rem; padding: 1px 5px;">KR ${krNumber}</span>
                   <span style="font-size: 0.68rem; color: var(--color-ink-50); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;" title="${krTitle}">${krTitle}</span>
+                  ${task.deadline ? `<span style="font-size: 0.68rem; color: var(--color-ink-70); background: #F1F5F9; padding: 1px 5px; border-radius: 4px; border: 1px solid var(--color-border-soft); display: inline-flex; align-items: center; gap: 3px;" title="Fecha límite: ${task.deadline}">📅 ${formatDeadlineDisplay(task.deadline)}</span>` : ''}
                 </div>
               </div>
               <div style="display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;">
@@ -1241,6 +1316,19 @@
         });
       });
 
+      // Task deadline (Flow View)
+      wrap.querySelectorAll('.flow-task-deadline').forEach(inp => {
+        const updateDeadline = e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].deadline = e.target.value || null;
+          renderEisenhowerMatrix(wrap);
+        };
+        inp.addEventListener('change', updateDeadline);
+        inp.addEventListener('input', updateDeadline);
+      });
+
       // Eisenhower Matrix Checkbox listeners
       wrap.querySelectorAll('.eisenhower-task-check').forEach(chk => {
         chk.addEventListener('change', e => {
@@ -1339,6 +1427,10 @@
                   <div style="margin-left: auto;">
                     ${quadBadge}
                   </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-top: 5px;">
+                  <span style="font-size: 0.68rem; color: var(--color-ink-50);" title="Fecha límite (opcional)">📅</span>
+                  <input type="date" class="flow-task-deadline" data-obj-idx="${oIdx}" data-kr-idx="${kIdx}" data-task-idx="${tIdx}" value="${t.deadline || ''}" title="Fecha límite (opcional)" aria-label="Fecha límite (opcional)" />
                 </div>
               </div>
             `;
@@ -1692,6 +1784,16 @@
           project.objectives[o].keyResults[k].tasks[t].title = e.target.value;
         });
       });
+      document.querySelectorAll('.task-deadline-input').forEach(inp => {
+        const updateDeadline = e => {
+          const o = parseInt(e.target.dataset.objIdx, 10);
+          const k = parseInt(e.target.dataset.krIdx, 10);
+          const t = parseInt(e.target.dataset.taskIdx, 10);
+          project.objectives[o].keyResults[k].tasks[t].deadline = e.target.value || null;
+        };
+        inp.addEventListener('change', updateDeadline);
+        inp.addEventListener('input', updateDeadline);
+      });
 
       // Add Buttons
       document.querySelectorAll('.btn-add-kr').forEach(btn => {
@@ -1806,9 +1908,9 @@
                 targetValue: 25000,
                 unit: '€',
                 tasks: [
-                  { id: 't1', title: 'Cerrar los 4 acuerdos piloto en pipeline', completed: true, important: true, urgent: true },
-                  { id: 't2', title: 'Aumentar ticket medio anual en nuevos clientes', completed: true, important: true, urgent: false },
-                  { id: 't3', title: 'Lanzar plan de referidos para clientes actuales', completed: false, important: true, urgent: false }
+                  { id: 't1', title: 'Cerrar los 4 acuerdos piloto en pipeline', completed: true, important: true, urgent: true, deadline: '2025-02-20' },
+                  { id: 't2', title: 'Aumentar ticket medio anual en nuevos clientes', completed: true, important: true, urgent: false, deadline: '2025-03-15' },
+                  { id: 't3', title: 'Lanzar plan de referidos para clientes actuales', completed: false, important: true, urgent: false, deadline: null }
                 ]
               },
               {
@@ -1818,9 +1920,9 @@
                 targetValue: 40,
                 unit: 'clientes',
                 tasks: [
-                  { id: 't4', title: 'Testear 2 canales de captación outbound', completed: true, important: false, urgent: true },
-                  { id: 't5', title: 'Crear webinar mensual con partners', completed: false, important: false, urgent: false },
-                  { id: 't6', title: 'Optimizar landing page para conversión', completed: true, important: true, urgent: true }
+                  { id: 't4', title: 'Testear 2 canales de captación outbound', completed: true, important: false, urgent: true, deadline: '2025-02-28' },
+                  { id: 't5', title: 'Crear webinar mensual con partners', completed: false, important: false, urgent: false, deadline: null },
+                  { id: 't6', title: 'Optimizar landing page para conversión', completed: true, important: true, urgent: true, deadline: '2025-03-10' }
                 ]
               }
             ]
@@ -1838,9 +1940,9 @@
                 targetValue: 5.0,
                 unit: 'min',
                 tasks: [
-                  { id: 't7', title: 'Implementar asistente guiado paso a paso', completed: true, important: true, urgent: true },
-                  { id: 't8', title: 'Medir eventos de fricción con analytics', completed: true, important: true, urgent: false },
-                  { id: 't9', title: 'Eliminar formulario previo obligatorio', completed: true, important: false, urgent: true }
+                  { id: 't7', title: 'Implementar asistente guiado paso a paso', completed: true, important: true, urgent: true, deadline: '2025-02-15' },
+                  { id: 't8', title: 'Medir eventos de fricción con analytics', completed: true, important: true, urgent: false, deadline: null },
+                  { id: 't9', title: 'Eliminar formulario previo obligatorio', completed: true, important: false, urgent: true, deadline: '2025-03-01' }
                 ]
               },
               {
@@ -1850,9 +1952,9 @@
                 targetValue: 99.8,
                 unit: '%',
                 tasks: [
-                  { id: 't10', title: 'Configurar réplicas y alertas en Datadog', completed: true, important: true, urgent: true },
-                  { id: 't11', title: 'Plan de contingencia ante caídas de servidor', completed: true, important: true, urgent: false },
-                  { id: 't12', title: 'Auditoría de seguridad y dependencias', completed: false, important: false, urgent: false }
+                  { id: 't10', title: 'Configurar réplicas y alertas en Datadog', completed: true, important: true, urgent: true, deadline: '2025-02-25' },
+                  { id: 't11', title: 'Plan de contingencia ante caídas de servidor', completed: true, important: true, urgent: false, deadline: '2025-03-20' },
+                  { id: 't12', title: 'Auditoría de seguridad y dependencias', completed: false, important: false, urgent: false, deadline: null }
                 ]
               }
             ]

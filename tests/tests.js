@@ -303,6 +303,10 @@ export function runAllTests() {
     const arr = ['A', 'B', 'C'];
     const reordered = reorderArray(arr, 0, 2);
     assert('OKR: Reordenación de arrays no muta el original', arr[0] === 'A' && reordered[2] === 'A');
+
+    // Task creation and optional deadline
+    const t = createTask('kr-demo', 'Tarea con fecha');
+    assert('OKR: Tarea soporta deadline nulo opcional', t.deadline === null);
   }
 
   return { passed, failed, total: passed + failed, results };

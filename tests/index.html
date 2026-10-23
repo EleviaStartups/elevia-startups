@@ -83,7 +83,7 @@
       const { calcCAC, calcLTVSubscription, calcLTVSimple, calcRatios } = __req('cac-ltv.calc');
       const { calcBurnRate } = __req('burn-rate.calc');
       const { calcBerkus, calcScorecard, calcVentureCapital, calcRevenueMultiples, calcDCF, calcRiskFactors, calcComparables, median, getRecommendedMethods } = __req('valuation.calc');
-      const { calcKRProgress, calcObjectiveProgress, reorderArray } = __req('okr.calc');
+      const { createTask, calcKRProgress, calcObjectiveProgress, reorderArray } = __req('okr.calc');
 
       const results = [];
       let passed = 0;
@@ -226,6 +226,9 @@
       const arr = ['A', 'B', 'C'];
       const reordered = reorderArray(arr, 0, 2);
       assert('OKR: Reordenación de arrays no muta original', arr[0] === 'A' && reordered[2] === 'A');
+
+      const t = createTask('kr-demo', 'Tarea con fecha');
+      assert('OKR: Tarea soporta deadline nulo opcional', t.deadline === null);
 
       // Update UI
       const summary = document.getElementById('test-summary');
